@@ -16,3 +16,27 @@ html{scroll-behavior:smooth}
 @keyframes content-arrive{from{opacity:0;transform:translate3d(0,32px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
 @media(max-width:800px){.hero-visual{inset:-4%;background-position:60% center;transform:scale(1.045)!important;will-change:auto}.hero-shade{background:linear-gradient(90deg,rgba(5,8,11,.93),rgba(5,8,11,.48)),linear-gradient(0deg,#0b0d10,transparent 65%)}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hero-visual,.hero-content{animation:none!important;filter:none!important;transform:none!important;will-change:auto}.reveal{opacity:1!important;transform:none!important}.media-card .cover img{transition:none!important}}
+
+/* Divine Media 2.2: Watch + Listen */
+.experience-banner{position:relative;isolation:isolate;overflow:hidden;min-height:380px;display:flex;align-items:center;padding:48px 6%;background:#0a0d12}
+.experience-banner>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:saturate(.78)}
+.experience-banner:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,#090b0ff7 0%,#090b0fd6 40%,#090b0f30 100%),linear-gradient(0deg,#0b0d10,transparent 55%)}
+.experience-copy{max-width:650px;animation:content-arrive .95s cubic-bezier(.16,1,.3,1) both}
+.experience-copy h1{font-family:Manrope;font-size:clamp(42px,5.3vw,74px);line-height:1.08;letter-spacing:-.06em;margin:20px 0}
+.experience-copy h1 em{font-style:normal;color:#c4fa77}
+.experience-copy p{max-width:420px;color:#c6cccd;line-height:1.75;font-size:14px;margin-bottom:26px}
+.watch-modal{width:min(880px,100%)}
+.watch-stage{min-height:360px;background-position:center;background-size:cover;display:grid;place-items:center}
+.stage-center{display:flex;flex-direction:column;align-items:center;gap:15px;color:#fff;font-size:11px;letter-spacing:.2em;text-align:center}
+.stage-center svg{box-sizing:content-box;background:#c4fa77;color:#111;padding:22px;border-radius:50%}
+.listening-modal{width:min(480px,100%)}
+.listening-room{padding:40px 35px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.album-art{width:min(270px,85%);aspect-ratio:1;object-fit:cover;border-radius:12px;margin:25px 0 10px;box-shadow:0 18px 65px #0008}
+.listening-room h2{font-family:Manrope;font-size:29px;letter-spacing:-.04em;margin:10px 0}
+.listening-room p{color:#aeb6b6;font-size:12px;line-height:1.7}
+.player-controls{display:flex;align-items:center;justify-content:center;gap:25px;margin:22px 0}
+.player-controls button{border:0;background:transparent;color:white;display:grid;place-items:center}
+.player-controls .player-main{height:60px;width:60px;background:#c4fa77;color:#111;border-radius:50%}
+.listening-room .player-notice{font-size:11px;max-width:310px;margin-bottom:24px}
+@media(max-width:600px){.experience-banner{min-height:420px}.experience-banner:before{background:linear-gradient(90deg,#090b0ff0,#090b0f7d),linear-gradient(0deg,#0b0d10,transparent)}.watch-stage{min-height:220px}.listening-room{padding:34px 20px}}
+@media(prefers-reduced-motion:reduce){.experience-copy{animation:none}}
