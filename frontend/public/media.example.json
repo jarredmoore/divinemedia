@@ -1,0 +1,16 @@
+[
+  {
+    "title": "Example Film",
+    "tag": "FILM · CURATED",
+    "type": "Watch",
+    "img": "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=720&q=80",
+    "videoUrl": ""
+  },
+  {
+    "title": "Example Listening Session",
+    "tag": "AUDIO · CURATED",
+    "type": "Listen",
+    "img": "https://images.unsplash.com/photo-1516280440614-37939bbacd81?w=720&q=80",
+    "audioUrl": ""
+  }
+]
