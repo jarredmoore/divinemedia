@@ -33,3 +33,11 @@ The frontend can now read an optional curated JSON feed, with no invented AVideo
 5. AVideo's real catalog API, authentication, thumbnail URLs, signed playback and live stream capabilities must be verified before building an adapter.
 
 The Library now persists **in this browser only** via localStorage; it is not synchronized to AVideo accounts. Direct video/audio controls work only when a valid accessible media URL is configured. Sample player controls are demonstrative and do not produce sound.
+
+## Divine Media 2.5 — feed refresh and verified local playback
+
+- The confirmed AVideo video #1 remains in Watch even when a curated JSON feed is configured, unless the feed already contains that same `watchUrl`.
+- The frontend checks the configured JSON feed at startup and every 60 seconds while the page is visible. This is **feed polling, not yet automatic AVideo catalog synchronization**.
+- The verified local watch page opens inside the Divine Media modal as an iframe; an **Open in AVideo** fallback remains available.
+- To sync new AVideo uploads automatically, a server-side adapter must first be connected to verified AVideo endpoints and publish the normalized JSON feed. Never expose AVideo database credentials or admin tokens in Vite environment variables.
+- `https://localhost` works only on the machine hosting AVideo. Public deployment requires a publicly reachable HTTPS backend.
