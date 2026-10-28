@@ -14,6 +14,7 @@ const photos={
  artist:'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=720&q=80'
 };
 const sampleItems=[
+ {title:'Divine Creative Group — New Media · Art · Entertainment',tag:'DIVINE MEDIA ORIGINAL · AVIDEO #1',img:photos.hero,type:'Watch',watchUrl:'https://localhost/channel/admin/video/1/divine-creative-group-_-new-media-%C2%B7-art-%C2%B7-entertainment'},
  {title:'Beyond the Frame',tag:'FILM · 28 MIN',img:photos.film,type:'Watch'},
  {title:'Live from the City',tag:'LIVE PERFORMANCE',img:photos.concert,type:'Live'},
  {title:'The City Speaks',tag:'DOCUMENTARY · 42 MIN',img:photos.city,type:'Watch'},
@@ -33,7 +34,7 @@ function App(){
 
  const tracks=items.filter(i=>i.type==='Listen');
  const currentTrack=tracks[queueIndex]||tracks[0];
- const openItem=item=>{setSelected(item);if(item.type==='Listen'){setQueueIndex(Math.max(0,tracks.findIndex(t=>t.title===item.title)));setPlaying(false)}};
+ const openItem=item=>{if(item.watchUrl){window.open(item.watchUrl,'_blank','noopener,noreferrer');return}setSelected(item);if(item.type==='Listen'){setQueueIndex(Math.max(0,tracks.findIndex(t=>t.title===item.title)));setPlaying(false)}};
  const stepTrack=delta=>{if(!tracks.length)return;setQueueIndex(i=>(i+delta+tracks.length)%tracks.length);setPlaying(false)};
  const visible=items.filter(i=>(tab==='Discover'||tab==='Library'&&saved.includes(i.title)||tab==='Watch'&&i.type==='Watch'||tab==='Listen'&&i.type==='Listen'||tab==='Live'&&i.type==='Live'||tab==='Creators'&&i.type==='Creators')&&(i.title+' '+i.tag).toLowerCase().includes(query.toLowerCase()));
  const go=t=>{setTab(t);setMenu(false);setSelected(null);setPlaying(false)};
