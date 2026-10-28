@@ -1,5 +1,7 @@
 // Curated JSON feed adapter: no undocumented AVideo API calls or embedded credentials.
 const STORAGE_KEY='divine-media:saved:v1';
+const avideoOrigin=(import.meta.env.VITE_AVIDEO_ORIGIN||'https://localhost').replace(/\/$/,'');
+const catalogEndpoint=import.meta.env.VITE_AVIDEO_CATALOG_URL||'/avideo-local/plugin/API/get.json.php?APIName=video&rowCount=50&current=1&noRelated=1';
 export function readSaved(){try{const v=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string'):[]}catch{return []}}
 export function writeSaved(saved){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(saved))}catch{/* storage may be disabled */}}
 const safeUrl=(value)=>{if(typeof value!=='string'||!value.trim())return undefined;try{const u=new URL(value,window.location.origin);return ['http:','https:'].includes(u.protocol)?u.href:undefined}catch{return undefined}};
@@ -10,7 +12,7 @@ export async function loadMedia(){const url=import.meta.env.VITE_MEDIA_FEED_URL|
 export function mapAVideoVideo(row){
  if(!row||typeof row!=='object'||!row.title||row.status!=='a'||row.externalOptions?.privacyInfo?.isPrivate||row.externalOptions?.privacyInfo?.password_protectd||row.only_for_paid||row.externalOptions?.privacyInfo?.only_for_paid)return null;
  const watchUrl=safeUrl(row.pageUrl||row.link||row.wwbnURL);
- if(!watchUrl||new URL(watchUrl).origin!=='https://localhost')return null;
+ if(!watchUrl||new URL(watchUrl).origin!==avideoOrigin)return null;
  const image=safeUrl(row.images?.posterLandscape||row.images?.poster||row.Poster||row.Thumbnail);
  const sources=Array.isArray(row.sources)?row.sources.filter(s=>s?.type==='video/mp4'&&Number.isFinite(Number(s.res))):[];
  sources.sort((a,b)=>Number(b.res)-Number(a.res));
@@ -20,7 +22,7 @@ export function mapAVideoVideo(row){
 }
 /** Read public AVideo catalog via local Vite proxy; no credentials. */
 export async function loadAVideoCatalog(){
- const res=await fetch('/avideo-local/plugin/API/get.json.php?APIName=video&rowCount=50&current=1&noRelated=1',{cache:'no-store'});
+ const res=await fetch(catalogEndpoint,{cache:'no-store',credentials:'omit'});
  if(!res.ok)throw Error('AVideo catalog HTTP '+res.status);
  const data=await res.json();
  if(data.error)throw Error('AVideo catalog API error');
