@@ -41,3 +41,12 @@ The Library now persists **in this browser only** via localStorage; it is not sy
 - The verified local watch page opens inside the Divine Media modal as an iframe; an **Open in AVideo** fallback remains available.
 - To sync new AVideo uploads automatically, a server-side adapter must first be connected to verified AVideo endpoints and publish the normalized JSON feed. Never expose AVideo database credentials or admin tokens in Vite environment variables.
 - `https://localhost` works only on the machine hosting AVideo. Public deployment requires a publicly reachable HTTPS backend.
+
+## Divine Media 2.6 — local AVideo catalog API (experimental)
+
+The Vite **development server** now proxies `/avideo-local/...` to `https://localhost/...`. This avoids browser CORS problems with local AVideo and accepts the self-signed certificate **only in the local development proxy**. No credentials are stored.
+
+1. In AVideo admin, enable the **API** plugin if installed: Admin → Plugins → API.
+2. While Vite is running, visit `http://localhost:5173/avideo-local/plugin/API/get.json.php?APIName=video&rowCount=10`. Expect JSON with `response.rows`. If the API plugin is unavailable, existing content continues working.
+3. The frontend requests the public video list every 60 seconds, merges it with the optional curated feed, and keeps the known first video. API response field names and URL accessibility must be checked against your actual installation. This is not yet a verified end-to-end sync.
+4. The proxy is **development only**. Netlify requires a public HTTPS AVideo host and a production-safe API proxy. Never commit API secrets or user credentials.
