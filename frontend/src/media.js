@@ -1,0 +1,7 @@
+// Curated JSON feed adapter: no undocumented AVideo API calls or embedded credentials.
+const STORAGE_KEY='divine-media:saved:v1';
+export function readSaved(){try{const v=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string'):[]}catch{return []}}
+export function writeSaved(saved){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(saved))}catch{/* storage may be disabled */}}
+const safeUrl=(value)=>{if(typeof value!=='string'||!value.trim())return undefined;try{const u=new URL(value,window.location.origin);return ['http:','https:'].includes(u.protocol)?u.href:undefined}catch{return undefined}};
+export function normalizeMedia(entry){if(!entry||typeof entry!=='object')return null;const title=typeof entry.title==='string'?entry.title.trim():'';const type=entry.type;if(!title||!['Watch','Listen','Live','Creators'].includes(type))return null;return {title:title.slice(0,140),type,tag:typeof entry.tag==='string'?entry.tag.slice(0,100):type.toUpperCase(),img:safeUrl(entry.img)||'/placeholder.svg',videoUrl:safeUrl(entry.videoUrl),audioUrl:safeUrl(entry.audioUrl)}}
+export async function loadMedia(){const url=import.meta.env.VITE_MEDIA_FEED_URL||'/media.json';const res=await fetch(url,{cache:'no-store'});if(!res.ok)throw Error('Media feed unavailable');const json=await res.json();if(!Array.isArray(json))throw Error('Media feed must be an array');return {items:json.map(normalizeMedia).filter(Boolean).slice(0,200)}}
