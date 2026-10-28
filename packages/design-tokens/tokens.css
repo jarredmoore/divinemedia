@@ -1,0 +1,27 @@
+/* Divine Media portable design tokens — foundation proposal, 2026-10-28.
+   Framework-independent. Not imported by the existing frontend until tested. */
+:root {
+  --dm-bg: #090b0f;
+  --dm-panel: #151a1d;
+  --dm-text: #f7f5f2;
+  --dm-muted: #b7b4bd;
+  --dm-accent: #c4fa77;
+  --dm-border: rgba(255,255,255,.12);
+  --dm-font-body: Inter, system-ui, sans-serif;
+  --dm-font-display: Manrope, "Space Grotesk", system-ui, sans-serif;
+  --dm-content-max: 1180px;
+  --dm-radius-card: 18px;
+  --dm-motion-fast: 180ms;
+  --dm-motion-normal: 320ms;
+  --dcg-bg: #09090c;
+  --dcg-panel: #101015;
+  --dcg-surface: #15151c;
+  --dcg-text: #f7f5f2;
+  --dcg-muted: #b7b4bd;
+  --dcg-orange: #ff6a2a;
+  --dcg-gold: #ffcc2f;
+  --dcg-magenta: #ee3e9f;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --dm-motion-fast: 0ms; --dm-motion-normal: 0ms; }
+}
