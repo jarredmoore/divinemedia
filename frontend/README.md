@@ -50,3 +50,9 @@ The Vite **development server** now proxies `/avideo-local/...` to `https://loca
 2. While Vite is running, visit `http://localhost:5173/avideo-local/plugin/API/get.json.php?APIName=video&rowCount=10`. Expect JSON with `response.rows`. If the API plugin is unavailable, existing content continues working.
 3. The frontend requests the public video list every 60 seconds, merges it with the optional curated feed, and keeps the known first video. API response field names and URL accessibility must be checked against your actual installation. This is not yet a verified end-to-end sync.
 4. The proxy is **development only**. Netlify requires a public HTTPS AVideo host and a production-safe API proxy. Never commit API secrets or user credentials.
+
+## Divine Media 2.7 — real AVideo metadata mapping
+
+Confirmed from the first AVideo API response: `response.rows` has `pageUrl`, `images.posterLandscape`, `sources` (MP4 resolutions), `channelName`, `duration`, `status`, and privacy flags. The adapter now reads these fields, prefers the highest MP4 resolution, and uses real poster artwork. It filters inactive, private, password-protected, and paid-only entries. The frontend keeps the known first video as fallback **only if no catalog videos load**.
+
+This is a local-only integration while AVideo is hosted at `https://localhost`. MP4/image requests may require the browser to trust the local AVideo certificate. Do not publish the local API's full JSON response: it includes user and session metadata.
