@@ -23,10 +23,11 @@ const items=[
 ];
 const links=[['Discover',Compass],['Watch',Clapperboard],['Listen',Headphones],['Live',Radio],['Creators',Users],['Library',Library]];
 function App(){
+ const[tab,setTab]=useState('Discover'),[query,setQuery]=useState(''),[menu,setMenu]=useState(false),[saved,setSaved]=useState([]),[selected,setSelected]=useState(null);
  const heroRef=useRef(null),heroVisualRef=useRef(null);
  useEffect(()=>{const el=heroRef.current,visual=heroVisualRef.current;if(!el||!visual||window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;let raf=0;const update=()=>{if(raf)return;raf=requestAnimationFrame(()=>{raf=0;const rect=el.getBoundingClientRect();if(rect.bottom<0||rect.top>window.innerHeight)return;const progress=Math.max(-1,Math.min(1,rect.top/window.innerHeight));visual.style.setProperty('--parallax-shift',Math.round(progress*-34)+'px')})};update();window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update,{passive:true});return()=>{window.removeEventListener('scroll',update);window.removeEventListener('resize',update);cancelAnimationFrame(raf)}},[]);
  useEffect(()=>{if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;const nodes=document.querySelectorAll('.reveal');const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('revealed');observer.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -25px 0px'});nodes.forEach(n=>observer.observe(n));return()=>observer.disconnect()},[tab,query]);
- const[tab,setTab]=useState('Discover'),[query,setQuery]=useState(''),[menu,setMenu]=useState(false),[saved,setSaved]=useState([]),[selected,setSelected]=useState(null);
+
  const visible=items.filter(i=>(tab==='Discover'||tab==='Library'&&saved.includes(i.title)||tab==='Watch'&&i.type==='Watch'||tab==='Listen'&&i.type==='Listen'||tab==='Live'&&i.type==='Live'||tab==='Creators'&&i.type==='Creators')&&(i.title+' '+i.tag).toLowerCase().includes(query.toLowerCase()));
  const go=t=>{setTab(t);setMenu(false);setSelected(null)};
  const toggle=t=>setSaved(v=>v.includes(t)?v.filter(x=>x!==t):[...v,t]);
