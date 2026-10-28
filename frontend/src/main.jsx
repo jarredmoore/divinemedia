@@ -13,7 +13,7 @@ const photos={
  stage:'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=720&q=80',
  artist:'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=720&q=80'
 };
-const verifiedLocalVideo={title:'Divine Creative Group — New Media · Art · Entertainment',tag:'DIVINE MEDIA ORIGINAL · AVIDEO #1',img:photos.hero,type:'Watch',watchUrl:'https://localhost/channel/admin/video/1/divine-creative-group-_-new-media-%C2%B7-art-%C2%B7-entertainment'};
+const verifiedLocalVideo={title:'Divine Creative Group — New Media · Art · Entertainment',tag:'DIVINE MEDIA ORIGINAL · AVIDEO #1',img:photos.hero,type:'Watch',watchUrl:import.meta.env.VITE_AVIDEO_ORIGIN?undefined:'https://localhost/channel/admin/video/1/divine-creative-group-_-new-media-%C2%B7-art-%C2%B7-entertainment'};
 const sampleItems=[
  verifiedLocalVideo,
  {title:'Beyond the Frame',tag:'FILM · 28 MIN',img:photos.film,type:'Watch'},
