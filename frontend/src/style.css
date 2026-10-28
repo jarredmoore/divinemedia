@@ -40,3 +40,8 @@ html{scroll-behavior:smooth}
 .listening-room .player-notice{font-size:11px;max-width:310px;margin-bottom:24px}
 @media(max-width:600px){.experience-banner{min-height:420px}.experience-banner:before{background:linear-gradient(90deg,#090b0ff0,#090b0f7d),linear-gradient(0deg,#0b0d10,transparent)}.watch-stage{min-height:220px}.listening-room{padding:34px 20px}}
 @media(prefers-reduced-motion:reduce){.experience-copy{animation:none}}
+
+/* Connected-media controls */
+.real-video{width:100%;height:auto;max-height:68vh;display:block;object-fit:contain;background:#000}
+.real-audio{display:block;width:100%;margin:20px 0 5px;accent-color:#c4fa77}
+.player-controls button:disabled{opacity:.3;cursor:not-allowed}
