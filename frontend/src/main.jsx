@@ -2,6 +2,8 @@ import React,{useState,useEffect,useRef} from 'react';
 import{createRoot}from'react-dom/client';
 import{Search,Compass,Clapperboard,Headphones,Radio,Users,Library,Play,ArrowUpRight,Menu,X,Heart,Plus,Volume2,SkipForward,SkipBack,Pause,ArrowLeft}from'lucide-react';
 import './style.css';
+import './dcg-tokens.css';
+import './dcg-theme.css';
 import {loadMedia, loadAVideoCatalog, readSaved, writeSaved} from './media.js';
 const photos={
  hero:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600&q=85',
