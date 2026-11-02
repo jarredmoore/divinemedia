@@ -1,0 +1,14 @@
+/* Divine Media 3.1: additive DCG design layer.
+   Imported after existing styles to preserve layouts, behavior, and media integrations. */
+body{background:var(--dm-bg);color:var(--dm-text)}
+.sidebar{background:var(--dm-surface);border-right-color:var(--dcg-line)}
+header{border-bottom-color:var(--dcg-line)}
+.brand-icon,.avatar,.primary,.play-float,.pill,.player-controls .player-main{background:var(--dm-accent);color:var(--dm-bg)}
+.nav-link.active{background:rgba(255,204,47,.10);color:var(--dm-accent)}
+.live-dot,.accent-line{background:var(--dm-accent)}
+.eyebrow,.hero h1 em,.manifesto em,.experience-copy h1 em,.manifesto button,.side-bottom>span,.save:hover,.save.is-saved{color:var(--dm-accent)}
+.primary{border-color:var(--dm-accent)}
+.primary:hover{background:#ffe179}
+.search{background:var(--dm-surface-raised);border-color:var(--dcg-line)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--dm-focus);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
