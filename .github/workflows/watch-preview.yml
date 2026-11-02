@@ -1,0 +1,45 @@
+name: Divine Media Watch Preview Build
+
+on:
+  push:
+    branches:
+      - dev/divine-media-3.1
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/watch-preview.yml'
+  pull_request:
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/watch-preview.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      - name: Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+      - name: Build Vite frontend
+        run: npm run build
+      - name: Confirm built assets
+        run: |
+          test -s dist/index.html
+          find dist/assets -type f -maxdepth 1 | grep -q .
+      - name: Upload preview build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: divine-media-watch-preview
+          path: frontend/dist/
+          retention-days: 7
