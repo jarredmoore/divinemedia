@@ -30,7 +30,7 @@ export function mapAVideoVideo(row){
  const watchUrl=safeAVideoUrl(row.pageUrl||row.link||row.wwbnURL);
  if(!watchUrl)return null;
  const image=safeAVideoUrl(row.images?.posterLandscape||row.images?.poster||row.Poster||row.Thumbnail);
- const audio=isAVideoAudio(row);
+ const audio=/\/audio\/\d+(?:\/|$)/i.test(new URL(watchUrl).pathname)||isAVideoAudio(row);
  const sources=Array.isArray(row.sources)?row.sources.filter(s=>s?.type==='video/mp4'&&Number.isFinite(Number(s.res))):[];
  sources.sort((a,b)=>Number(b.res)-Number(a.res));
  const videoUrl=audio?undefined:safeAVideoUrl(sources[0]?.src||row.videos?.mp4?.['720']||row.videos?.mp4?.['480']);
