@@ -41,3 +41,13 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 @media(max-width:800px){.sidebar-toggle{display:none}.sidebar-collapsed .sidebar{width:236px;padding:34px 19px}.sidebar-collapsed .brand>span,.sidebar-collapsed .side-label,.sidebar-collapsed .side-bottom,.sidebar-collapsed .nav-text,.sidebar-collapsed .live-dot{display:initial}.sidebar-collapsed .sidebar nav{gap:6px}.sidebar-collapsed .nav-link{justify-content:flex-start;padding:13px 14px}.sidebar-collapsed .nav-link svg{width:19px;height:19px}}
 @media(max-width:600px){.eyebrow,.eyebrow.small,.card-tag,.section-sub{font-size:11px}.watch-modal{width:100%}.real-video{max-height:70dvh}.cover{aspect-ratio:4/5}.cover img.media-artwork{object-fit:contain}}
 @media(prefers-reduced-motion:reduce){.experience-banner>img.banner-parallax{animation:none!important;transition:none!important;transform:none!important}}
+
+/* Unified pill search: quiet at rest, DCG yellow on focus */
+.search{border-radius:999px;padding:10px 16px;min-height:44px;transition:border-color .2s ease,box-shadow .2s ease,background-color .2s ease}
+.search input{border:0;border-radius:999px;background:transparent;min-width:0;outline:none;color:var(--dm-text);font-size:13px}
+.search input:focus-visible{outline:none}
+.search:focus-within{border-color:var(--dm-accent);box-shadow:0 0 0 2px rgba(255,204,47,.18);background:rgba(255,204,47,.06);color:var(--dm-accent)}
+.search:focus-within input{color:var(--dm-text);caret-color:var(--dm-accent)}
+.search:focus-within svg{color:var(--dm-accent)}
+.search input::placeholder{color:#aeb1b8;opacity:1}
+@media(max-width:480px){.search{padding:9px 12px;min-height:42px}.search input{width:min(31vw,140px);font-size:12px}}
