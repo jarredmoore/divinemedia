@@ -12,3 +12,32 @@ header{border-bottom-color:var(--dcg-line)}
 .search{background:var(--dm-surface-raised);border-color:var(--dcg-line)}
 button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--dm-focus);outline-offset:3px}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Divine Media 3.1 usability refinement: legible labels and compact navigation */
+.eyebrow,.eyebrow.small,.side-label,.breadcrumb,.card-tag,.section-sub,.side-bottom>span{font-size:clamp(11px,.78vw,13px);letter-spacing:.11em;line-height:1.5}
+.brand small{font-size:10px;letter-spacing:.13em}
+.card-tag{color:#b5b8bd}
+.section-sub{color:#b9bbc1}
+.sidebar{transition:width .25s ease,padding .25s ease}
+.sidebar-toggle{align-self:flex-end;margin:24px 5px 0;padding:9px;border:1px solid var(--dcg-line);border-radius:9px;background:transparent;color:var(--dm-text);display:grid;place-items:center}
+.sidebar-toggle:hover{background:var(--dm-surface-raised)}
+.nav-link svg{flex-shrink:0}
+.sidebar-collapsed .sidebar{width:78px;padding:28px 10px}
+.sidebar-collapsed .brand{padding:0;justify-content:center}
+.sidebar-collapsed .brand>span,.sidebar-collapsed .side-label,.sidebar-collapsed .side-bottom,.sidebar-collapsed .nav-text,.sidebar-collapsed .live-dot{display:none}
+.sidebar-collapsed .sidebar-toggle{align-self:center;margin:28px 0 20px}
+.sidebar-collapsed .sidebar nav{gap:10px}
+.sidebar-collapsed .nav-link{justify-content:center;padding:13px 0}
+.sidebar-collapsed .nav-link svg{width:21px;height:21px}
+.cover img.media-artwork{object-fit:contain;background:#101015}
+.cover{background:#101015}
+.media-card .cover:hover img.media-artwork{transform:scale(1.035)}
+.experience-banner{isolation:isolate}
+.experience-banner>img.banner-parallax{inset:-7% 0;width:100%;height:114%;object-fit:cover;transform:translate3d(0,0,0);transition:transform .15s linear}
+@media(min-width:801px) and (prefers-reduced-motion:no-preference){
+ .experience-banner>img.banner-parallax{animation:banner-drift 18s ease-in-out infinite alternate}
+ @keyframes banner-drift{from{transform:scale(1.03) translateY(-1%)}to{transform:scale(1.08) translateY(2%)}}
+}
+@media(max-width:800px){.sidebar-toggle{display:none}.sidebar-collapsed .sidebar{width:236px;padding:34px 19px}.sidebar-collapsed .brand>span,.sidebar-collapsed .side-label,.sidebar-collapsed .side-bottom,.sidebar-collapsed .nav-text,.sidebar-collapsed .live-dot{display:initial}.sidebar-collapsed .sidebar nav{gap:6px}.sidebar-collapsed .nav-link{justify-content:flex-start;padding:13px 14px}.sidebar-collapsed .nav-link svg{width:19px;height:19px}}
+@media(max-width:600px){.eyebrow,.eyebrow.small,.card-tag,.section-sub{font-size:11px}.watch-modal{width:100%}.real-video{max-height:70dvh}.cover{aspect-ratio:4/5}.cover img.media-artwork{object-fit:contain}}
+@media(prefers-reduced-motion:reduce){.experience-banner>img.banner-parallax{animation:none!important;transition:none!important;transform:none!important}}
