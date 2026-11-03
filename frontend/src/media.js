@@ -23,7 +23,7 @@ const verifiedPublicAudioById={16:'https://media.divinecreativegroup.com/videos/
 function audioSource(row){
  const sources=Array.isArray(row.sources)?row.sources:[];
  const match=sources.find(s=>s&&((typeof s.type==='string'&&s.type.startsWith('audio/'))||/\.(mp3|m4a|aac|ogg|oga|wav|flac)(?:[?#]|$)/i.test(s.src||'')));
- const candidates=[match?.src,row.audios?.mp3,row.audio?.mp3,row.mp3,row.audioUrl,row.audioURL,row.audioSrc,row.audioFile,row.mp3File,verifiedPublicAudioById[Number(row.id)]];
+ const candidates=[row.audioUrl,match?.src,row.audios?.mp3,row.audio?.mp3,row.mp3,row.audioUrl,row.audioURL,row.audioSrc,row.audioFile,row.mp3File,verifiedPublicAudioById[Number(row.id)]];
  for(const candidate of candidates){const url=safeAVideoUrl(candidate);if(url)return url}
  return undefined;
 }
@@ -33,7 +33,7 @@ export function mapAVideoVideo(row){
  const watchUrl=safeAVideoUrl(row.pageUrl||row.link||row.wwbnURL);
  if(!watchUrl)return null;
  const image=safeAVideoUrl(row.images?.posterLandscape||row.images?.poster||row.Poster||row.Thumbnail);
- const audio=/\/audio\/\d+(?:\/|$)/i.test(new URL(watchUrl).pathname)||isAVideoAudio(row);
+ const audio=row.mediaType==='audio'||/\/audio\/\d+(?:\/|$)/i.test(new URL(watchUrl).pathname)||isAVideoAudio(row);
  const sources=Array.isArray(row.sources)?row.sources.filter(s=>s?.type==='video/mp4'&&Number.isFinite(Number(s.res))):[];
  sources.sort((a,b)=>Number(b.res)-Number(a.res));
  const videoUrl=audio?undefined:safeAVideoUrl(sources[0]?.src||row.videos?.mp4?.['720']||row.videos?.mp4?.['480']);
