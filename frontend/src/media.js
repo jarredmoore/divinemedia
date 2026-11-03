@@ -17,10 +17,13 @@ function isAVideoAudio(row){
  if(Array.isArray(row.sources)&&row.sources.some(s=>typeof s?.type==='string'&&s.type.startsWith('audio/')))return true;
  return Boolean(row.audios?.mp3||row.audio?.mp3||row.mp3);
 }
+// Verified public stream supplied for AVideo audio #16 (5StarringMe).
+// Temporary per-item fallback until the catalog exposes audio sources automatically.
+const verifiedPublicAudioById={16:'https://media.divinecreativegroup.com/videos/audio_261103021835_v3962/audio_261103021835_v3962.mp3'};
 function audioSource(row){
  const sources=Array.isArray(row.sources)?row.sources:[];
  const match=sources.find(s=>s&&((typeof s.type==='string'&&s.type.startsWith('audio/'))||/\.(mp3|m4a|aac|ogg|oga|wav|flac)(?:[?#]|$)/i.test(s.src||'')));
- const candidates=[match?.src,row.audios?.mp3,row.audio?.mp3,row.mp3,row.audioUrl,row.audioURL,row.audioSrc,row.audioFile,row.mp3File];
+ const candidates=[match?.src,row.audios?.mp3,row.audio?.mp3,row.mp3,row.audioUrl,row.audioURL,row.audioSrc,row.audioFile,row.mp3File,verifiedPublicAudioById[Number(row.id)]];
  for(const candidate of candidates){const url=safeAVideoUrl(candidate);if(url)return url}
  return undefined;
 }
