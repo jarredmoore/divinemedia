@@ -3,7 +3,7 @@ const STORAGE_KEY='divine-media:saved:v1';
 const avideoOrigin=(import.meta.env.VITE_AVIDEO_ORIGIN||'https://media.divinecreativegroup.com').replace(/\/$/,'');
 const catalogEndpoint=import.meta.env.VITE_AVIDEO_CATALOG_URL||'/api/public-catalog';
 // Set this to a public HTTPS cover-art URL after publishing the album image.
-const murphyAlbumCover=import.meta.env.VITE_MURPHY_LEE_COVER_URL||'';
+const murphyAlbumCover=import.meta.env.VITE_MURPHY_LEE_COVER_URL||'/album-art/murphy-lee-2nd-time-around.jpg';
 const murphyAlbumTitles=new Set(['5starringme','4pinkslipvibes','2secondtimearound','3humanlove','1divineintro']);
 export function readSaved(){try{const v=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string'):[]}catch{return []}}
 export function writeSaved(saved){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(saved))}catch{/* storage may be disabled */}}
@@ -37,7 +37,7 @@ export function mapAVideoVideo(row){
  const watchUrl=safeAVideoUrl(row.pageUrl||row.link||row.wwbnURL);
  if(!watchUrl)return null;
  const image=safeAVideoUrl(row.images?.posterLandscape||row.images?.poster||row.Poster||row.Thumbnail);
- const albumCover=audioPlaceholderCover(row)?safeUrl(murphyAlbumCover):undefined;
+ const albumCover=audioPlaceholderCover(row)?murphyAlbumCover:undefined;
  const audio=row.mediaType==='audio'||/\/audio\/\d+(?:\/|$)/i.test(new URL(watchUrl).pathname)||isAVideoAudio(row);
  const sources=Array.isArray(row.sources)?row.sources.filter(s=>s?.type==='video/mp4'&&Number.isFinite(Number(s.res))):[];
  sources.sort((a,b)=>Number(b.res)-Number(a.res));
