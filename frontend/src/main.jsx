@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useRef} from 'react';
 import{createRoot}from'react-dom/client';
-import{Search,Compass,Clapperboard,Headphones,Radio,Users,Library,Play,ArrowUpRight,Menu,X,Heart,Plus,Volume2,SkipForward,SkipBack,Pause,ArrowLeft,PanelLeftClose,PanelLeftOpen,Volume2}from'lucide-react';
+import{Search,Compass,Clapperboard,Headphones,Radio,Users,Library,Play,ArrowUpRight,Menu,X,Heart,Plus,Volume2,SkipForward,SkipBack,Pause,ArrowLeft,PanelLeftClose,PanelLeftOpen}from'lucide-react';
 import './style.css';
 import './dcg-tokens.css';
 import './dcg-theme.css';
