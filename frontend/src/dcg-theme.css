@@ -79,3 +79,8 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .app:has(.dm-dock){padding-bottom:78px}
 @media(max-width:600px){.dm-dock{gap:9px;padding:9px 12px;min-height:68px}.dm-dock-art{height:42px;width:42px}.dm-dock-info{max-width:none}.dm-dock-progress{position:absolute;bottom:0;left:0;right:0;width:100%;height:4px;margin:0}.dm-dock-volume-icon{display:none}.app:has(.dm-dock){padding-bottom:68px}}
 @media(prefers-reduced-motion:reduce){.dm-dock{backdrop-filter:none}}
+
+/* Video-aware dock: return to the existing AVideo/native player, no duplicate stream */
+.dm-video-dock .dm-dock-resume{display:flex;align-items:center;gap:8px;border:1px solid rgba(255,204,47,.45);border-radius:999px;padding:10px 16px;background:var(--dm-accent);color:#09090c;font-size:12px;font-weight:750;white-space:nowrap}
+.dm-video-dock .dm-dock-resume:hover{background:#ffe17b}
+@media(max-width:480px){.dm-video-dock .dm-dock-resume{padding:9px 11px;font-size:11px}}
