@@ -2,9 +2,8 @@
 const STORAGE_KEY='divine-media:saved:v1';
 const avideoOrigin=(import.meta.env.VITE_AVIDEO_ORIGIN||'https://media.divinecreativegroup.com').replace(/\/$/,'');
 const catalogEndpoint=import.meta.env.VITE_AVIDEO_CATALOG_URL||'/api/public-catalog';
-// Set this to a public HTTPS cover-art URL after publishing the album image.
-const murphyAlbumCover=import.meta.env.VITE_MURPHY_LEE_COVER_URL||'';
-const murphyAlbumTitles=new Set(['5starringme','4pinkslipvibes','2secondtimearound','3humanlove','1divineintro']);
+// Default album artwork shipped with the frontend; override when a future release needs different artwork.
+const murphyAlbumCover=import.meta.env.VITE_MURPHY_LEE_COVER_URL||'/2ndTimeAround.jpg';
 export function readSaved(){try{const v=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string'):[]}catch{return []}}
 export function writeSaved(saved){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(saved))}catch{/* storage may be disabled */}}
 const safeUrl=(value)=>{if(typeof value!=='string'||!value.trim())return undefined;try{const u=new URL(value,window.location.origin);return ['http:','https:'].includes(u.protocol)?u.href:undefined}catch{return undefined}};
@@ -30,19 +29,17 @@ function audioSource(row){
  for(const candidate of candidates){const url=safeAVideoUrl(candidate);if(url)return url}
  return undefined;
 }
-function audioPlaceholderCover(row){return Boolean(murphyAlbumCover)&&murphyAlbumTitles.has(String(row.title||'').toLowerCase().replace(/[^a-z0-9]/g,''))}
 /** Map the public AVideo API response; do not retain user/session fields. */
 export function mapAVideoVideo(row){
  if(!row||typeof row!=='object'||!row.title||row.status!=='a'||row.externalOptions?.privacyInfo?.isPrivate||row.externalOptions?.privacyInfo?.password_protectd||row.only_for_paid||row.externalOptions?.privacyInfo?.only_for_paid)return null;
  const watchUrl=safeAVideoUrl(row.pageUrl||row.link||row.wwbnURL);
  if(!watchUrl)return null;
  const image=safeAVideoUrl(row.images?.posterLandscape||row.images?.poster||row.Poster||row.Thumbnail);
- const albumCover=audioPlaceholderCover(row)?murphyAlbumCover:undefined;
  const audio=row.mediaType==='audio'||/\/audio\/\d+(?:\/|$)/i.test(new URL(watchUrl).pathname)||isAVideoAudio(row);
  const sources=Array.isArray(row.sources)?row.sources.filter(s=>s?.type==='video/mp4'&&Number.isFinite(Number(s.res))):[];
  sources.sort((a,b)=>Number(b.res)-Number(a.res));
  const videoUrl=audio?undefined:safeAVideoUrl(sources[0]?.src||row.videos?.mp4?.['720']||row.videos?.mp4?.['480']);
- const item=normalizeMedia({title:row.title,tag:'AVIDEO · '+(row.channelName||(audio?'AUDIO':'VIDEO'))+(row.duration?' · '+row.duration:''),type:audio?'Listen':'Watch',watchUrl,img:albumCover||image,videoUrl,audioUrl:audio?audioSource(row):undefined,creator:row.channelName||row.user||'Creator',channelUrl:row.wwbnChannelURL});
+ const item=normalizeMedia({title:row.title,tag:'AVIDEO · '+(row.channelName||(audio?'AUDIO':'VIDEO'))+(row.duration?' · '+row.duration:''),type:audio?'Listen':'Watch',watchUrl,img:audio?murphyAlbumCover:image,videoUrl,audioUrl:audio?audioSource(row):undefined,creator:row.channelName||row.user||'Creator',channelUrl:row.wwbnChannelURL});
  return item?{...item,avideoId:row.id}:null;
 }
 /** Read sanitized public AVideo catalog from same-origin Netlify function; no credentials. */
