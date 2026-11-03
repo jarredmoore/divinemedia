@@ -91,3 +91,10 @@ button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(-
 .avideo-audio-embed a{display:inline-flex;align-items:center;gap:7px;color:#ffcc2f;font-size:12px;text-decoration:none;align-self:center}
 .avideo-audio-embed a:hover{text-decoration:underline}
 @media(max-width:600px){.avideo-audio-embed iframe{height:220px}}
+
+/* Functional DCG audio volume control */
+.dm-dock-volume{display:flex;align-items:center;gap:5px;min-width:110px}
+.dm-dock-volume button{padding:7px;flex-shrink:0}
+.dm-dock-volume input[type=range]{width:80px;min-width:0;accent-color:#ffcc2f;cursor:pointer}
+@media(max-width:600px){.dm-dock-volume{min-width:0;gap:0}.dm-dock-volume input[type=range]{width:55px}}
+@media(max-width:390px){.dm-dock-volume input[type=range]{width:40px}}
