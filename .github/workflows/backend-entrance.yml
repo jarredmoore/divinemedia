@@ -1,0 +1,27 @@
+name: Divine Media Backend Entrance
+on:
+  pull_request:
+    paths:
+      - 'backend/divine-entrance/**'
+      - 'ops/divinemedia/apply-entrance.py'
+      - '.github/workflows/backend-entrance.yml'
+  push:
+    branches:
+      - feat/divine-media-3.3-entrance
+    paths:
+      - 'backend/divine-entrance/**'
+      - 'ops/divinemedia/apply-entrance.py'
+      - '.github/workflows/backend-entrance.yml'
+permissions:
+  contents: read
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: PHP templates
+        run: find backend/divine-entrance -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Login presentation JavaScript
+        run: node --check backend/divine-entrance/login-theme.js
+      - name: Reversible installer Python
+        run: python3 -m py_compile ops/divinemedia/apply-entrance.py
