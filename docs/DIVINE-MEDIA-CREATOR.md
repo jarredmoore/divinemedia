@@ -33,7 +33,7 @@ Rollback checks installed file hashes and refuses to overwrite later changes. As
 
 ## Design previews
 
-The Encoder preview uses the public connection form with native styles. Direct Upload previews use a representative form fixture pending isolated authenticated rendering. These previews are design evidence, not proof of successful media processing.
+The Encoder preview uses the public connection form with native styles. Direct Upload previews use the sanitized native form rendered by an authenticated creator in the isolated restore, with a representative guidance sidebar. These previews are design evidence, not proof of successful media processing.
 
 | Direct upload | Encoder connection |
 | --- | --- |
@@ -43,3 +43,23 @@ The Encoder preview uses the public connection form with native styles. Direct U
 ## Validation
 
 Local browser checks cover both pages at 1440px and 390px, horizontal overflow, original form identity, retained submit listeners and native input IDs. All network traffic is intercepted; no production upload is submitted. Installer tests cover exact rollback, restrictive umask, source leases and refusal to destroy later changes. The production direct-upload script also passes a browser check with mocked transport: browse triggers the existing input, file addition submits once, progress reaches 50%, cancellation aborts, and failure retains its error state. Actual upload/encoding jobs are excluded from visual validation.
+
+The isolated restored runtime passes PHP lint, the guest Encoder connection form, an authenticated native media uploader, and Encoder upload/settings/tabs rendered with a temporary signed-in fixture. The fixture and test account exist only in the clone, which has an internal network and no processing startup. Handler hashes remain unchanged, rollback/reapply passes, and all scratch containers/network/files are removed. This verifies rendering and installation; it does not verify a real Encoder sign-in or processing job. See [stage evidence](CREATOR-STAGE-VERIFICATION.json).
+
+## Signed-in Encoder preview
+
+The isolated signed-in view uses sanitized server-rendered controls, with account values and executable content removed. It verifies the shared layout at desktop and mobile sizes; production authentication and job submission are not exercised.
+
+![Encoder workspace desktop](previews/creator-encoder-workspace-1440.png)
+
+![Encoder workspace mobile](previews/creator-encoder-workspace-390.png)
+
+## Deployment — 2026-11-07
+
+Live source commit: `61f96e4c30ae30cb8305d01b652b5d65313f2309`, release `0b8df6f2022d`. Installed from the feature branch without merging either the integration or production branch.
+
+Public checks pass for the entrance, login, native library, audio/video filters, embed and Encoder routes. Guests at `/upload` retain the native 302 login redirect. The Encoder connection form and all three public theme assets return 200. Seven native/routing files and all five entrance assets retain their hashes; the queue is unchanged, the catalog remains 16 records, all 52 original media hashes match, and MP3/MP4 range requests return 206. Existing containers remain healthy without restarts.
+
+Rollback snapshot: `/srv/divinemedia/backups/creator-20261107T171602Z-325e71`. See [live evidence](CREATOR-LIVE-VERIFICATION.json). No production upload, real Encoder sign-in, or processing job was performed.
+
+Final public connection and sanitized signed-in Encoder browser checks pass at 320, 390, 768 and 1440 pixels, without page overflow. The signed-in upload and queue panels share the available desktop width and stack on smaller screens; native action labels remain readable. See [browser evidence](CREATOR-BROWSER-VERIFICATION.json).
