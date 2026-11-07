@@ -43,13 +43,6 @@
       "roundtrip_verified": true
     }
   },
-  "renewal_audit": {
-    "cron_running": true,
-    "renewal_job_present": true,
-    "all_certificates_job_present": true,
-    "new_certificate_has_apache_reload_hook": false,
-    "new_certificate_renewal_file_present": true
-  },
   "renewal_hook": {
     "result": "pass",
     "hook": "/srv/divinemedia/app/.compose/letsencrypt/renewal-hooks/deploy/divinemedia-apache-renew",
@@ -61,5 +54,12 @@
       "bytes": 51865,
       "roundtrip_verified": true
     }
+  },
+  "pre_hook_audit": {
+    "cron_running": true,
+    "renewal_job_present": true,
+    "all_certificates_job_present": true,
+    "new_certificate_has_apache_reload_hook": false,
+    "new_certificate_renewal_file_present": true
   }
 }
