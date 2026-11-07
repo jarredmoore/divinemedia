@@ -11,7 +11,7 @@ header('Cache-Control: no-cache');
 <meta name="theme-color" content="#09090c">
 <link rel="icon" href="/divine-entrance/mark.svg" type="image/svg+xml">
 <link rel="canonical" href="https://media.divinecreativegroup.com/">
-<link rel="stylesheet" href="/divine-entrance/entrance.css?v=33-entrance-2">
+<link rel="stylesheet" href="/divine-entrance/entrance.css?v=33-entrance-3">
 </head>
 <body class="dm-entrance">
 <a class="dm-skip" href="#main">Skip to content</a>

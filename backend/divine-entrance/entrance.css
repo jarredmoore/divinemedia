@@ -32,5 +32,5 @@
 .dm-auth-card .material-switch>label{display:none!important}
 .dm-auth-card #loginForm .form-group>.col-md-12{padding-left:0;padding-right:0}
 .dm-primary>span svg{fill:none;width:14px;height:14px}
-/* Native decorative backdrops are identified outside the retained login form. */
-.dm-auth-ready .dm-native-backdrop{display:none!important}
+/* An opaque full-bleed canvas keeps native background variants behind the branded page. */
+.dm-auth-ready .dm-auth-shell{background:#09090c;box-shadow:0 0 0 100vmax #09090c;min-height:100vh}

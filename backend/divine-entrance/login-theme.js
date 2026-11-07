@@ -2,7 +2,7 @@
   function mount() {
     const nativePage = document.querySelector('.loginPage');
     const form = nativePage?.querySelector('#loginForm');
-    if (!form || window.self !== window.top || document.querySelector('.dm-auth-shell')) return;
+    if (!form || window.self !== window.top || window.opener || document.querySelector('.dm-auth-shell')) return;
     // Move the existing nodes: never clone inputs, replace the form, or intercept authentication.
     const shell = document.createElement('main');
     shell.className = 'dm-auth-shell';
@@ -10,17 +10,6 @@
     shell.querySelector('.dm-native-host').append(nativePage);
     document.body.prepend(shell);
     document.body.classList.add('dm-auth-ready');
-    function quietNativeBackdrops() {
-      for (const node of document.querySelectorAll('body div, body canvas, body ul')) {
-        if (shell.contains(node)) continue;
-        const decorative = node.tagName === 'CANVAS' || /hero|background|bokeh|particle|circles|squares|bubbles|stars|waves/i.test(node.className + ' ' + node.id);
-        if (!decorative || node.matches('[role=dialog],[role=alert],[aria-live]') || node.querySelector('input,button,form,iframe,a,select,textarea')) continue;
-        const style = getComputedStyle(node);
-        if (style.position === 'fixed' && Number(style.zIndex) < 0) node.classList.add('dm-native-backdrop');
-      }
-    }
-    quietNativeBackdrops();
-    if (document.readyState !== 'complete') window.addEventListener('load', quietNativeBackdrops, {once: true});
     document.title = 'Creator sign-in | Divine Media';
     form.querySelector('#inputUser')?.setAttribute('autocomplete', 'username');
     form.querySelector('#inputPassword')?.setAttribute('autocomplete', 'current-password');
