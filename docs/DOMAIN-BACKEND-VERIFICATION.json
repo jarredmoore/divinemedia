@@ -1,0 +1,26 @@
+{
+  "commit": "79a18229f8840f08c969597cf74536c2c06fde03",
+  "release": "domain-release-d26fe550d767",
+  "snapshot": "/srv/divinemedia/backups/domains-20261107T222154Z-70a793",
+  "result": "pass",
+  "canonical_routes": "200; guest upload 302",
+  "legacy_media_api_and_embeds": "compatible",
+  "legacy_auth_entries": "302 to new host",
+  "backend_public_self_connection": "pass",
+  "encoder_site_allowed": true,
+  "login_cookie_domains": "compatible",
+  "catalog_rows": 18,
+  "original_media_hashes_preserved": 54,
+  "native_handler_hashes_preserved": 10,
+  "encoder_queue_unchanged": true,
+  "mp3_mp4_ranges": "206 on both hosts",
+  "application_rollback": "/srv/divinemedia/backups/domains-20261107T222154Z-70a793/application-f3fbe904",
+  "settings_rollback": "/srv/divinemedia/backups/domains-20261107T222154Z-70a793/settings-f3fbe904",
+  "containers": [
+    "app-live-1 Up 19 hours (healthy)",
+    "app-avideo-1 Up 9 days (healthy)",
+    "app-database_encoder-1 Up 9 days (healthy)",
+    "app-database-1 Up 9 days (healthy)",
+    "app-memcached-1 Up 9 days"
+  ]
+}

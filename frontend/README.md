@@ -1,3 +1,5 @@
+> Canonical public URLs: [Watch](https://divinemedia.us/) and [Media / creator access](https://media.divinemedia.us/). See [domain migration and rollback](../docs/DIVINE-MEDIA-DOMAINS.md) for source/deploy references, legacy redirects, and the production-branch approval boundary.
+
 # Current cloud workflow (Divine Media 3.3)
 
 Use `dev/divine-media-3.1` as the integration branch and open feature PRs against it. Production is `production/divine-media` and requires explicit approval. See [the audit and plan](../docs/DIVINE-MEDIA-3.3-AUDIT.md) and [adopted workflow](../DIVINE-MEDIA-DEVELOPMENT-WORKFLOW.md).
