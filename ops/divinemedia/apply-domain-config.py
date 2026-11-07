@@ -35,6 +35,28 @@ def rollback(root,web,state):
  for name in plan['before']:atomic(root/name,(state/'files'/name).read_bytes())
  write_vhost(web,original);apache_reload(web)
  return {'rolled_back':True}
+def rewrite_vhost(original_vhost):
+ vhost,count=re.subn(rb'(ServerName\s+)'+re.escape(OLD.encode()),lambda m:m.group(1)+NEW.encode(),original_vhost)
+ if count!=2:raise RuntimeError('Unexpected vhost names')
+ vhost,count=re.subn(rb'(ServerAlias\s+)localhost',lambda m:m.group(1)+OLD.encode()+b' localhost',vhost)
+ if count!=2:raise RuntimeError('Unexpected vhost aliases')
+ old_cert=b'/etc/letsencrypt/live/'+OLD.encode()+b'/'
+ if vhost.count(old_cert)!=2:raise RuntimeError('Unexpected certificate paths')
+ vhost=vhost.replace(old_cert,b'/etc/letsencrypt/live/divinemedia/')
+ auth_rules=b"""
+    # DM_CANONICAL_AUTH_V1: only legacy browser entry GET/HEAD; never redirect POSTs.
+    RewriteEngine On
+    RewriteCond %{HTTP_HOST} ^media[.]divinecreativegroup[.]com(?::[0-9]+)?$ [NC]
+    RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
+    RewriteCond %{QUERY_STRING} ^noNavbar=(0|1|true|false)$ [NC]
+    RewriteRule ^/?(user/?|upload|view/mini-upload-form/index[.]php|Encoder/(view/index[.]php|index[.]php)?)$ https://media.divinemedia.us%{REQUEST_URI} [R=302,L,NE]
+    RewriteCond %{HTTP_HOST} ^media[.]divinecreativegroup[.]com(?::[0-9]+)?$ [NC]
+    RewriteCond %{REQUEST_METHOD} ^(GET|HEAD)$
+    RewriteRule ^/?(user/?|upload|view/mini-upload-form/index[.]php|Encoder/(view/index[.]php|index[.]php)?)$ https://media.divinemedia.us%{REQUEST_URI} [R=302,L,NE,QSD]
+"""
+ vhost,count=re.subn(rb'(<VirtualHost[^>]*>\s*\n)',lambda m:m.group(1)+auth_rules,vhost)
+ if count!=2:raise RuntimeError('Unexpected virtual host blocks')
+ return vhost
 def install(root,web,assets,snapshot,state,apply=False):
  root=pathlib.Path(root);assets=pathlib.Path(assets);snapshot=pathlib.Path(snapshot);state=pathlib.Path(state)
  cert=json.loads((snapshot/'certificate-report.json').read_text())
@@ -60,13 +82,7 @@ def install(root,web,assets,snapshot,state,apply=False):
   if not member.isfile():raise RuntimeError('Unexpected archived vhost shape')
   expected_vhost=archive.extractfile(member).read()
  if original_vhost!=expected_vhost:raise RuntimeError('Vhost changed since domain snapshot')
- vhost,count=re.subn(rb'(ServerName\s+)'+re.escape(OLD.encode()),lambda m:m.group(1)+NEW.encode(),original_vhost)
- if count!=2:raise RuntimeError('Unexpected vhost names')
- vhost,count=re.subn(rb'(ServerAlias\s+)localhost',lambda m:m.group(1)+OLD.encode()+b' localhost',vhost)
- if count!=2:raise RuntimeError('Unexpected vhost aliases')
- old_cert=b'/etc/letsencrypt/live/'+OLD.encode()+b'/'
- if vhost.count(old_cert)!=2:raise RuntimeError('Unexpected certificate paths')
- vhost=vhost.replace(old_cert,b'/etc/letsencrypt/live/divinemedia/')
+ vhost=rewrite_vhost(original_vhost)
  info=docker(web,'openssl','x509','-in','/etc/letsencrypt/live/divinemedia/fullchain.pem','-noout','-ext','subjectAltName').stdout
  if b'DNS:'+NEW.encode() not in info or b'DNS:'+OLD.encode() not in info:raise RuntimeError('Dual-host certificate missing')
  plan={'before':{n:digest(d) for n,d in originals.items()},'after':{n:digest(d) for n,d in changes.items()},'vhost_before':digest(original_vhost),'vhost_after':digest(vhost),'domains':[OLD,NEW]}
