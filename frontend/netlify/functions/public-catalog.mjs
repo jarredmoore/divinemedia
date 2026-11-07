@@ -11,7 +11,7 @@ export function findPublicAudioUrl(html){
  const text=html.replaceAll('&amp;','&').replaceAll('\\/','/');
  // Consume complete external URLs before relative paths, so an untrusted host
  // cannot be mistaken for a relative /videos/ URL during HTML discovery.
- const candidates=[...text.matchAll(/https?:\/\/[^\s"'<>\\]+|\/videos\/[a-zA-Z0-9_./%-]+\.(?:mp3|m4a|ogg|wav)(?![a-zA-Z0-9])/gi)];
+ const candidates=[...text.matchAll(/(?:https?:)?\/\/[^\s"'<>\\]+|\/videos\/[a-zA-Z0-9_./%-]+\.(?:mp3|m4a|ogg|wav)(?![a-zA-Z0-9])/gi)];
  for(const match of candidates){
   const url=mediaUrl(match[0]);
   if(url&&new URL(url).pathname.startsWith('/videos/')&&/\.(mp3|m4a|ogg|wav)$/i.test(new URL(url).pathname)&&!new URL(url).search)return url;

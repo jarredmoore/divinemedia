@@ -29,4 +29,6 @@ test('old media URLs move to the new domain without changing paths',()=>{
  assert.equal(findPublicAudioUrl('<source src="https://media.divinecreativegroup.com/videos/new/new.mp3">'),src);
  assert.equal(findPublicAudioUrl('<source src="https://evil.example/videos/new/new.mp3">'),null);
  assert.equal(findPublicAudioUrl('<source src="https://media.divinemedia.us.evil.example/videos/new/new.mp3">'),null);
+ assert.equal(findPublicAudioUrl('<source src="//evil.example/videos/new/new.mp3">'),null);
+ assert.equal(findPublicAudioUrl('<source src="//media.divinecreativegroup.com/videos/new/new.mp3">'),src);
 });
