@@ -55,3 +55,13 @@ The installer was applied to an isolated restore of the verified off-VM backup, 
 The native guest login kept `#loginForm` and received only the theme asset include. The authentication handler checksum was unchanged. PHP lint passed. The installer then rolled back to the exact original source, restored the native homepage, removed its assets, and reapplied successfully against the same original hashes. Scratch containers, network and extracted files were removed after verification.
 
 The release bundle's deployment plan is tied to the original `.htaccess` and login-template hashes. This is a presentation change, not a database, upload, encoding or thumbnail release.
+
+## Live deployment
+
+Applied November 7, 2026 at 8:02 a.m. America/Chicago (14:02 UTC), from feature commit `1e4b67346e7bc470719c381d99fc6358b36fb0b2`, release `76e475070ca5`. No development or production branch was merged.
+
+Public HTTPS homepage and creator sign-in return HTTP 200. Live native library/query, Encoder, embed, audio/video page and login JSON checks retained HTTP 200. Catalog count remains 16; MP3/MP4 ranges return 206. The authentication handler checksum and all 52 original media hashes are unchanged. Original containers remain healthy; no services were restarted.
+
+Check the login on canonical HTTPS: HTTP can return AVideo's wrapper without the form. This is not evidence that sign-in is unavailable. The final presentation uses a full-bleed opaque canvas to prevent native animated backgrounds from changing the branded appearance. Native dialogs and controls remain visible; embedded/popup authentication keeps its native presentation.
+
+Current exact rollback snapshot: `/srv/divinemedia/backups/entrance-20261107T140202Z-a7d9e2`. The installed core and owned-asset hashes must still match that snapshot's plan before rollback. Real-account sign-in and SSO were not exercised; the owner can validate those using their usual credentials without sharing them.
