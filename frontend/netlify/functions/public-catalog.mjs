@@ -5,7 +5,7 @@ function mediaUrl(value){
  if(typeof value!=='string'||!value.trim())return null;
  try{
   const u=new URL(value,ORIGIN);
-  if(u.protocol!=='https:'||u.origin!==ORIGIN)return null;
+  if(u.protocol!=='https:'||u.origin!==ORIGIN||u.username||u.password)return null;
   return u.href;
  }catch{return null}
 }

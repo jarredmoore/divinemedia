@@ -21,3 +21,11 @@ Treat `vm-divinemedia-staging` as potentially production-serving. Establish subs
 Investigate Upload/Encoder independently: inventory versions, service health, configured public URLs, queue/error metadata, and existing backup/rollback references. Avoid submitting uploads or encoding jobs and do not touch existing videos or thumbnail processing. Backend changes require separate approval, backup and rollback per the adopted workflow.
 
 This environment has no configured Azure or Netlify identity. Connected GitHub and public HTTP evidence can validate checks/previews; subscription costs, VM metrics and Netlify dashboard settings require authorized account access. Never put credentials in this document or frontend variables.
+
+## Phase 1 verification evidence
+
+- Clean `npm ci`, four catalog regression tests, and production Vite build pass. Initial GitHub Actions PR build also passed.
+- Read-only live catalog inspection found 16 public entries, including seven audio sources. Passing that public response through the updated handler yields seven playable audio entries without HTML requests.
+- Chromium decoded and played the downloaded public MP3. Automated checks passed for artwork loading, volume adjustment, mute/unmute restoration, seeking, previous/next playback, and control bounds at 320, 375, 390, 768 and 1440 pixels. Browser media requests used a local copy of that MP3; this establishes frontend behavior, not preview network delivery or physical-device audio output.
+- Direct Node fetch from this workspace timed out (the shell HTTP client uses the environment proxy successfully). Live function execution in Netlify must still be checked.
+- The live frontend responds with Netlify headers. At initial PR inspection, GitHub showed the Actions build but no Netlify status, deployment or preview comment. This does not establish whether Deploy Previews are enabled or the site is linked to this repository. Site dashboard settings and production deploy/source mapping remain unverified.

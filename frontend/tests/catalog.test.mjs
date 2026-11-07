@@ -14,6 +14,7 @@ test('audio candidates skip untrusted URLs and preserve valid later sources',()=
  assert.equal(isAudio({type:'audio'},origin+'/video/99'),true);
  assert.equal(isAudio({sources:[{src,type:'application/octet-stream'}]},origin+'/video/99'),true);
  assert.equal(isAudio({type:'video'},origin+'/video/99'),false);
+ assert.equal(publicAudioSource({audioUrl:'https://user:password@media.divinecreativegroup.com/a.mp3'}),null);
 });
 test('legacy public page discovery works for escaped paths',()=>{
  assert.equal(findPublicAudioUrl('<source src="/videos/new/new.mp3">'),src);
