@@ -47,3 +47,11 @@ Browser checks against the existing public native login verify desktop/mobile bo
 Installer regression checks cover restrictive deployment permissions, source-change rejection, exact rollback and preservation of later edits. GitHub Actions runs PHP, JavaScript and Python syntax checks plus those installer checks.
 
 Deployment requires PHP lint, isolated route-preservation tests, a rollback/reapply rehearsal, and a source-hash match against the live installation. Screenshots under `docs/previews` contain blank form fields and public UI only.
+
+## Isolated verification result
+
+The installer was applied to an isolated restore of the verified off-VM backup, with the restored application, cache, and both databases on an internal network. Bare `/` and `/index.php` rendered the new entrance. The native library, root query filters, Encoder, video embed, video page, audio page and login JSON route all retained their baseline HTTP 200 statuses. The public catalog retained 16 rows and MP3/MP4 byte-range requests returned HTTP 206.
+
+The native guest login kept `#loginForm` and received only the theme asset include. The authentication handler checksum was unchanged. PHP lint passed. The installer then rolled back to the exact original source, restored the native homepage, removed its assets, and reapplied successfully against the same original hashes. Scratch containers, network and extracted files were removed after verification.
+
+The release bundle's deployment plan is tied to the original `.htaccess` and login-template hashes. This is a presentation change, not a database, upload, encoding or thumbnail release.
