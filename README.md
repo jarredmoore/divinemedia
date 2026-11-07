@@ -1,143 +1,114 @@
-# Documentation and Codebase used to Developing and Depolying VOD applications for Divine Media™ Content Delivery Platforms
+# Divine Media
 
-## Audio Video Platform
-AVideo is a term that means absolutely nothing, or anything video. Since it doesn't mean anything the brand simply is identifiable with audio video. AVideo Platform is an Audio and Video Platform or simply "A Video Platform".
+**Watch. Listen. Create.**
 
-* AVideo - Audio Video
-* AVideo Platform - Audio Video Platform
-* OAVP - Online Audio Video Platform 
-* OVP - Online Video Platform
+Divine Media is Divine Creative Group’s platform for publishing and discovering independent video and audio—films, performances, episodes, and creator releases. This repository contains the platform’s source code, frontend development, and operational documentation.
 
-AVideo Platform is distributed as SaaS at <a href="https://avideo.com">AVideo.com</a>, as an <a href="https://platform.avideo.com/AVideo_Enterprise">Enterprise Version</a>, and as an <a href="https://platform.avideo.com/AVideo_OpenSource">Open-Source Project</a>.  
+The viewing experience uses React and Vite. AVideo manages the media catalog, creator accounts, uploads, and publishing, with Encoder handling media preparation.
 
-## AN AVideo Platform Instance
+## Explore the platform
 
-When we say a clone or copy of AVideo we mean an instance of AVideo Platform Enterprise or Open-Source and every instance of the AVideo Platform can be indexed as a network in the World Wide Broadcast Network Platform System.
+| Destination | Purpose |
+| --- | --- |
+| [Watch](https://watch.divinecreativegroup.com/) | Public viewing and listening experience |
+| [Media](https://media.divinecreativegroup.com/) | Branded entrance and media platform |
+| [Creator upload](https://media.divinecreativegroup.com/upload) | Direct upload for authorized creators; sign-in required |
+| [Encoder](https://media.divinecreativegroup.com/Encoder/) | Connect a media account, upload source files, and follow processing |
 
-### AVideo trademark is FREE to use
-AVideo is a registered trademark owned by WWBN (World Wide Broadcast Network, Inc.) and is freely distributable with any Enterprise or Open-Source AVideo Platform products provided by WWBN, and its permitted use is granted with GNU-GPL, CDDL open source licenses. <a href="https://platform.avideo.com/AVideo_OpenSource#OSAV">Open-Source License can be viewed in this link.</a>
-* Word Mark:	AVIDEO
-* Translations:	"AVideo" has no meaning in any foreign language.
-* Description:	"AVideo" constitutes Audio Video.
-* Goods and Services:	IC 009. US 021 023 026 036 038. G & S: Computer search engine software for searching online video content. FIRST USE: 20030602. FIRST USE IN COMMERCE: 20040112
-* Standard Characters: Claimed	
-* Mark Drawing Code:	(4) STANDARD CHARACTER MARK
-* Trademark Search Facility Classification Code:	LETS-1 A A single letter, multiples of a single letter or in combination with a design
-* Serial Number:	77450549
-* Registration Number:	3625659
+## How it fits together
 
-#### About the project re-brand.
- Originally the open-source version was offered as YouPHPTube, and marketed as a YouTube Clone (after the popular video sharing site), we decided to rebrand our open-source audio video platform project from YouPHPTube to <strong>AVideo Platform</strong> which contsitutes <strong>Audio Video Platform</strong>. In some plugins, forks, versions, modules, APIs, documentation, file names, there may be or have been reference to <a href="https://youphp.tube/" target="_blank">youphptube</a>, <a href="https://youphp.tube/plugins/" target="_blank">youphp.tube</a>, youtube clone, clone script, searchtube, adtube, showtube, searchmercials.  WWBN owns <a href="//searchmercials.com">Searchmercials</a>, <a href="//searchtube.com">SearchTube</a>, AdTube, ShowTube, <a href="//avideo.com">AVideo</a>, <a href="//wwbn.com">WWBN</a> among other trademarks. All other trademarks and similarity to any referred to in any files, documents, wikis, plugins, code, modules, apis, integrations, technologies, links belong to their respective owners. Follow us on <a href="https://www.facebook.com/avideo/">Facebook</a> 
-#
-# AVideo Platform Open-Source Project
-## AVideo Platform Open-Source Consist of THREE main Areas: 
-<img src="https://platform.avideo.com/website/assets/151/images/svg/balancing.svg"/>
+| Component | Technology | Delivery |
+| --- | --- | --- |
+| Watch frontend | React 19, Vite 6, lucide-react | Netlify previews and production |
+| Media platform | AVideo, PHP, Apache, MariaDB | Azure VM and Docker |
+| Encoder | AVideo Encoder and FFmpeg | Azure backend |
+| Source and review | GitHub branches and pull requests | This repository |
 
-#### (Management/Encoding/Storage)
-1. Management Project(s): <a href="http://git.platform.avideo.com/" class="" target="_blank">AVideo Platform</a>
-1. Encoding Project(s): <a href="http://git.encoder.avideo.com/" class="" target="_blank">AVideo Encoder</a> & <a href="http://git.encoder-network.avideo.com/" class="" target="_blank">AVideo Encoder Network</a> (Optional)
-1. Storage Project(s): <a href="http://git.storage.avideo.com/" class="" target="_blank">AVideo Storage</a>
+Published media stays in AVideo’s catalog. The frontend presents that catalog and plays its published media sources. Creator authentication, upload permissions, encoding, and thumbnail processing remain with the backend.
 
-Management life cycle is as follows; media is managed at the platform at 1, media is then uploaded to a temporary storage to be encoded at 2, then stored for broadcast at 3, then distributed to devices at 1 to be consumed.
+## Development and deployment
 
-#### About AVideo Platform Open-Source
-Some of the largest brands in the world use the AVideo Platform to manage and distribute their media assets. AVideo Platform open-source project has over 900 developers, and over 4000 AVideo Platform instances throughout the world.  Because of the remarkable flexibility of the platform, each of our customers uses our platform in a slightly different way, to address their particular needs and deliver solid targeted value to their organization.
+- **Repository homepage:** `master`. This branch contains the historical backend source and this overview.
+- **Active integration branch:** [`dev/divine-media-3.1`](https://github.com/jarredmoore/divinemedia/tree/dev/divine-media-3.1). Current Watch frontend work starts here.
+- **Production branch:** `production/divine-media`. Changes or merges require explicit approval.
+- **Feature work:** small, reversible changes on separate branches, reviewed through pull requests.
 
-The AVideo Platform Plugin Design allows you to get exactly the solution that addresses your needs today, while ensuring that your Broadcast Network implementation can grow and expand with you as your needs evolve.
+GitHub is the source of truth. Netlify handles frontend previews and production delivery; Azure hosts AVideo and Encoder. A merged pull request and a deployed release are separate steps—verify the deployed source and rollback reference for each service.
 
-<div align="center"><img src="https://platform.avideo.com/website/assets/151/images/open_source_banner.png"/></div>
+Existing videos and thumbnail processing must be preserved. Backend changes need a verified backup, a scoped deployment plan, and a rollback path. Keep credentials and private runtime configuration out of commits, frontend bundles, and logs.
 
-# Create Your Own Broadcast Network With AVideo Platform
+### Run the Watch frontend locally
 
-## AVideo Platform Open-Source Solution enables you to create your own video sharing site. Join the AVideo Developer Community and get platform innovation details, bug fixes, and contribute the continued evolution of AVideo Platform.
+Use Node.js 22 and npm. The frontend lives on the development branch, rather than the repository homepage branch.
 
-## Along with this re-brand come a slew of value added benefits for all AVideo Platform instances. 
-* Each AVideo Platform clone is considered a broadcast network
-* Each broadcast network is indexed in our World Wide Broadcast Network Platform System
-* Each broadcast network can use our ad network
-* Each broadcast network can use our Open Systems TV platform (Coming Soon)
-* Each broadcast network has channels and each channel has programs <a href="https://github.com/WWBN/AVideo/wiki/AVideo-Platform-Channel-Programming-Documentation">Learn more</a>
+```sh
+git clone https://github.com/jarredmoore/divinemedia.git
+cd divinemedia
+git switch dev/divine-media-3.1
+cd frontend
+npm install
+npm run dev
+```
 
-And more to come in 2020. Our mission is to take your video sharing site to "The Next Level" Internet TV.
+Build and inspect the production frontend locally:
 
-WWBN offers relevant and practical solutions, as well as valuable innovative technology, designed to increase the efficiency of advertising and broadcasting operations and maximize revenue opportunities for our customers and partners.
+```sh
+npm run build
+npm run preview
+```
 
-### WHERE WE DELIVER
-PROFITABLE STRATEGIES - We provide companies with new business models that evolve around the delivery of video and other digital assets complementing their existing business offerings and adding to their revenues. These new ways of doing business include Turnkey application-integration with capabilities for managing, auditing, and disseminating digital content.
+Validate API responses, media playback, navigation, and mobile layouts in a frontend preview before production promotion.
 
-### To learn more about AVideo Platform visit the <a href="https://platform.avideo.com/" target="_blank">AVideo Platform Official Site</a>.
-### To learn more about the history of the AVideo Paroject <a href="https://wwbn.com/AVideo_Platform" target="_blank">WWBN Project Page</a>
+## Requirements
 
-### To see a demo select one below.
-* <a href="https://flix.avideo.com/" target="_blank">AVideo Platform Flix Demo</a>
-  - We provide you a AVideo Flix Style site sample. On this site you can subscribe (with real money on PayPal). this subscription will allow you to watch our private videos. There is an user that you can use to see how it works. user: test and pass: test.
-* <a href="https://tutorials.avideo.com/" target="_blank">AVideo Platform Gallery Demo</a>
-  - We've provided a sample Video Gallery site, which is also our tutorials site. On this sample you can login, subscribe, like, dislike and comment. but you can not upload videos.
-* <a href="http://demo.avideo.com/" target="_blank">AVideo Platform Full-Access Demo</a>
-  - We provide you a Demo site sample with full access to the admin account. You will need an admin password to upload and manage videos, it is by default. user: admin and pass: 123. Also there is a non admin user and password (Only for comments). user: test and pass: test.
-  
+### Current Divine Media stack
 
+| Area | Requirements |
+| --- | --- |
+| Frontend development | Node.js 22, npm, React 19, Vite 6, and a modern browser |
+| Backend hosting | Linux, Docker, Apache 2.x with `mod_rewrite`, PHP with the extensions required by the deployed AVideo version, and MariaDB/MySQL-compatible databases |
+| Media preparation | AVideo Encoder, FFmpeg/FFprobe, temporary working storage, and access to the media platform |
+| Public delivery | HTTPS endpoints for the frontend, media platform, and Encoder |
+| Operations | Persistent media/database storage, off-VM backups, restore verification, and deployment rollback references |
 
-# Notice:
-### We highly recommend you keep your instance of AVideo Platform updated to the latest release. If you have updated your instance to version 8.0, your old plugins will not work, just download them again and you should be fine.
+The November 7, 2026 backend audit verified PHP 8.5.4, MariaDB 13.0.2, and FFmpeg 8.0.1 in the deployed containers. These are observed runtime versions, not a claim that the older repository Dockerfile reproduces the current installation. Check the deployed configuration and version-specific AVideo requirements before backend work.
 
-## Important Information
+### Historical upstream server requirements
 
-> Streamer can be installed on any Server, including Windows, but the encoder and Livestream should work fine on any Linux distribution. However we recommend Ubuntu 16+ without any kind of control panel.
-> The problem with cPanel, Plesk, Webmin, VestaCP, etc. It's because we need full root access to install some libs, and maybe compile them. Another important point is that to make Livestream work, we need to compile Nginx and the control panels often prevent us from running the commands forcing the installation available only on your panel.
-
-I don´t want to read I just want you to show me how to install!!
-
-Ok, <a href="https://tutorials.avideo.com/video/streamer-and-encoder">check this out!</a>
-
-For text-based tutorials and the manual, <a href="https://github.com/WWBN/AVideo/wiki/Admin-manual"> look here</a>. 
-
-There, you can find some hints for troubleshooting as well.
-
-### AVideo Platform Mobile APP
-<a href="https://play.google.com/store/apps/details?id=platform.avideo.com">Android</a>
-
-## AVideo Platform Certified
-#### Need Help With Installation or Plugins? Feel free to ask us for help from the AVideo Platform Certified developers.
-
-<a href="https://youphp.tube/plugins/">Daniel Neto</a>
-
-# AVideo - Streamer
-AVideo! is an video-sharing website, It is an open source solution that is freely available to everyone. With AVideo you can create your own video sharing site, AVideo will help you import and encode videos from other sites like Youtube, Vimeo, etc. and you can share directly on your website. In addition, you can use Facebook or Google login to register users on your site. The service was created in march 2017.
-
-<div align="center">
-<img src="https://platform.avideo.com/website/assets/151/images/who-we-are.jpg">
-<a href="http://demo.avideo.com/" target="_blank">View Demo</a>
-</div>
-
-# AVideo - Encoder
-Go get it <a href="https://github.com/WWBN/AVideo-Encoder" target="_blank">here</a>
-
-<div align="center">
-<img src="https://platform.avideo.com/website/assets/151/images/encoder_img.png">
-<a href="https://encoder2.avideo.com/" target="_blank">View Public Encoder</a>
-</div>
-
-# Why do I need the Encoder?
-You may want to install the encoder for a few reasons, such as, if you have a faster server than the public encoder server (which is likely to be the case), or if you'd like a private way of encoding your videos.
-
-But, the installation is mandatory if you are using a private network. The public encoder will not have access to send the videos to your streamer site.
-
-If your server does not have a public IP or uses an IP on some of these bands:
-- 10.0.0.0/8
-- 127.0.0.0/8 (Localhost)
-- 172.16.0.0/12
-- 192.168.0.0/16
-
-Surely you need to install an encoder
-
-# Server Requirements
-
-In order for you to be able to run AVideo Platform, there are certain tools that need to be installed on your server. Don't worry, they are all FREE. To have a look at complete list of required tools, click the link below.
+The original README listed these minimums. They are retained for historical reference; use the current Divine Media stack above for ongoing work.
 
 - PHP 5.6+
 - MySQL 5.0+
 - Apache web server 2.x (with mod_rewrite enabled)
+
+See the [AVideo administrator manual](https://github.com/WWBN/AVideo/wiki/Admin-manual) and [Encoder repository](https://github.com/WWBN/AVideo-Encoder) for upstream installation guidance.
+
+## Version history
+
+### Divine Media
+
+| Version / milestone | Status and scope |
+| --- | --- |
+| **3.3 — In development** | Branded media entrance, matching login, and shared creator styling for Direct Upload and Encoder are deployed from feature branches. Automatic MP3 discovery and player improvements remain under review. This is not a completed 3.3 release. |
+| **3.1 — Development baseline, November 1, 2026** | Established `dev/divine-media-3.1` from the existing Divine Media frontend work. Upload, thumbnail display, and playback were confirmed working as the baseline for the Watch redesign. |
+| **2.x — Earlier frontend foundation** | Existing Watch development on `divine-media-2`, carried forward into the 3.1 integration branch. |
+
+Current work and implementation details:
+
+- [Audio discovery and playback — PR #2](https://github.com/jarredmoore/divinemedia/pull/2)
+- [Azure audit — PR #3](https://github.com/jarredmoore/divinemedia/pull/3)
+- [Backup and recovery tooling — PR #4](https://github.com/jarredmoore/divinemedia/pull/4)
+- [Branded entrance and login — PR #5](https://github.com/jarredmoore/divinemedia/pull/5)
+- [Creator workspace — PR #6](https://github.com/jarredmoore/divinemedia/pull/6)
+
+Project references on the integration branch: [Project charter](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/PROJECT.md), [experience direction](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/EXPERIENCE_DIRECTION.md), and [changelog](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/CHANGELOG.md). These documents describe their recorded baseline; the linked pull requests contain subsequent work.
+
+### AVideo upstream history
+
+The release notes below are preserved from the original README. These are **AVideo versions**, separate from Divine Media’s version numbers. References to an “upcoming version” describe the historical upstream roadmap.
+
+<details>
+<summary>Expand the original AVideo release notes (5.6 through 3.4.1)</summary>
 
 # In the upcoming version (already in the code on the master branch)
 - Better support for Nginx and Microsofts IIS (experimental)
@@ -217,3 +188,12 @@ No. We will be providing a public encoder, we will build the encoder in such a w
 
 # Older version
 If you want the old version with Streamer and Encoder together (Version 3.4.1) download it <a href="https://github.com/WWBN/AVideo/releases/tag/3.4.1">here</a>
+
+
+</details>
+
+## Upstream acknowledgments and licensing
+
+Divine Media builds on [AVideo](https://github.com/WWBN/AVideo) and [AVideo Encoder](https://github.com/WWBN/AVideo-Encoder), developed by WWBN and the upstream community. AVideo was formerly known as YouPHPTube; legacy names remain in parts of the codebase.
+
+AVideo is a trademark of World Wide Broadcast Network, Inc. Existing copyright, trademark, and third-party license notices remain applicable. See the repository’s [LICENSE](LICENSE) and [upstream licensing information](https://platform.avideo.com/AVideo_OpenSource).
