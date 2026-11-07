@@ -1,13 +1,14 @@
+import {MEDIA_ORIGIN,canonicalMediaUrl} from '../shared/domains.mjs';
 // Curated JSON feed adapter: no undocumented AVideo API calls or embedded credentials.
 const STORAGE_KEY='divine-media:saved:v1';
-const avideoOrigin=(import.meta.env.VITE_AVIDEO_ORIGIN||'https://media.divinecreativegroup.com').replace(/\/$/,'');
+export const avideoOrigin=(import.meta.env.VITE_AVIDEO_ORIGIN||MEDIA_ORIGIN).replace(/\/$/,'');
 const catalogEndpoint=import.meta.env.VITE_AVIDEO_CATALOG_URL||'/api/public-catalog';
 // Default album artwork shipped with the frontend; override when a future release needs different artwork.
 const murphyAlbumCover=import.meta.env.VITE_MURPHY_LEE_COVER_URL||'/2ndTimeAround.jpg';
 export function readSaved(){try{const v=JSON.parse(localStorage.getItem(STORAGE_KEY)||'[]');return Array.isArray(v)?v.filter(x=>typeof x==='string'):[]}catch{return []}}
 export function writeSaved(saved){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(saved))}catch{/* storage may be disabled */}}
 const safeUrl=(value)=>{if(typeof value!=='string'||!value.trim())return undefined;try{const u=new URL(value,window.location.origin);return ['http:','https:'].includes(u.protocol)?u.href:undefined}catch{return undefined}};
-const safeAVideoUrl=(value)=>{if(typeof value!=='string'||!value.trim())return undefined;try{const u=new URL(value,avideoOrigin+'/');return u.protocol==='https:'&&u.origin===avideoOrigin?u.href:undefined}catch{return undefined}};
+const safeAVideoUrl=(value)=>canonicalMediaUrl(value,avideoOrigin)||undefined;
 export function normalizeMedia(entry){if(!entry||typeof entry!=='object')return null;const title=typeof entry.title==='string'?entry.title.trim():'';const type=entry.type;if(!title||!['Watch','Listen','Live','Creators'].includes(type))return null;return {title:title.slice(0,140),type,tag:typeof entry.tag==='string'?entry.tag.slice(0,100):type.toUpperCase(),img:safeUrl(entry.img)||'/placeholder.svg',videoUrl:safeUrl(entry.videoUrl),audioUrl:safeUrl(entry.audioUrl),watchUrl:safeUrl(entry.watchUrl),creator:typeof entry.creator==='string'?entry.creator.slice(0,100):undefined,channelUrl:safeUrl(entry.channelUrl)}}
 export async function loadMedia(){const url=import.meta.env.VITE_MEDIA_FEED_URL||'/media.json';const res=await fetch(url,{cache:'no-store'});if(!res.ok)throw Error('Media feed unavailable');const json=await res.json();if(!Array.isArray(json))throw Error('Media feed must be an array');return {items:json.map(normalizeMedia).filter(Boolean).slice(0,200)}}
 

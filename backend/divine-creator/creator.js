@@ -14,7 +14,7 @@
     if (connectForm) document.body.classList.add('dm-creator-connect');
     const brand = document.createElement('header');
     brand.className = 'dmc-header';
-    brand.innerHTML = `<a class="dmc-brand" href="/" aria-label="Divine Media home"><img src="/divine-creator/mark.svg" width="38" height="38" alt=""><span>DIVINE<small>MEDIA</small></span></a><span class="dmc-workspace-label">CREATOR WORKSPACE</span><a class="dmc-watch" href="https://watch.divinecreativegroup.com/">View the platform <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a>`;
+    brand.innerHTML = `<a class="dmc-brand" href="/" aria-label="Divine Media home"><img src="/divine-creator/mark.svg" width="38" height="38" alt=""><span>DIVINE<small>MEDIA</small></span></a><span class="dmc-workspace-label">CREATOR WORKSPACE</span><a class="dmc-watch" href="https://divinemedia.us/">View the platform <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M5 5h14v14"/></svg></a>`;
     document.body.prepend(brand);
     const main = document.createElement('main');main.className = 'dmc-main';
     const title = connectForm ? 'Connect your media account.' : encoder ? 'Prepare your next release.' : 'Your next story starts here.';

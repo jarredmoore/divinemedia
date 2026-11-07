@@ -1,22 +1,20 @@
 // Public-only AVideo catalog adapter. Never return the upstream API response verbatim.
-const ORIGIN='https://media.divinecreativegroup.com';
+import {MEDIA_ORIGIN,MEDIA_ORIGINS,canonicalMediaUrl} from '../../shared/domains.mjs';
+const ORIGIN=process.env.AVIDEO_ORIGIN||MEDIA_ORIGIN;
+if(!MEDIA_ORIGINS.includes(ORIGIN))throw Error('Unsupported public media origin');
 const endpoint=new URL('/plugin/API/get.json.php?APIName=video&rowCount=50&current=1&noRelated=1',ORIGIN);
-function mediaUrl(value){
- if(typeof value!=='string'||!value.trim())return null;
- try{
-  const u=new URL(value,ORIGIN);
-  if(u.protocol!=='https:'||u.origin!==ORIGIN||u.username||u.password)return null;
-  return u.href;
- }catch{return null}
-}
+const mediaUrl=(value)=>canonicalMediaUrl(value,ORIGIN);
+
 function isAudioPage(url){try{return /\/audio\/\d+(?:\/|$)/i.test(new URL(url).pathname)}catch{return false}}
 export function findPublicAudioUrl(html){
  // Read only public HTML. Never expose tokens, query-string credentials, or private media.
  const text=html.replaceAll('&amp;','&').replaceAll('\\/','/');
- const candidates=[...text.matchAll(/(?:https?:\/\/media\.divinecreativegroup\.com)?\/videos\/[a-zA-Z0-9_./%-]+\.(?:mp3|m4a|ogg|wav)(?![a-zA-Z0-9])/gi)];
+ // Consume complete external URLs before relative paths, so an untrusted host
+ // cannot be mistaken for a relative /videos/ URL during HTML discovery.
+ const candidates=[...text.matchAll(/https?:\/\/[^\s"'<>\\]+|\/videos\/[a-zA-Z0-9_./%-]+\.(?:mp3|m4a|ogg|wav)(?![a-zA-Z0-9])/gi)];
  for(const match of candidates){
   const url=mediaUrl(match[0]);
-  if(url&&new URL(url).pathname.startsWith('/videos/')&&!new URL(url).search)return url;
+  if(url&&new URL(url).pathname.startsWith('/videos/')&&/\.(mp3|m4a|ogg|wav)$/i.test(new URL(url).pathname)&&!new URL(url).search)return url;
  }
  return null;
 }

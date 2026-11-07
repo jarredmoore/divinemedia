@@ -4,7 +4,7 @@ import{Search,Compass,Clapperboard,Headphones,Radio,Users,Library,Play,ArrowUpRi
 import './style.css';
 import './dcg-tokens.css';
 import './dcg-theme.css';
-import {loadMedia, loadAVideoCatalog, readSaved, writeSaved} from './media.js';
+import {loadMedia, loadAVideoCatalog, readSaved, writeSaved, avideoOrigin} from './media.js';
 const photos={
  hero:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600&q=85',
  film:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=720&q=80',
@@ -15,7 +15,7 @@ const photos={
  stage:'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?w=720&q=80',
  artist:'https://images.unsplash.com/photo-1524368535928-5b5e00ddc76b?w=720&q=80'
 };
-const verifiedLocalVideo={title:'Divine Creative Group — New Media · Art · Entertainment',tag:'DIVINE MEDIA ORIGINAL · AVIDEO #1',img:photos.hero,type:'Watch',watchUrl:import.meta.env.VITE_AVIDEO_ORIGIN?undefined:'https://localhost/channel/admin/video/1/divine-creative-group-_-new-media-%C2%B7-art-%C2%B7-entertainment'};
+const verifiedLocalVideo={title:'Divine Creative Group — New Media · Art · Entertainment',tag:'DIVINE MEDIA ORIGINAL · AVIDEO #1',img:photos.hero,type:'Watch',watchUrl:avideoOrigin+'/channel/admin/video/1/divine-creative-group-_-new-media-%C2%B7-art-%C2%B7-entertainment'};
 const sampleItems=[
  verifiedLocalVideo,
  {title:'Beyond the Frame',tag:'FILM · 28 MIN',img:photos.film,type:'Watch'},
