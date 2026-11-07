@@ -32,6 +32,5 @@
 .dm-auth-card .material-switch>label{display:none!important}
 .dm-auth-card #loginForm .form-group>.col-md-12{padding-left:0;padding-right:0}
 .dm-primary>span svg{fill:none;width:14px;height:14px}
-/* Mask native animated backdrops without covering CAPTCHA or authentication dialogs. */
-.dm-auth-ready::before{content:"";position:fixed;inset:0;background:#09090c;z-index:0;pointer-events:none}
-.dm-auth-ready .dm-auth-shell{position:relative;z-index:1}
+/* Native decorative backdrops are identified outside the retained login form. */
+.dm-auth-ready .dm-native-backdrop{display:none!important}
