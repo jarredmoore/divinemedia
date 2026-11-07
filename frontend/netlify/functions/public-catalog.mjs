@@ -1,24 +1,32 @@
 // Public-only AVideo catalog adapter. Never return the upstream API response verbatim.
-const ORIGIN='https://media.divinecreativegroup.com';
+import {MEDIA_ORIGIN,MEDIA_ORIGINS,canonicalMediaUrl} from '../../shared/domains.mjs';
+const ORIGIN=process.env.AVIDEO_ORIGIN||MEDIA_ORIGIN;
+if(!MEDIA_ORIGINS.includes(ORIGIN))throw Error('Unsupported public media origin');
 const endpoint=new URL('/plugin/API/get.json.php?APIName=video&rowCount=50&current=1&noRelated=1',ORIGIN);
-function mediaUrl(value){
- if(typeof value!=='string'||!value.trim())return null;
- try{
-  const u=new URL(value,ORIGIN);
-  if(u.protocol!=='https:'||u.origin!==ORIGIN)return null;
-  return u.href;
- }catch{return null}
-}
+const mediaUrl=(value)=>canonicalMediaUrl(value,ORIGIN);
+
 function isAudioPage(url){try{return /\/audio\/\d+(?:\/|$)/i.test(new URL(url).pathname)}catch{return false}}
-function findPublicAudioUrl(html){
+export function findPublicAudioUrl(html){
  // Read only public HTML. Never expose tokens, query-string credentials, or private media.
  const text=html.replaceAll('&amp;','&').replaceAll('\\/','/');
- const candidates=[...text.matchAll(/(?:https?:\/\/media\.divinecreativegroup\.com)?\/videos\/[a-zA-Z0-9_./%-]+\.(?:mp3|m4a|ogg|wav)(?![a-zA-Z0-9])/gi)];
+ // Consume complete external URLs before relative paths, so an untrusted host
+ // cannot be mistaken for a relative /videos/ URL during HTML discovery.
+ const candidates=[...text.matchAll(/(?:https?:)?\/\/[^\s"'<>\\]+|\/videos\/[a-zA-Z0-9_./%-]+\.(?:mp3|m4a|ogg|wav)(?![a-zA-Z0-9])/gi)];
  for(const match of candidates){
   const url=mediaUrl(match[0]);
-  if(url&&new URL(url).pathname.startsWith('/videos/')&&!new URL(url).search)return url;
+  if(url&&new URL(url).pathname.startsWith('/videos/')&&/\.(mp3|m4a|ogg|wav)$/i.test(new URL(url).pathname)&&!new URL(url).search)return url;
  }
  return null;
+}
+export function publicAudioSource(row){
+ const sources=Array.isArray(row.sources)?row.sources:[];
+ const candidates=[row.audioUrl,row.audioURL,row.mp3,row.audios?.mp3,row.audio?.mp3,
+ ...sources.filter(s=>s&&(/^audio\//i.test(s.type||'')||/\.(mp3|m4a|aac|ogg|oga|wav|flac)(?:[?#]|$)/i.test(s.src||''))).map(s=>s.src)];
+ for(const candidate of candidates){const url=mediaUrl(candidate);if(url)return url}
+ return null;
+}
+export function isAudio(row,pageUrl){
+ return isAudioPage(pageUrl)||[row.type,row.mediaType,row.mimeType].some(v=>typeof v==='string'&&(v.toLowerCase()==='audio'||/^audio\//i.test(v)))||Boolean(publicAudioSource(row));
 }
 async function resolveAudio(pageUrl){
  if(!isAudioPage(pageUrl))return null;
@@ -48,8 +56,8 @@ export default async function handler(){
    const sources=Array.isArray(row.sources)?row.sources.filter(s=>s?.type==='video/mp4').sort((a,b)=>Number(b.res||0)-Number(a.res||0)):[];
    const pageUrl=mediaUrl(row.pageUrl||row.link||row.wwbnURL);
    if(!pageUrl)return null;
-   const audio=isAudioPage(pageUrl);
-   const directAudio=audio?mediaUrl(row.audioUrl||row.audioURL||row.mp3||row.audios?.mp3)||await resolveAudio(pageUrl):null;
+   const audio=isAudio(row,pageUrl);
+   const directAudio=audio?publicAudioSource(row)||await resolveAudio(pageUrl):null;
    return {
     mediaType:audio?'audio':'video',audioUrl:directAudio,
     id:row.id,title:String(row.title||'').slice(0,140),status:'a',

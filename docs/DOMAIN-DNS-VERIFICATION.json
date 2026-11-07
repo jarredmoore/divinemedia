@@ -1,0 +1,11 @@
+{
+  "result": "pass",
+  "existing_dns_and_mail_records_preserved": true,
+  "new_record": {
+    "id": "6aefa3b4543fb4ce9de5a90c",
+    "hostname": "media.divinemedia.us",
+    "type": "A",
+    "value": "52.242.132.198",
+    "ttl": 300
+  }
+}

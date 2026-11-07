@@ -1,0 +1,27 @@
+name: Domain migration checks
+on:
+  pull_request:
+    paths:
+      - 'ops/divinemedia/*domain*'
+      - 'tests/backend/test_domain_settings.py'
+      - '.github/workflows/backend-domains.yml'
+  push:
+    branches: ['feat/divine-media-3.3-domains']
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests/backend -v
+      - name: Validate migration script syntax
+        run: |
+          python - <<'PY'
+          import ast
+          from pathlib import Path
+          for path in Path('ops/divinemedia').glob('*domain*.py'):
+              ast.parse(path.read_text())
+          PY
+      - run: git diff --check
