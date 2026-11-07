@@ -59,6 +59,16 @@ Use `npm ci`, `npm test`, and `npm run build` in `frontend/`. Both `VITE_AVIDEO_
 - Current live preservation checks cover **18 catalog records and 54 MP3/MP4 files**, ten unchanged native handler/template/routing files, and an unchanged Encoder queue. All containers retain their existing uptime; Apache was gracefully reloaded.
 - Actual MP3 playback, Murphy Lee artwork, volume, mute/unmute, seek, previous/next and responsive layouts pass in Chromium at 320, 390, 768 and 1440 pixels. Native entrance/login/Encoder rendering and canonical links pass. Real account sign-in, a production upload, and an encoding job were not performed.
 
+### Restart durability
+
+The legacy TLS synchronizer selected certificates using `SERVER_NAME=localhost`, which could replace the valid domain certificate on restart. It now prefers a valid certificate matching the configured Apache `ServerName`. The existing Azure Compose override adds two persistent bind mounts for the verified vhost directory and TLS synchronizer; all other resolved Compose settings are unchanged.
+
+The patched TLS synchronizer passed in an isolated container using the exact live image, an internal network, copied configuration/certificates and deliberately unusable default certificate paths. Apache syntax passed, and the configured vhost stayed byte-for-byte unchanged. Only this TLS helper was exercised on the live container. No container restart or recreation occurred.
+
+The native full startup still invokes `Encoder/install/reencodeAllVideos.php`. That behavior is untouched and requires a separate Encoder audit before any planned restart; this verification does not establish that the full native startup is safe for existing media.
+
+Private before/after bootstrap archives passed off-VM roundtrip hash verification. Recovery state is `bootstrap-state-3bbad16b` beneath the domain snapshot, including `sync-before.sh`, `compose-before.yml`, `vhost-before.conf` and `plan.json`. For rollback, first verify the installed script/Compose hashes against the plan, restore only those leased files, and validate Apache/Compose configuration. Do not restart the stack as part of hostname rollback. Keep the managed bind-source directory until no running container or Compose configuration references it. The application/vhost rollback below remains applicable because the active vhost bytes were unchanged.
+
 ### Git and build delivery
 
 The new main site was previously a manual Netlify site. This cutover pins it to the verified deployment built from committed feature-branch source. Automatic Git-based production delivery should be connected to `production/divine-media` only alongside an explicitly approved production-branch promotion. The production branch was not changed for this cutover.
@@ -80,7 +90,7 @@ The full restore rehearsal uses the earlier verified 16-record/52-file recovery 
 
 ### Evidence and previews
 
-[Backend preservation](DOMAIN-BACKEND-VERIFICATION.json) · [isolated verification](DOMAIN-STAGE-VERIFICATION.json) · [certificate and backup proof](DOMAIN-CERTIFICATE-VERIFICATION.json) · [DNS preservation](DOMAIN-DNS-VERIFICATION.json) · [browser and Netlify checks](DOMAIN-FRONTEND-VERIFICATION.json)
+[Backend preservation](DOMAIN-BACKEND-VERIFICATION.json) · [isolated verification](DOMAIN-STAGE-VERIFICATION.json) · [certificate and backup proof](DOMAIN-CERTIFICATE-VERIFICATION.json) · [bootstrap durability](DOMAIN-BOOTSTRAP-VERIFICATION.json) · [DNS preservation](DOMAIN-DNS-VERIFICATION.json) · [browser and Netlify checks](DOMAIN-FRONTEND-VERIFICATION.json)
 
 ![Watch on the new domain](previews/domains-watch-desktop.png)
 

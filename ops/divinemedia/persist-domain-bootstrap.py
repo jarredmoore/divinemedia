@@ -35,7 +35,7 @@ def put_script(data):
  docker('exec','-i',WEB,'php','-r','$p=$argv[1];$m=fileperms($p)&0777;$u=fileowner($p);$g=filegroup($p);$t=tempnam(dirname($p),".dm-bootstrap-");file_put_contents($t,stream_get_contents(STDIN));chmod($t,$m);chown($t,$u);chgrp($t,$g);if(!rename($t,$p))exit(2);',SYNC,input=data)
 def model(files):return yaml.safe_load(run('docker','compose',*[x for p in files for x in ['-f',p]],'config',cwd=ROOT).stdout)
 if __name__=='__main__':
- os.umask(0o077);snapshot=pathlib.Path(pathlib.Path('/srv/divinemedia/backups/.latest-domain-snapshot').read_text().strip());state=snapshot/'bootstrap-state';state.mkdir(mode=0o700,exist_ok=False)
+ os.umask(0o077);snapshot=pathlib.Path(pathlib.Path('/srv/divinemedia/backups/.latest-domain-snapshot').read_text().strip());state=snapshot/('bootstrap-state-'+uuid.uuid4().hex[:8]);state.mkdir(mode=0o700,exist_ok=False)
  report={'result':'pending','state':str(state),'no_container_restart':True,'native_startup_not_executed':True};phase='read-bootstrap';changed_script=False;changed_compose=False;target=ROOT/'.compose/domain-bootstrap';created_target=False
  try:
   record=json.loads(docker('inspect',WEB).stdout)[0];service=record['Config']['Labels']['com.docker.compose.service'];files=record['Config']['Labels']['com.docker.compose.project.config_files'].split(',');compose=pathlib.Path(files[-1]);original_compose=compose.read_bytes();original_sync=docker('exec',WEB,'cat',SYNC).stdout;original_vhost=docker('exec',WEB,'cat',VHOST).stdout
@@ -50,7 +50,7 @@ if __name__=='__main__':
    if candidate:
     one=docker('exec',WEB,'readlink','-f',candidate,check=False).stdout.strip();two=docker('exec',WEB,'readlink','-f',current).stdout.strip()
     if one and one==two:raise RuntimeError('Native startup could overwrite the managed certificate; review its generation settings')
-  before_model=model(files);doc=yaml.safe_load(original_compose);node=doc['services'].setdefault(service,{});volumes=node.setdefault('volumes',[])
+  before_model=model(files);doc=yaml.safe_load(original_compose) or {};doc['services']=doc.get('services') or {};doc['services'][service]=doc['services'].get(service) or {};node=doc['services'][service];volumes=node.setdefault('volumes',[])
   targets=['/etc/apache2/sites-enabled',SYNC]
   for mount in before_model['services'][service].get('volumes',[]):
    if mount.get('target') in targets or mount.get('target','').startswith('/etc/apache2/sites-enabled/'):raise RuntimeError('An existing Apache/bootstrap mount requires separate review')
@@ -62,7 +62,7 @@ if __name__=='__main__':
   spec=importlib.util.spec_from_file_location('backup',pathlib.Path(__file__).with_name('prepare-domain-certificate.py'));backup=importlib.util.module_from_spec(spec);spec.loader.exec_module(backup)
   with tarfile.open(state/'bootstrap-before.tar.gz','w:gz') as archive:
    for name in ['sync-before.sh','compose-before.yml','vhost-before.conf']:archive.add(state/name,arcname=name)
-  report['before_backup']=backup.off_vm(state/'bootstrap-before.tar.gz',snapshot.name)
+  report['before_backup']=backup.off_vm(state/'bootstrap-before.tar.gz',snapshot.name+'/'+state.name)
   phase='isolated-tls-sync-test';scratch=pathlib.Path(tempfile.mkdtemp(prefix='bootstrap-tls-',dir='/srv/divinemedia/backups'));name='dm-bootstrap-tls-'+uuid.uuid4().hex[:10];network=name+'-net'
   try:
    with tarfile.open(snapshot/'runtime-active.tar.gz') as archive:archive.extractall(scratch,filter=restore_mode)
@@ -86,7 +86,7 @@ if __name__=='__main__':
   docker('exec',WEB,'apache2ctl','-t')
   phase='off-vm-persistent-state'
   with tarfile.open(state/'bootstrap-after.tar.gz','w:gz') as archive:archive.add(compose,arcname='compose-after.yml');archive.add(target,arcname='domain-bootstrap')
-  report['after_backup']=backup.off_vm(state/'bootstrap-after.tar.gz',snapshot.name)
+  report['after_backup']=backup.off_vm(state/'bootstrap-after.tar.gz',snapshot.name+'/'+state.name)
   plan={'compose':str(compose),'compose_before':sha(original_compose),'compose_after':sha(desired),'sync_before':sha(original_sync),'sync_after':sha(patched),'managed_directory':str(target)};(state/'plan.json').write_text(json.dumps(plan,indent=2))
   report.update({'result':'pass','service':service,'compose_bind_mounts_added':2,'unrelated_compose_settings_unchanged':True,'active_vhost_unchanged':True,'native_encoder_startup_untouched':True})
  except Exception as error:
