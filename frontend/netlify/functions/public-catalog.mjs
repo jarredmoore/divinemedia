@@ -5,12 +5,12 @@ function mediaUrl(value){
  if(typeof value!=='string'||!value.trim())return null;
  try{
   const u=new URL(value,ORIGIN);
-  if(u.protocol!=='https:'||u.origin!==ORIGIN)return null;
+  if(u.protocol!=='https:'||u.origin!==ORIGIN||u.username||u.password)return null;
   return u.href;
  }catch{return null}
 }
 function isAudioPage(url){try{return /\/audio\/\d+(?:\/|$)/i.test(new URL(url).pathname)}catch{return false}}
-function findPublicAudioUrl(html){
+export function findPublicAudioUrl(html){
  // Read only public HTML. Never expose tokens, query-string credentials, or private media.
  const text=html.replaceAll('&amp;','&').replaceAll('\\/','/');
  const candidates=[...text.matchAll(/(?:https?:\/\/media\.divinecreativegroup\.com)?\/videos\/[a-zA-Z0-9_./%-]+\.(?:mp3|m4a|ogg|wav)(?![a-zA-Z0-9])/gi)];
@@ -19,6 +19,16 @@ function findPublicAudioUrl(html){
   if(url&&new URL(url).pathname.startsWith('/videos/')&&!new URL(url).search)return url;
  }
  return null;
+}
+export function publicAudioSource(row){
+ const sources=Array.isArray(row.sources)?row.sources:[];
+ const candidates=[row.audioUrl,row.audioURL,row.mp3,row.audios?.mp3,row.audio?.mp3,
+ ...sources.filter(s=>s&&(/^audio\//i.test(s.type||'')||/\.(mp3|m4a|aac|ogg|oga|wav|flac)(?:[?#]|$)/i.test(s.src||''))).map(s=>s.src)];
+ for(const candidate of candidates){const url=mediaUrl(candidate);if(url)return url}
+ return null;
+}
+export function isAudio(row,pageUrl){
+ return isAudioPage(pageUrl)||[row.type,row.mediaType,row.mimeType].some(v=>typeof v==='string'&&(v.toLowerCase()==='audio'||/^audio\//i.test(v)))||Boolean(publicAudioSource(row));
 }
 async function resolveAudio(pageUrl){
  if(!isAudioPage(pageUrl))return null;
@@ -48,8 +58,8 @@ export default async function handler(){
    const sources=Array.isArray(row.sources)?row.sources.filter(s=>s?.type==='video/mp4').sort((a,b)=>Number(b.res||0)-Number(a.res||0)):[];
    const pageUrl=mediaUrl(row.pageUrl||row.link||row.wwbnURL);
    if(!pageUrl)return null;
-   const audio=isAudioPage(pageUrl);
-   const directAudio=audio?mediaUrl(row.audioUrl||row.audioURL||row.mp3||row.audios?.mp3)||await resolveAudio(pageUrl):null;
+   const audio=isAudio(row,pageUrl);
+   const directAudio=audio?publicAudioSource(row)||await resolveAudio(pageUrl):null;
    return {
     mediaType:audio?'audio':'video',audioUrl:directAudio,
     id:row.id,title:String(row.title||'').slice(0,140),status:'a',
