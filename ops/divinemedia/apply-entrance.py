@@ -55,7 +55,7 @@ def install(root,assets,backup_root,expected=None,apply=False):
     for name,data in originals.items():
         dest=backup/name;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(data)
     (backup/'plan.json').write_text(json.dumps(plan,indent=2))
-    staging=root/('.divine-entrance-'+stamp);staging.mkdir(mode=0o755)
+    staging=root/('.divine-entrance-'+stamp);staging.mkdir(mode=0o755);os.chmod(staging,0o755)
     try:
         for p in asset_files:shutil.copyfile(p,staging/p.name);os.chmod(staging/p.name,0o644)
         os.replace(staging,target)

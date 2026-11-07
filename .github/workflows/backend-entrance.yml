@@ -4,6 +4,7 @@ on:
     paths:
       - 'backend/divine-entrance/**'
       - 'ops/divinemedia/apply-entrance.py'
+      - 'ops/divinemedia/test-entrance-installer.py'
       - '.github/workflows/backend-entrance.yml'
   push:
     branches:
@@ -11,6 +12,7 @@ on:
     paths:
       - 'backend/divine-entrance/**'
       - 'ops/divinemedia/apply-entrance.py'
+      - 'ops/divinemedia/test-entrance-installer.py'
       - '.github/workflows/backend-entrance.yml'
 permissions:
   contents: read
@@ -25,3 +27,5 @@ jobs:
         run: node --check backend/divine-entrance/login-theme.js
       - name: Reversible installer Python
         run: python3 -m py_compile ops/divinemedia/apply-entrance.py
+      - name: Installer permissions, source lease, rollback protection
+        run: python3 ops/divinemedia/test-entrance-installer.py
