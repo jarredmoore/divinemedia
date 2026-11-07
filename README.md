@@ -10,10 +10,12 @@ The viewing experience uses React and Vite. AVideo manages the media catalog, cr
 
 | Destination | Purpose |
 | --- | --- |
-| [Watch](https://watch.divinecreativegroup.com/) | Public viewing and listening experience |
-| [Media](https://media.divinecreativegroup.com/) | Branded entrance and media platform |
-| [Creator upload](https://media.divinecreativegroup.com/upload) | Direct upload for authorized creators; sign-in required |
-| [Encoder](https://media.divinecreativegroup.com/Encoder/) | Connect a media account, upload source files, and follow processing |
+| [Watch](https://divinemedia.us/) | Public viewing and listening experience |
+| [Media](https://media.divinemedia.us/) | Branded entrance and media platform |
+| [Creator upload](https://media.divinemedia.us/upload) | Direct upload for authorized creators; sign-in required |
+| [Encoder](https://media.divinemedia.us/Encoder/) | Connect a media account, upload source files, and follow processing |
+
+The previous Watch hostname redirects to `divinemedia.us`. Existing media URLs remain supported; creator sign-in and Encoder entry pages move to the new media hostname.
 
 ## How it fits together
 
@@ -89,7 +91,7 @@ See the [AVideo administrator manual](https://github.com/WWBN/AVideo/wiki/Admin-
 
 | Version / milestone | Status and scope |
 | --- | --- |
-| **3.3 — In development** | Branded media entrance, matching login, and shared creator styling for Direct Upload and Encoder are deployed from feature branches. Automatic MP3 discovery and player improvements remain under review. This is not a completed 3.3 release. |
+| **3.3 — In development** | Branded entrance, matching login, shared creator workspace, audio discovery/player improvements, and the `divinemedia.us` domain structure are deployed from feature branches. Production-branch promotion remains a separate approval step; this is not a completed 3.3 release. |
 | **3.1 — Development baseline, November 1, 2026** | Established `dev/divine-media-3.1` from the existing Divine Media frontend work. Upload, thumbnail display, and playback were confirmed working as the baseline for the Watch redesign. |
 | **2.x — Earlier frontend foundation** | Existing Watch development on `divine-media-2`, carried forward into the 3.1 integration branch. |
 
@@ -100,6 +102,7 @@ Current work and implementation details:
 - [Backup and recovery tooling — PR #4](https://github.com/jarredmoore/divinemedia/pull/4)
 - [Branded entrance and login — PR #5](https://github.com/jarredmoore/divinemedia/pull/5)
 - [Creator workspace — PR #6](https://github.com/jarredmoore/divinemedia/pull/6)
+- [Canonical domains and integrated 3.3 foundation — PR #8](https://github.com/jarredmoore/divinemedia/pull/8)
 
 Project references on the integration branch: [Project charter](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/PROJECT.md), [experience direction](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/EXPERIENCE_DIRECTION.md), and [changelog](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/CHANGELOG.md). These documents describe their recorded baseline; the linked pull requests contain subsequent work.
 
