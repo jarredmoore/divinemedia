@@ -57,3 +57,5 @@
 /plugin/Statistics/
 /YouPHPTube.code-workspace
 /iptvsource_one_one.csv
+# Local Netlify folder
+.netlify

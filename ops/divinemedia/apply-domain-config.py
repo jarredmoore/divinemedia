@@ -49,6 +49,10 @@ def install(root,web,assets,snapshot,state,apply=False):
   data=originals[name];pattern=rb"(\$global\[['\"]webSiteRootURL['\"]\]\s*=\s*['\"])https://media[.]divinecreativegroup[.]com(/(?:Encoder/)?)"
   changes[name],count=re.subn(pattern,lambda m:m.group(1)+b'https://'+NEW.encode()+m.group(2),data)
   if count!=1:raise RuntimeError('Unexpected public URL configuration shape')
+  if name.endswith('encoder/videos/configuration.php'):
+   force=rb"(\$global\[['\"]forceStreamerSiteURL['\"]\]\s*=\s*['\"])https://media[.]divinecreativegroup[.]com/"
+   changes[name],count=re.subn(force,lambda m:m.group(1)+b'https://'+NEW.encode()+b'/',changes[name])
+   if count!=1:raise RuntimeError('Unexpected forced streamer configuration shape')
  for name in ASSETS:changes[name]=(assets/name).read_bytes()
  original_vhost=docker(web,'cat',VHOST).stdout
  with tarfile.open(snapshot/'runtime-before.tar.gz') as archive:
