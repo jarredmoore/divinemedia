@@ -1,6 +1,6 @@
 # Divine Media 3.3 — Azure audit
 
-Status: read-only observations, not a backend release. Observed November 6, 2026, approximately 10:34–10:40 p.m. America/Chicago (November 7, 04:34–04:40 UTC). Metrics cover the preceding seven days. Billing is delayed and excludes unreported usage.
+Status: initial read-only audit plus isolated backup verification; not a backend release. Observed November 6, 2026, approximately 10:34–10:40 p.m. America/Chicago (November 7, 04:34–04:40 UTC). Metrics cover the preceding seven days. Billing is delayed and excludes unreported usage.
 
 ## Main conclusion
 
@@ -106,3 +106,35 @@ Used Azure CLI list/show, Cost Management query POST (a read query), Azure Monit
 The VM diagnostic-settings read failed with an Azure message requesting `Microsoft.Insights` provider registration; provider metadata confirms `NotRegistered`. No provider registration was attempted. Metrics reads succeeded. Therefore diagnostic-setting configuration remains unverified rather than assumed absent.
 
 Raw audit evidence stays in the cloud workspace outside Git. This report contains summarized observations only. The frontend feature PR is independent; this document does not authorize any production deployment or backend change.
+
+## Follow-up backup verification
+
+Requested by the owner after the initial audit. This verification examines the existing backup set; it does not create a current backup.
+
+### Media and configuration archive coverage
+
+- The only SQL/media/config archive set located under the application backup directory is dated November 1: four gzip files. Searches found no Azure vault, snapshot or storage account in the inspected subscription and no identifiable host application-backup schedule. An external backup location has not been established.
+- `videos.tar.gz` contains 51 regular files, including 13 MP3/MP4 files, with approximately 64.4 MB uncompressed contents. All archived files can be streamed and read without extracting over live data.
+- SHA-256 comparison against matching paths in the current video directory: 47 identical files, four changed files, zero archived paths missing from the live directory. A changed file is not evidence of corruption; the live state may have legitimately changed after the backup.
+- The current video directory contains 168 files, including 52 MP3/MP4 files. **39 current MP3/MP4 files are absent from the November 1 media archive.** This is a path-level coverage comparison, stronger than the initial modification-time check. The backup cannot be claimed to recover the current media catalog.
+- `config.tar.gz` contains 367 files, approximately 97.7 MB uncompressed, covering compose files and `.compose` content, including configuration, some media and SQL files. Its name does not imply that it is configuration-only. No configuration contents or credentials were copied into GitHub.
+
+### Database dump structure
+
+- `avideo.sql.gz`: 83,977 uncompressed bytes, 27 CREATE TABLE statements and eight INSERT statements; dump completion marker present.
+- `encoder.sql.gz`: 15,679 uncompressed bytes, seven CREATE TABLE statements and three INSERT statements; dump completion marker present.
+- Encoder schema includes queue, formats, streamers and configuration tables. Main schema includes videos, users, plugins, playlists and metadata tables. These are structural checks, not record-completeness or point-in-time consistency guarantees.
+
+### Isolated database restore result — PASS for the November 1 dumps
+
+Both existing SQL dumps were imported successfully into a disposable container using the locally cached MariaDB 13.0.2 image. The dumps retain their original schema names (`avideo` and `avideo_encoder`), which the test respected. The restored schemas contain 27 and seven tables respectively. MariaDB table checks pass. The restored main database contains **two video rows**; the restored Encoder queue contains zero rows.
+
+A read-only live database metadata query was unavailable, so an exact live database row-count comparison is not claimed. The original public API inspection returned 16 entries; the restored dump contains only two video rows. Final container inventory confirmed no remaining `dm-backup-verify-*` container.
+
+The verification container had no network, no published ports, no production database or media mounts, a read-only root filesystem, read-only mounts of the two compressed dumps, and temporary in-memory database storage. Limits were 0.5 CPU and 1 GiB RAM. It was removed after verification; live application/database/live-stream containers remained healthy and running. No live database was restored over, and no upload/encoding/thumbnail job ran. Raw SQL and configuration contents were not printed or added to GitHub.
+
+An initial test imported successfully but queried the wrong schema names; it was cleaned up and repeated with the corrected schema checks. Only the completed second test establishes the restore/table-check result above.
+
+The second accessible Azure subscription was also checked for Recovery Services vaults, Data Protection vaults, storage accounts and snapshots; none were returned. Backups outside these subscriptions or in an external provider remain unverified.
+
+**Verdict:** the November 1 database dumps are restorable and the archives are readable, but the backup set is stale and does not cover the current media directory. This is not a full application restore rehearsal, a database/media consistency guarantee, or evidence of an off-VM disaster-recovery copy. A fresh coordinated backup and an isolated full restore rehearsal remain necessary before backend repair work.
