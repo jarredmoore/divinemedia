@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+# Certbot runs deploy hooks only after renewal. Keep this scoped to our certificate.
+[ "${RENEWED_LINEAGE:-}" = /etc/letsencrypt/live/divinemedia ] || exit 0
+apache2ctl -t
+apache2ctl -k graceful
