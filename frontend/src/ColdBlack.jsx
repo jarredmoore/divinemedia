@@ -2,15 +2,8 @@ import React,{useEffect,useRef,useState} from 'react';
 import {NativeActions} from './NativeActions.jsx';
 import {ArrowDown,ArrowUpRight,Menu,Pause,Play,Search,X} from 'lucide-react';
 
-export const THEME_KEY='divine-media:theme:v1';
-export function readTheme(){
- try{
-  const requested=new URLSearchParams(location.search).get('theme');
-  if(requested==='cold-black')return 'code-black';
-  if(['default','code-black'].includes(requested))return requested;
-  return ['cold-black','code-black'].includes(localStorage.getItem(THEME_KEY))?'code-black':'default';
- }catch{return 'default'}
-}
+export {THEME_KEY} from '../shared/theme.mjs';
+export {readCurrentTheme as readTheme} from '../shared/theme.mjs';
 export function ThemePicker({theme,onChange}){
  return <label className="theme-picker"><span className="sr-only">Viewing theme</span><select aria-label="Viewing theme" value={theme} onChange={e=>onChange(e.target.value)}><option value="default">Default</option><option value="code-black">Code Black</option></select></label>;
 }
