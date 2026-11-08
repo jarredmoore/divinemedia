@@ -4,6 +4,10 @@ Cold Black is an optional Watch frontend theme. First visits retain the existing
 
 The theme adds a floating smoked-glass navigation bar, a champagne D monogram and spaced wordmark, a full-screen stage background, a pinned split-scene scroll transition, full-bleed featured programming and quiet media shelves. All six existing navigation destinations remain accessible, including through the mobile menu. No Webflow template code, imagery or video is included.
 
+[Open the working Cold Black preview](https://6aefc75309917db3b70bb1a8--mediaproduction.netlify.app/?theme=cold-black) · [Pull request #10](https://github.com/jarredmoore/divinemedia/pull/10) · [Deployed browser verification](COLD-BLACK-BROWSER-VERIFICATION.json)
+
+The Netlify draft is built from frontend commit `a20f3c33679f022ed22c8c38f17df2e9fc040bbf`. Later documentation/evidence commits do not change its frontend source. The existing public deploy and production-branch SHA were verified unchanged.
+
 ## Background and motion
 
 `frontend/public/themes/cold-black/stage-poster.jpg` is compressed original AI-generated stage artwork created for this theme. `stage-loop.mp4` animates a gentle, seamless camera drift over that artwork; it is not recorded concert footage. The silent H.264 loop is 14 seconds, 1280 × 720 and 458,383 bytes. The poster is approximately 89 KB. Both assets ship with the frontend; no third-party video service is needed.
