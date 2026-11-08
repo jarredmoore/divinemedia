@@ -1,0 +1,15 @@
+{
+  "result": "pass",
+  "tested_url": "https://6aefc9b7bac75e020823b88a--mediaproduction.netlify.app",
+  "visible_name": "Code Black",
+  "base_color": "#000000",
+  "computed_canvas": "rgb(0, 0, 0)",
+  "legacy_url_and_preference_compatible": true,
+  "default_switch": true,
+  "viewport_widths": [
+    1440,
+    320
+  ],
+  "console_errors": [],
+  "frontend_source_commit": "26844c96b8242fda4529896c3990073e6420cdff"
+}
