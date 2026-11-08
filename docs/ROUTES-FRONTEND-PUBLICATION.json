@@ -1,0 +1,9 @@
+{
+  "result": "pass",
+  "public_origin": "https://divinemedia.us",
+  "published_deploy": "6af0f784f9b38d200ae0b693",
+  "previous_deploy": "6aefc9b7bac75e020823b88a",
+  "frontend_source_commit": "9004b733",
+  "production_branch_merged": false,
+  "verified_draft_promoted": true
+}

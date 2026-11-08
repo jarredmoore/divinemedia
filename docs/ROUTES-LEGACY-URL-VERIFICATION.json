@@ -1,0 +1,50 @@
+{
+  "result": "pass",
+  "routes": [
+    {
+      "path": "/",
+      "status": 302,
+      "location": "https://media.divinemedia.us/?theme=code-black"
+    },
+    {
+      "path": "/view/",
+      "status": 302,
+      "location": "https://media.divinemedia.us/view/?theme=code-black"
+    },
+    {
+      "path": "/user",
+      "status": 302,
+      "location": "https://media.divinemedia.us/user"
+    },
+    {
+      "path": "/signUp",
+      "status": 302,
+      "location": "https://media.divinemedia.us/signUp?theme=code-black"
+    },
+    {
+      "path": "/cat/default",
+      "status": 302,
+      "location": "https://media.divinemedia.us/cat/default?theme=code-black"
+    },
+    {
+      "path": "/view/channels.php",
+      "status": 302,
+      "location": "https://media.divinemedia.us/view/channels.php?theme=code-black"
+    },
+    {
+      "path": "/channel/admin",
+      "status": 302,
+      "location": "https://media.divinemedia.us/channel/admin?theme=code-black"
+    },
+    {
+      "path": "/upload",
+      "status": 302,
+      "location": "https://media.divinemedia.us/upload"
+    },
+    {
+      "path": "/Encoder/",
+      "status": 302,
+      "location": "https://media.divinemedia.us/Encoder/"
+    }
+  ]
+}
