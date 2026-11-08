@@ -1,5 +1,9 @@
 # Native AVideo features and frontend activation
 
+[Open the working feature preview](https://6af0e7c0c7c99c2a27543abe--mediaproduction.netlify.app/?theme=code-black) · [Feature PR #12](https://github.com/jarredmoore/divinemedia/pull/12) · [Deployed browser evidence](NATIVE-FRONTEND-DEPLOYED-VERIFICATION.json)
+
+Frontend source for the draft is commit `f48a6cae`; later commits update documentation and evidence.
+
 ## Production release
 
 The owner explicitly approved production promotion in this session. PR #10 integrated Code Black into development; [PR #11](https://github.com/jarredmoore/divinemedia/pull/11) merged development into `production/divine-media` at `5067877dbd56bcd769812f42b46b15576848753f`. The previously tested Code Black draft `6aefc9b7bac75e020823b88a` is now the published Netlify deploy at https://divinemedia.us. The prior deploy `6aefae007b01dc9671e0b50f` remains the rollback reference. Both Default and Code Black remain selectable. Actual production playback and responsive checks passed; see [release](PRODUCTION-3.3-RELEASE.json) and [browser verification](PRODUCTION-3.3-BROWSER-VERIFICATION.json).
