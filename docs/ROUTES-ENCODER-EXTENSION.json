@@ -1,0 +1,23 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/encoder-shell-ad8bbacb46",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "b6fdac5ae15c08c652d3b1fb9c925b137252fc31c171fe638f2dedcbbe98bc71",
+    "bytes": 14941,
+    "roundtrip_verified": true
+  },
+  "native_launcher_not_executed": true,
+  "no_restart_or_jobs": true,
+  "after_backup": {
+    "name": "after.tar.gz",
+    "sha256": "1967d59e923668d2c70ae0fe1b99e3ec2a5d4100daa8a0db2730ca663ae6323d",
+    "bytes": 15232,
+    "roundtrip_verified": true
+  },
+  "combined_rollback_snapshot": "/srv/divinemedia/backups/encoder-shell-ad8bbacb46/recovery",
+  "changed_template": ".compose/encoder/view/localEncoder.php",
+  "head_insertion_only": true,
+  "original_sha256": "1145778e11592958a8e8924c941a9b58c841ebf985803c3818b85608389aba5c",
+  "final_sha256": "88d2c3e30dad6e550f6ba1f5afbce876d5cef5d509f86498dd0734d6573e4c12"
+}

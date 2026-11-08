@@ -1,0 +1,30 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/route-css-93998cd0c0",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "7c3e57904e604a1eabd055877ff523ec99a7e477bd6b0d5691adac1539999714",
+    "bytes": 3990,
+    "roundtrip_verified": true
+  },
+  "native_templates_unchanged": true,
+  "no_restart_or_jobs": true,
+  "after_backup": {
+    "name": "after.tar.gz",
+    "sha256": "5062dd229d5516446e92d532ddf0b2593eba24a29ee759430466858030297060",
+    "bytes": 18843,
+    "roundtrip_verified": true
+  },
+  "combined_rollback_snapshot": "/srv/divinemedia/backups/route-css-93998cd0c0/recovery",
+  "changed_assets": [
+    "head.php cache version only",
+    "shell.css"
+  ],
+  "final_assets": {
+    "head.php": "75ceb3c5680b9895f5b56b7b4a9feb7f51d5a395a9fe2204df4f6bb79419fd6b",
+    "legacy-entry.php": "cc8d364f8238cbda1bc9b47469b993b500cb05b1e874db0945b8d0070d0805cf",
+    "mark.svg": "9358c1d5e20da9015359d1c3f14315eaaa0d15e32d69e3a5f36e925958e6a235",
+    "shell.css": "c3fa1aac986f4945ad1656466cf6e07cf9280f6812a0fb0706d9fc99f1fff6aa",
+    "shell.js": "d6712e3823782d01379e40563285ec667a5a312de83beb4786bff85b0106e11c"
+  }
+}
