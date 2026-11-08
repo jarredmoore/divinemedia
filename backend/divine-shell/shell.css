@@ -45,3 +45,4 @@ html[data-dm-theme="code-black"] .dm-brand>span,html[data-dm-theme="code-black"]
 .dm-route-shell>.row,.dm-route-shell>.container-fluid>.row{margin-left:0!important;margin-right:0!important}
 html[data-dm-theme="code-black"] :is(.dm-route-brand,.dm-brand,.dmc-brand,.navbar-brand) img{filter:grayscale(.5) sepia(.2) brightness(1.1)}
 .dm-route-shell>.container>.row{margin-left:0!important;margin-right:0!important}
+.dm-route-branded .gallery>.row{margin-left:0!important;margin-right:0!important}
