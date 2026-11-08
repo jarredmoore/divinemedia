@@ -5,12 +5,13 @@ export const THEME_KEY='divine-media:theme:v1';
 export function readTheme(){
  try{
   const requested=new URLSearchParams(location.search).get('theme');
-  if(['default','cold-black'].includes(requested))return requested;
-  return localStorage.getItem(THEME_KEY)==='cold-black'?'cold-black':'default';
+  if(requested==='cold-black')return 'code-black';
+  if(['default','code-black'].includes(requested))return requested;
+  return ['cold-black','code-black'].includes(localStorage.getItem(THEME_KEY))?'code-black':'default';
  }catch{return 'default'}
 }
 export function ThemePicker({theme,onChange}){
- return <label className="theme-picker"><span className="sr-only">Viewing theme</span><select aria-label="Viewing theme" value={theme} onChange={e=>onChange(e.target.value)}><option value="default">Default</option><option value="cold-black">Cold Black</option></select></label>;
+ return <label className="theme-picker"><span className="sr-only">Viewing theme</span><select aria-label="Viewing theme" value={theme} onChange={e=>onChange(e.target.value)}><option value="default">Default</option><option value="code-black">Code Black</option></select></label>;
 }
 export function ColdBlackHeader({tab,go,query,setQuery,theme,onTheme,links}){
  const[expanded,setExpanded]=useState(false);

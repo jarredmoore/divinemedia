@@ -30,7 +30,7 @@ const sampleItems=[
 ];
 const links=[['Discover',Compass],['Watch',Clapperboard],['Listen',Headphones],['Live',Radio],['Creators',Users],['Library',Library]];
 function App(){
- const[theme,setTheme]=useState(readTheme);const coldBlack=theme==='cold-black';
+ const[theme,setTheme]=useState(readTheme);const coldBlack=theme==='code-black';
  const changeTheme=value=>{setTheme(value);window.scrollTo({top:0,behavior:'instant'});try{const u=new URL(location.href);u.searchParams.set('theme',value);history.replaceState(null,'',u)}catch{/* preference still works without URL storage */}};
  useEffect(()=>{document.documentElement.dataset.theme=theme;try{localStorage.setItem(THEME_KEY,theme)}catch{/* storage can be disabled */}},[theme]);
  const[sidebarCollapsed,setSidebarCollapsed]=useState(false);const[dockTrack,setDockTrack]=useState(null);const[dockVideo,setDockVideo]=useState(null);const[dockPlaying,setDockPlaying]=useState(false);const[dockTime,setDockTime]=useState(0);const[dockDuration,setDockDuration]=useState(0);const[dockVolume,setDockVolume]=useState(0.8);const[volumeBeforeMute,setVolumeBeforeMute]=useState(0.8);const dockAudioRef=useRef(null);const[dockError,setDockError]=useState('');const dockAutoPlay=useRef(false);const[creatorFilter,setCreatorFilter]=useState(null),[playing,setPlaying]=useState(false),[queueIndex,setQueueIndex]=useState(0),[tab,setTab]=useState('Discover'),[query,setQuery]=useState(''),[menu,setMenu]=useState(false),[saved,setSaved]=useState(readSaved),[selected,setSelected]=useState(null),[items,setItems]=useState(sampleItems),[sourceStatus,setSourceStatus]=useState('sample');
