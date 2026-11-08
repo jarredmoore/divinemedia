@@ -2,7 +2,7 @@
 """Lease-checked HTML presentation hooks; native handlers/configuration are untouched."""
 import argparse,datetime,hashlib,json,os,pathlib,shutil,stat,tempfile,uuid
 MARKER='DM_ROUTE_SHELL_V1'
-FILES=['.htaccess','view/include/head.php','.compose/encoder/view/index.header.php','divine-entrance/landing.php']
+FILES=['.htaccess','view/include/head.php','.compose/encoder/view/index.header.php','.compose/encoder/view/localEncoder.php','divine-entrance/landing.php']
 ASSETS={'head.php','legacy-entry.php','shell.css','shell.js','mark.svg'}
 LEGACY='''# DM_ROUTE_SHELL_V1: canonical browser entries only; keep media/API/POST routes.
 <IfModule mod_rewrite.c>
@@ -41,7 +41,7 @@ def install(root,assets,backups,expected=None,apply=False):
  changes['.htaccess']=LEGACY.encode()+apache.replace(needle,b'RewriteCond %{QUERY_STRING} ^(?:theme=(?:code-black|cold-black|default))?$',1)
  changes['view/include/head.php']=originals['view/include/head.php']+hook(2)
  changes['.compose/encoder/view/index.header.php']=originals['.compose/encoder/view/index.header.php']+hook(2)
- for name,level in [('divine-entrance/landing.php',1)]:
+ for name,level in [('divine-entrance/landing.php',1),('.compose/encoder/view/localEncoder.php',2)]:
   data=originals[name]
   if data.lower().count(b'</head>')!=1:raise RuntimeError('Unexpected HTML head')
   at=data.lower().index(b'</head>');changes[name]=data[:at]+hook(level)+data[at:]
@@ -68,7 +68,7 @@ def rollback(root,snapshot):
   if digest((target/name).read_bytes())!=sha:raise RuntimeError('Later asset edit blocks rollback')
  for name,sha in plan['before'].items():
   if digest((snapshot/name).read_bytes())!=sha:raise RuntimeError('Snapshot checksum mismatch')
- for name in FILES:atomic(root/name,(snapshot/name).read_bytes(),(root/name).stat())
+ for name in plan['before']:atomic(root/name,(snapshot/name).read_bytes(),(root/name).stat())
  shutil.rmtree(target);return {'rolled_back':True}
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--root',required=True);p.add_argument('--assets');p.add_argument('--backups');p.add_argument('--expected');p.add_argument('--apply',action='store_true');p.add_argument('--rollback');a=p.parse_args()

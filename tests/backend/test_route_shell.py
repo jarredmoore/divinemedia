@@ -4,7 +4,7 @@ spec=importlib.util.spec_from_file_location('route_shell',ROOT/'ops/divinemedia/
 class RouteShellTests(unittest.TestCase):
  def setUp(self):
   self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=pathlib.Path(self.tmp.name)/'app';self.root.mkdir();self.assets=ROOT/'backend/divine-shell';self.backups=pathlib.Path(self.tmp.name)/'backups'
-  values={'.htaccess':'# DM_ENTRANCE_INDEX_V1\nRewriteCond %{QUERY_STRING} ^$\nRewriteRule ^$ divine-entrance/landing.php [END]\n','view/include/head.php':'<?php echo "native head"; ?>','divine-entrance/landing.php':'<head><title>Divine Media</title></head><body>Original landing</body>','.compose/encoder/view/index.header.php':'<meta charset="utf-8"><title>Encoder</title>'}
+  values={'.htaccess':'# DM_ENTRANCE_INDEX_V1\nRewriteCond %{QUERY_STRING} ^$\nRewriteRule ^$ divine-entrance/landing.php [END]\n','view/include/head.php':'<?php echo "native head"; ?>','divine-entrance/landing.php':'<head><title>Divine Media</title></head><body>Original landing</body>','.compose/encoder/view/localEncoder.php':'<head><title>Local Encoder</title></head><body>Original launcher</body>','.compose/encoder/view/index.header.php':'<meta charset="utf-8"><title>Encoder</title>'}
   for n,s in values.items():p=self.root/n;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(s)
   self.original={n:(self.root/n).read_bytes() for n in values}
  def test_exact_rollback_and_theme_root_route(self):
