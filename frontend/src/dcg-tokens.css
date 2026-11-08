@@ -1,0 +1,23 @@
+:root{
+  /* DCG One-Pager master palette, adapted for the Divine Media product. */
+  --dcg-bg:#09090c;
+  --dcg-panel:#101015;
+  --dcg-panel-2:#15151c;
+  --dcg-text:#f7f5f2;
+  --dcg-muted:#b7b4bd;
+  --dcg-line:rgba(255,255,255,.12);
+  --dcg-orange:#ff6a2a;
+  --dcg-gold:#ffcc2f;
+  --dcg-magenta:#ee3e9f;
+  --dcg-max:1180px;
+  --dcg-radius:26px;
+  --dcg-shadow:0 30px 80px rgba(0,0,0,.35);
+  /* Product-level aliases: media surfaces may differ from the corporate One-Pager. */
+  --dm-bg:var(--dcg-bg);
+  --dm-surface:var(--dcg-panel);
+  --dm-surface-raised:var(--dcg-panel-2);
+  --dm-text:var(--dcg-text);
+  --dm-muted:var(--dcg-muted);
+  --dm-accent:var(--dcg-gold);
+  --dm-focus:var(--dcg-gold);
+}

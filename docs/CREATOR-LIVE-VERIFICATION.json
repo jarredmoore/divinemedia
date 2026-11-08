@@ -1,0 +1,32 @@
+{
+  "commit": "61f96e4c30ae30cb8305d01b652b5d65313f2309",
+  "release": "0b8df6f2022d",
+  "before_catalog_rows": 16,
+  "result": "pass",
+  "native_route_statuses": {
+    "/": 200,
+    "/view/": 200,
+    "/user": 200,
+    "/upload": 302,
+    "/Encoder/": 200,
+    "/?type=audio": 200,
+    "/index.php?type=video": 200,
+    "/videoEmbed/1": 200
+  },
+  "guest_encoder": "200 native account form and theme",
+  "authenticated_forms": "verified in isolated restore only",
+  "native_handlers_unchanged": 7,
+  "entrance_assets_unchanged": 5,
+  "encoder_queue_unchanged": true,
+  "catalog_rows": 16,
+  "original_media_hashes_unchanged": 52,
+  "mp3_mp4_ranges": "206",
+  "rollback_snapshot": "/srv/divinemedia/backups/creator-20261107T171602Z-325e71",
+  "containers": [
+    "app-live-1 Up 13 hours (healthy)",
+    "app-avideo-1 Up 9 days (healthy)",
+    "app-database_encoder-1 Up 9 days (healthy)",
+    "app-database-1 Up 9 days (healthy)",
+    "app-memcached-1 Up 9 days"
+  ]
+}

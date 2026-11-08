@@ -1,0 +1,110 @@
+/* Divine Media 3.1: additive DCG design layer.
+   Imported after existing styles to preserve layouts, behavior, and media integrations. */
+body{background:var(--dm-bg);color:var(--dm-text)}
+.sidebar{background:var(--dm-surface);border-right-color:var(--dcg-line)}
+header{border-bottom-color:var(--dcg-line)}
+.brand-icon,.avatar,.primary,.play-float,.pill,.player-controls .player-main{background:var(--dm-accent);color:var(--dm-bg)}
+.nav-link.active{background:rgba(255,204,47,.10);color:var(--dm-accent)}
+.live-dot,.accent-line{background:var(--dm-accent)}
+.eyebrow,.hero h1 em,.manifesto em,.experience-copy h1 em,.manifesto button,.side-bottom>span,.save:hover,.save.is-saved{color:var(--dm-accent)}
+.primary{border-color:var(--dm-accent)}
+.primary:hover{background:#ffe179}
+.search{background:var(--dm-surface-raised);border-color:var(--dcg-line)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--dm-focus);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Divine Media 3.1 usability refinement: legible labels and compact navigation */
+.eyebrow,.eyebrow.small,.side-label,.breadcrumb,.card-tag,.section-sub,.side-bottom>span{font-size:clamp(11px,.78vw,13px);letter-spacing:.11em;line-height:1.5}
+.brand small{font-size:10px;letter-spacing:.13em}
+.card-tag{color:#b5b8bd}
+.section-sub{color:#b9bbc1}
+.sidebar{transition:width .25s ease,padding .25s ease}
+.sidebar-toggle{align-self:flex-end;margin:24px 5px 0;padding:9px;border:1px solid var(--dcg-line);border-radius:9px;background:transparent;color:var(--dm-text);display:grid;place-items:center}
+.sidebar-toggle:hover{background:var(--dm-surface-raised)}
+.nav-link svg{flex-shrink:0}
+.sidebar-collapsed .sidebar{width:78px;padding:28px 10px}
+.sidebar-collapsed .brand{padding:0;justify-content:center}
+.sidebar-collapsed .brand>span,.sidebar-collapsed .side-label,.sidebar-collapsed .side-bottom,.sidebar-collapsed .nav-text,.sidebar-collapsed .live-dot{display:none}
+.sidebar-collapsed .sidebar-toggle{align-self:center;margin:28px 0 20px}
+.sidebar-collapsed .sidebar nav{gap:10px}
+.sidebar-collapsed .nav-link{justify-content:center;padding:13px 0}
+.sidebar-collapsed .nav-link svg{width:21px;height:21px}
+.cover img.media-artwork{object-fit:contain;background:#101015}
+.cover{background:#101015}
+.media-card .cover:hover img.media-artwork{transform:scale(1.035)}
+.experience-banner{isolation:isolate}
+.experience-banner>img.banner-parallax{inset:-7% 0;width:100%;height:114%;object-fit:cover;transform:translate3d(0,0,0);transition:transform .15s linear}
+@media(min-width:801px) and (prefers-reduced-motion:no-preference){
+ .experience-banner>img.banner-parallax{animation:banner-drift 18s ease-in-out infinite alternate}
+ @keyframes banner-drift{from{transform:scale(1.03) translateY(-1%)}to{transform:scale(1.08) translateY(2%)}}
+}
+@media(max-width:800px){.sidebar-toggle{display:none}.sidebar-collapsed .sidebar{width:236px;padding:34px 19px}.sidebar-collapsed .brand>span,.sidebar-collapsed .side-label,.sidebar-collapsed .side-bottom,.sidebar-collapsed .nav-text,.sidebar-collapsed .live-dot{display:initial}.sidebar-collapsed .sidebar nav{gap:6px}.sidebar-collapsed .nav-link{justify-content:flex-start;padding:13px 14px}.sidebar-collapsed .nav-link svg{width:19px;height:19px}}
+@media(max-width:600px){.eyebrow,.eyebrow.small,.card-tag,.section-sub{font-size:11px}.watch-modal{width:100%}.real-video{max-height:70dvh}.cover{aspect-ratio:4/5}.cover img.media-artwork{object-fit:contain}}
+@media(prefers-reduced-motion:reduce){.experience-banner>img.banner-parallax{animation:none!important;transition:none!important;transform:none!important}}
+
+/* Unified pill search: quiet at rest, DCG yellow on focus */
+.search{border-radius:999px;padding:10px 16px;min-height:44px;transition:border-color .2s ease,box-shadow .2s ease,background-color .2s ease}
+.search input{border:0;border-radius:999px;background:transparent;min-width:0;outline:none;color:var(--dm-text);font-size:13px}
+.search input:focus-visible{outline:none}
+.search:focus-within{border-color:var(--dm-accent);box-shadow:0 0 0 2px rgba(255,204,47,.18);background:rgba(255,204,47,.06);color:var(--dm-accent)}
+.search:focus-within input{color:var(--dm-text);caret-color:var(--dm-accent)}
+.search:focus-within svg{color:var(--dm-accent)}
+.search input::placeholder{color:#aeb1b8;opacity:1}
+@media(max-width:480px){.search{padding:9px 12px;min-height:42px}.search input{width:min(31vw,140px);font-size:12px}}
+
+/* Divine Media 3.2: artwork-led mixed-height gallery */
+.masonry-grid{display:block;columns:4;column-gap:18px}
+.masonry-card{display:inline-block;width:100%;break-inside:avoid;page-break-inside:avoid;margin:0 0 26px;vertical-align:top}
+.masonry-card .cover{height:auto;aspect-ratio:auto;min-height:0;overflow:hidden;background:#101015;display:block}
+.masonry-card .cover img.media-artwork{display:block;width:100%;height:auto;max-height:none;aspect-ratio:auto;object-fit:contain}
+.masonry-card .card-meta{align-items:flex-start}
+.masonry-card .card-meta>div{min-width:0}
+.masonry-card .card-meta h3{overflow-wrap:anywhere}
+@media(max-width:1150px){.masonry-grid{columns:3}}
+@media(max-width:800px){.masonry-grid{columns:2;column-gap:12px}.masonry-card{margin-bottom:22px}}
+@media(max-width:480px){.masonry-card .cover{aspect-ratio:auto}.masonry-card .cover img.media-artwork{height:auto;aspect-ratio:auto}.masonry-card .card-meta h3{font-size:13px}}
+/* Persistent audio dock appears only for a real configured audio source */
+.dm-dock{position:fixed;z-index:24;bottom:0;left:0;right:0;min-height:78px;padding:12px clamp(16px,3vw,44px);display:flex;align-items:center;gap:16px;background:rgba(14,14,19,.97);border-top:1px solid rgba(255,204,47,.27);box-shadow:0 -10px 45px #0009;backdrop-filter:blur(18px)}
+.dm-dock-art{height:50px;width:50px;border-radius:9px;object-fit:cover;background:#222}
+.dm-dock-info{display:flex;flex-direction:column;gap:4px;min-width:0;max-width:250px;flex:1}
+.dm-dock-info strong{font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dm-dock-info span{font-size:11px;color:#b7b4bd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dm-dock button{border:0;color:var(--dm-text);background:transparent;display:grid;place-items:center;padding:10px;border-radius:50%}
+.dm-dock .dm-dock-play{background:var(--dm-accent);color:#09090c}
+.dm-dock button:hover{background:#ffffff1a}
+.dm-dock .dm-dock-play:hover{background:#ffe179}
+.dm-dock-progress{flex:2;min-width:80px;accent-color:var(--dm-accent);cursor:pointer}
+.dm-dock-progress:disabled{opacity:.35;cursor:default}
+.dm-dock-volume-icon{color:#b7b4bd}
+.app:has(.dm-dock){padding-bottom:78px}
+@media(max-width:600px){.dm-dock{gap:9px;padding:9px 12px;min-height:68px}.dm-dock-art{height:42px;width:42px}.dm-dock-info{max-width:none}.dm-dock-progress{position:absolute;bottom:0;left:0;right:0;width:100%;height:4px;margin:0}.dm-dock-volume-icon{display:none}.app:has(.dm-dock){padding-bottom:68px}}
+@media(prefers-reduced-motion:reduce){.dm-dock{backdrop-filter:none}}
+
+/* Video-aware dock: return to the existing AVideo/native player, no duplicate stream */
+.dm-video-dock .dm-dock-resume{display:flex;align-items:center;gap:8px;border:1px solid rgba(255,204,47,.45);border-radius:999px;padding:10px 16px;background:var(--dm-accent);color:#09090c;font-size:12px;font-weight:750;white-space:nowrap}
+.dm-video-dock .dm-dock-resume:hover{background:#ffe17b}
+@media(max-width:480px){.dm-video-dock .dm-dock-resume{padding:9px 11px;font-size:11px}}
+
+/* AVideo audio-page fallback when the public catalog omits direct MP3 URLs */
+.avideo-audio-embed{width:100%;max-width:640px;margin:14px auto;display:flex;flex-direction:column;gap:10px}
+.avideo-audio-embed iframe{width:100%;height:260px;border:1px solid #ffffff26;border-radius:12px;background:#08080b}
+.avideo-audio-embed a{display:inline-flex;align-items:center;gap:7px;color:#ffcc2f;font-size:12px;text-decoration:none;align-self:center}
+.avideo-audio-embed a:hover{text-decoration:underline}
+@media(max-width:600px){.avideo-audio-embed iframe{height:220px}}
+
+/* Functional DCG audio volume control */
+.dm-dock-volume{display:flex;align-items:center;gap:5px;min-width:110px}
+.dm-dock-volume button{padding:7px;flex-shrink:0}
+.dm-dock-volume input[type=range]{width:80px;min-width:0;accent-color:#ffcc2f;cursor:pointer}
+@media(max-width:600px){.dm-dock-volume{min-width:0;gap:0}.dm-dock-volume input[type=range]{width:55px}}
+@media(max-width:390px){.dm-dock-volume input[type=range]{width:40px}}
+/* Keep every audio control reachable on narrow phones. */
+@media(max-width:600px){
+ .dm-dock:not(.dm-video-dock){display:grid;grid-template-columns:42px minmax(0,1fr) 44px 44px 44px;gap:4px;padding-bottom:18px}
+ .dm-dock:not(.dm-video-dock) .dm-dock-info{grid-column:2 / 5}
+ .dm-dock:not(.dm-video-dock) .dm-dock-close{grid-column:5;grid-row:1}
+ .dm-dock:not(.dm-video-dock) .dm-dock-volume{grid-column:1 / 3;grid-row:2}
+ .dm-dock:not(.dm-video-dock) .dm-dock-skip,.dm-dock:not(.dm-video-dock) .dm-dock-play{grid-row:2;min-height:44px}
+ .dm-dock:not(.dm-video-dock) .dm-dock-progress{height:16px}
+ .app:has(.dm-dock:not(.dm-video-dock)){padding-bottom:132px}
+}

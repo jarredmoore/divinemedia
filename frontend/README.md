@@ -1,3 +1,13 @@
+> Canonical public URLs: [Watch](https://divinemedia.us/) and [Media / creator access](https://media.divinemedia.us/). See [domain migration and rollback](../docs/DIVINE-MEDIA-DOMAINS.md) for source/deploy references, legacy redirects, and the production-branch approval boundary.
+
+# Current cloud workflow (Divine Media 3.3)
+
+Use `dev/divine-media-3.1` as the integration branch and open feature PRs against it. Production is `production/divine-media` and requires explicit approval. See [the audit and plan](../docs/DIVINE-MEDIA-3.3-AUDIT.md) and [adopted workflow](../DIVINE-MEDIA-DEVELOPMENT-WORKFLOW.md).
+
+Run `npm ci`, `npm test`, and `npm run build`. Netlify base is `frontend`, publish directory `dist`, functions directory `netlify/functions`. The public catalog function supplies automatic audio/video discovery; Vite alone does not serve Netlify functions. Verify `/api/public-catalog` in the Deploy Preview. Never add secrets to `VITE_*` variables.
+
+The notes below describe historical iterations and are not current deployment instructions.
+
 # Divine Media — Discover UI v0.1
 
 A modern, responsive React + Vite frontend. It is a **visual prototype**, not yet connected to AVideo. Media thumbnails are remote Unsplash images; content titles and creators are illustrative. No login, uploads, purchases or live streams are enabled.

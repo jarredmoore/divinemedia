@@ -1,0 +1,25 @@
+name: Backend creator theme
+on:
+  pull_request:
+    paths:
+      - 'backend/divine-creator/**'
+      - 'ops/divinemedia/apply-creator.py'
+      - 'tests/backend/**'
+      - '.github/workflows/backend-creator.yml'
+  push:
+    branches: ['feat/divine-media-3.3-creator-workspace']
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: node --check backend/divine-creator/creator.js
+      - run: php -l backend/divine-creator/theme.php
+      - run: python -m unittest discover -s tests/backend -v
+      - run: git diff --check

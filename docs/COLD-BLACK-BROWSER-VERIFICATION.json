@@ -1,0 +1,33 @@
+{
+  "result": "pass",
+  "tested_url": "https://6aefc75309917db3b70bb1a8--mediaproduction.netlify.app",
+  "default_preserved": true,
+  "no_default_video_requests": true,
+  "theme_switch_persistence_and_url": true,
+  "background_video_play_pause": true,
+  "background_pause_offscreen_and_modal": true,
+  "scroll_split_reveal": true,
+  "reduced_motion_and_data_saver_still": true,
+  "actual_mp3_playback": true,
+  "murphy_lee_artwork": true,
+  "volume_seek_previous_next": true,
+  "player_survives_theme_switch": true,
+  "mobile_navigation_search": true,
+  "viewport_widths": [
+    1440,
+    1024,
+    768,
+    390,
+    320
+  ],
+  "horizontal_overflow": false,
+  "console_errors": [],
+  "blocked_writes": 0,
+  "frontend_source_commit": "a20f3c33679f022ed22c8c38f17df2e9fc040bbf",
+  "netlify_deploy_id": "6aefc75309917db3b70bb1a8",
+  "pull_request": "https://github.com/jarredmoore/divinemedia/pull/10",
+  "public_site_promotion": false,
+  "azure_backend_changes": false,
+  "production_branch_unchanged": true,
+  "existing_public_deploy_unchanged": true
+}

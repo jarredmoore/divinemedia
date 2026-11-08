@@ -1,0 +1,65 @@
+{
+  "issuance": {
+    "snapshot": "/srv/divinemedia/backups/domains-20261107T222154Z-70a793",
+    "phase": "complete",
+    "result": "pass",
+    "off_vm": [
+      {
+        "name": "runtime-before.tar.gz",
+        "sha256": "813cb4f79da09b9980a35270c9da2126b6bb71b2ea8b742ace28277d9860bb1a",
+        "bytes": 49924,
+        "roundtrip_verified": true
+      },
+      {
+        "name": "host-files-before.tar.gz",
+        "sha256": "4935d87174c9eff103d7e5c1528adc3b9be0c6b5bde737050a3b799fe9f82ee7",
+        "bytes": 12463,
+        "roundtrip_verified": true
+      },
+      {
+        "name": "runtime-with-new-certificate.tar.gz",
+        "sha256": "a7d791a38f12faf536bb282e623652ad71064fa4f797a02b5e353c5f4eeb04ce",
+        "bytes": 51425,
+        "roundtrip_verified": true
+      }
+    ],
+    "certificate": {
+      "name": "divinemedia",
+      "domains": [
+        "media.divinecreativegroup.com",
+        "media.divinemedia.us"
+      ],
+      "expires": "Feb  5 21:23:28 2027 GMT"
+    },
+    "active_configuration_unchanged": true
+  },
+  "url_settings_backup": {
+    "result": "pass",
+    "snapshot": "/srv/divinemedia/backups/domains-20261107T222154Z-70a793",
+    "url_settings_backup": {
+      "name": "database-url-settings-before.json",
+      "sha256": "f9687fc43ca061b2d3edba9fcca50f03adab120f10a0e4320bf34e5f941f1c47",
+      "bytes": 97,
+      "roundtrip_verified": true
+    }
+  },
+  "renewal_hook": {
+    "result": "pass",
+    "hook": "/srv/divinemedia/app/.compose/letsencrypt/renewal-hooks/deploy/divinemedia-apache-renew",
+    "hook_sha256": "a66febcead48c32fb3b7cbd55a79b286a11593e111285d0242258d551ed0fc34",
+    "hook_test": "Apache config valid and graceful reload succeeds",
+    "active_tls_backup": {
+      "name": "runtime-active.tar.gz",
+      "sha256": "62a8e33338bab0400d65af29f96c301a2c85dc2c07fc4264adb313536d571436",
+      "bytes": 51865,
+      "roundtrip_verified": true
+    }
+  },
+  "pre_hook_audit": {
+    "cron_running": true,
+    "renewal_job_present": true,
+    "all_certificates_job_present": true,
+    "new_certificate_has_apache_reload_hook": false,
+    "new_certificate_renewal_file_present": true
+  }
+}

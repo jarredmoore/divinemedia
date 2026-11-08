@@ -1,0 +1,48 @@
+{
+  "result": "pass",
+  "verification_basis": {
+    "full_restore_release": "domain-release-5c9380e5bb02",
+    "redirect_delta": "internal Apache/PHP stub"
+  },
+  "source": "off-VM downloaded copy",
+  "source_hashes_verified": true,
+  "media_count": 52,
+  "databases": [
+    {
+      "label": "avideo",
+      "restored_tables": 27,
+      "table_checks": "pass"
+    },
+    {
+      "label": "encoder",
+      "restored_tables": 7,
+      "table_checks": "pass"
+    }
+  ],
+  "recovery_images_verified": 5,
+  "restored_media_hashes_verified": 52,
+  "restored_video_rows": 16,
+  "apache_config": "pass",
+  "application_runtime_db_connections": "pass",
+  "dual_host_https_routes": "pass",
+  "mp3_mp4_ranges": "206 on both hosts",
+  "encoder_default_streamer": "https://media.divinemedia.us/",
+  "encoder_new_site_allowed": true,
+  "native_login_cookie_domains": "compatible",
+  "authenticated_upload_action": "new origin",
+  "catalog_rows_preserved": 16,
+  "media_hashes_preserved": 52,
+  "native_handlers_preserved": 5,
+  "queue_unchanged": true,
+  "rollback_reapply": "pass",
+  "scratch_network_removed": true,
+  "scratch_containers_removed": true,
+  "scratch_files_removed": true,
+  "legacy_auth_redirects": "302 to canonical host",
+  "credential_queries_forwarded": false,
+  "compact_mode_preserved": true,
+  "legacy_post_and_api_requests": "not redirected",
+  "legacy_static_range": "206",
+  "unchanged_source_files": 8,
+  "redirect_scratch_removed": true
+}

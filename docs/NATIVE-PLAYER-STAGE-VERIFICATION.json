@@ -1,0 +1,43 @@
+{
+  "source": "off-VM downloaded copy",
+  "source_hashes_verified": true,
+  "media_count": 52,
+  "databases": [
+    {
+      "label": "avideo",
+      "restored_tables": 27,
+      "table_checks": "pass"
+    },
+    {
+      "label": "encoder",
+      "restored_tables": 7,
+      "table_checks": "pass"
+    }
+  ],
+  "recovery_images_verified": 5,
+  "restored_media_hashes_verified": 52,
+  "restored_video_rows": 16,
+  "ui_plugin_source_hashes": {
+    "Hotkeys": "3faf9ffdf2e0718eb55574de6baa05de7ee01eeb908531108f020ad5f602f936",
+    "NextButton": "7153b236c48f8b1c3d58e500988df5f3900c430c18ad3ba6cb0fd3786dc22886",
+    "SeekButton": "3981d7af7a93fd9a1a90988b95f5b77cad3ed9398f3f7ecfc6c5ef8e71df7ee8",
+    "TheaterButton": "e9c34826ea613624967b70366f505044b52889d41decff5b1380841c5bc61c45"
+  },
+  "player_plugins_staged": [
+    "Hotkeys",
+    "NextButton",
+    "SeekButton",
+    "TheaterButton"
+  ],
+  "apache_config": "pass",
+  "application_runtime_db_connections": "pass",
+  "isolated_http_status": "200",
+  "rendered_response_no_fatal_error": "pass",
+  "restored_media_range_status": "206",
+  "native_player_utilities_rendered": true,
+  "native_startup_not_executed": true,
+  "result": "pass",
+  "scratch_network_removed": true,
+  "scratch_containers_removed": true,
+  "scratch_files_removed": true
+}

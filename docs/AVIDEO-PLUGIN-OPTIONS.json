@@ -1,0 +1,863 @@
+{
+  "source": "https://github.com/WWBN/AVideo/wiki/Plugin-Documentation-Index",
+  "marketplace": "https://streamphp.com/marketplace/",
+  "runtime_version": "30.2",
+  "inventory_phase": "before player-utility activation",
+  "prices_are_listings_not_quotes": true,
+  "plugins": [
+    {
+      "name": "AD_Overlay",
+      "availability": "Free",
+      "group": "Advertising and monetization",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "AD_Server",
+      "availability": "Free",
+      "group": "Advertising and monetization",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "AD_Server_Location",
+      "availability": "Free",
+      "group": "Advertising and monetization",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "ADs",
+      "availability": "Free",
+      "group": "Advertising and monetization",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "AdBlockerDetector",
+      "availability": "Free",
+      "group": "Advertising and monetization",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "AdsForJesus",
+      "availability": "Free",
+      "group": "Advertising and monetization",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "GoogleAds_IMA",
+      "availability": "Paid",
+      "group": "Advertising and monetization",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "MonetizeUsers",
+      "availability": "Free",
+      "group": "Advertising and monetization",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "PromoteVideos",
+      "availability": "Paid",
+      "group": "Advertising and monetization",
+      "runtime": "Not installed",
+      "price_usd": "$19.99"
+    },
+    {
+      "name": "YPTWallet",
+      "availability": "Free",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "PayPalYPT",
+      "availability": "Free",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "StripeYPT",
+      "availability": "Free",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "AuthorizeNet",
+      "availability": "Free",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "RazorPayYPT",
+      "availability": "Free",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "BTCPayments",
+      "availability": "Free",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Subscription",
+      "availability": "Paid",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "PayPerView",
+      "availability": "Paid",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "PayPerViewLive",
+      "availability": "Paid",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "FansSubscriptions",
+      "availability": "Paid",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "Gift",
+      "availability": "Paid",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "DiskUploadQuota",
+      "availability": "Paid",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "Wix",
+      "availability": "Paid",
+      "group": "Payments, wallet and selling content",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "PlayerSkins",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "PlayLists",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VideoPlaylistScheduler",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "VideoHLS",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "VideoHLSOverlay",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VideoOffline",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "VideoResolutionSwitcher",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "SubtitleSwitcher",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "VideoThumbnails",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "MP4ThumbsAndGif",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "$19.99"
+    },
+    {
+      "name": "VideoTags",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Bookmark",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "InteractiveVideo",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VideoVoteSystem",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Shorts",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "ImageGallery",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Articles",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VideoDocuments",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "CertifyComplete",
+      "availability": "Paid",
+      "group": "Video, player and content",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "FloatVideo",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Hotkeys",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "NextButton",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "SeekButton",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "TheaterButton",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VideoLandscapeFullscreen",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VideoLogoOverlay",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VR360",
+      "availability": "Free",
+      "group": "Video, player and content",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Gallery",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "YouPHPFlix2",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "FirstPageChannelList",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Layout",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Customize",
+      "availability": "Paid",
+      "group": "Layout, pages and discovery",
+      "runtime": "Not installed",
+      "price_usd": "$19.99"
+    },
+    {
+      "name": "CustomizeAdvanced",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "TopMenu",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Livesearch",
+      "availability": "Paid",
+      "group": "Layout, pages and discovery",
+      "runtime": "Not installed",
+      "price_usd": "$19.99"
+    },
+    {
+      "name": "PredefinedCategory",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "MessageOfTheDay",
+      "availability": "Paid",
+      "group": "Layout, pages and discovery",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "CookieAlert",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "MaintenanceMode",
+      "availability": "Free",
+      "group": "Layout, pages and discovery",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Live",
+      "availability": "Free",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LiveLinks",
+      "availability": "Free",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LiveUsers",
+      "availability": "Paid",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "Rebroadcaster",
+      "availability": "Paid",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "SendRecordedToEncoder",
+      "availability": "Paid",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "WebRTC",
+      "availability": "Free",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Meet",
+      "availability": "Free",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "YPTSocket",
+      "availability": "Free",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Chat2",
+      "availability": "Paid",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "ZoomMeetingRecorder",
+      "availability": "Paid",
+      "group": "Live, meetings and real-time features",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "AWS_S3",
+      "availability": "Paid",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "Blackblaze_B2",
+      "availability": "Paid",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "FTP_Storage",
+      "availability": "Paid",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "YPTStorage",
+      "availability": "Paid",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Not installed",
+      "price_usd": "$59.99"
+    },
+    {
+      "name": "CDN",
+      "availability": "Free (the CDN service is paid)",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "SecureVideosDirectory",
+      "availability": "Paid",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "Cache",
+      "availability": "Free",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Backup",
+      "availability": "Paid",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "CloneSite",
+      "availability": "Free",
+      "group": "Storage, delivery, backup and performance",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "CustomizeUser",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Permissions",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "User_Controll",
+      "availability": "Paid",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Not installed",
+      "price_usd": "$19.99"
+    },
+    {
+      "name": "UserConnections",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginControl",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "UserOTPLogin",
+      "availability": "Paid",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Not installed",
+      "price_usd": "$19.99"
+    },
+    {
+      "name": "WebAuthnLogin",
+      "availability": "Paid",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginApple",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginFacebook",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginGoogle",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginLinkedin",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginTwitter",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginWordPress",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginYahoo",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "LoginLDAP",
+      "availability": "Paid",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Not installed",
+      "price_usd": "$99.99"
+    },
+    {
+      "name": "LoginLDAP_DYNA",
+      "availability": "Paid",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Not installed",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "SignUpAgreement",
+      "availability": "Paid",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Not installed",
+      "price_usd": "$19.99"
+    },
+    {
+      "name": "Audit",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "ReportVideo",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "User_Location",
+      "availability": "Free",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Video_Location_Block",
+      "availability": "Paid",
+      "group": "Accounts, login, privacy and security",
+      "runtime": "Not installed",
+      "price_usd": "$29.99"
+    },
+    {
+      "name": "API",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "MobileManager",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "MobileYPT",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Notifications",
+      "availability": "Paid",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Not installed",
+      "price_usd": "$19.99"
+    },
+    {
+      "name": "UserNotifications",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "DiscordNotify",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "SlackNotify",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "SlackBot",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "AutoPostOnSocialMedia",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "SocialMediaPublisher",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "YouTubeAPI",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VimeoAPI",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "BulkEmbed",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "BitLy",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "PHPBB3",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "JustWatch",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "WWBNIndex",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "AI",
+      "availability": "Free (the AI service is paid)",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "Scheduler",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Active",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "VideosStatistics",
+      "availability": "Free",
+      "group": "Notifications, integrations, mobile and developer features",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    },
+    {
+      "name": "BlockonomicsYPT",
+      "availability": "Free, still in the code but marked deprecated. Do not use it for new sites.",
+      "group": "Deprecated plugins",
+      "runtime": "Installed; inactive",
+      "price_usd": "\u2014"
+    }
+  ]
+}
