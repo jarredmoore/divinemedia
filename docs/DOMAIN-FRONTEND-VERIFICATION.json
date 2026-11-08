@@ -1,0 +1,74 @@
+{
+  "publication": {
+    "result": "pass",
+    "site_id": "74211341-4673-4a96-8a18-927fffe55e91",
+    "previous_deploy": "5df0740e8350b4ec783ddfd5",
+    "published_deploy": "6aefae007b01dc9671e0b50f",
+    "canonical_domain": "divinemedia.us",
+    "domain_aliases": [
+      "www.divinemedia.us"
+    ],
+    "source_commit": "79a18229f8840f08c969597cf74536c2c06fde03",
+    "verified_draft_promoted": true
+  },
+  "live_http": {
+    "result": "pass",
+    "main_html_matches_verified_draft": true,
+    "main_html_sha256": "03a9425bf5f8e04663ed5140e62e9e2cd2b718349711a2132339bea3879116e5",
+    "www_redirects_to_apex": true,
+    "catalog_rows": 18,
+    "audio_tracks": 7,
+    "media_origin": "media.divinemedia.us"
+  },
+  "live_browser": {
+    "result": "pass",
+    "tested_url": "https://divinemedia.us",
+    "catalog_cards": 18,
+    "canonical_origin": "https://divinemedia.us",
+    "actual_mp3_playback": true,
+    "artwork": "Murphy Lee cover loaded",
+    "volume_mute_unmute": "pass",
+    "seek": "pass",
+    "previous_next": "pass",
+    "viewport_widths": [
+      1440,
+      768,
+      390,
+      320
+    ],
+    "horizontal_overflow": false,
+    "blocked_writes": 0,
+    "production_upload_or_encode_submitted": false
+  },
+  "native_browser": {
+    "result": "pass",
+    "host": "media.divinemedia.us",
+    "pages": [
+      "entrance",
+      "login",
+      "Encoder connection"
+    ],
+    "viewport_widths": [
+      1440,
+      390,
+      320
+    ],
+    "horizontal_overflow": false,
+    "canonical_watch_links": true,
+    "encoder_default_site": "https://media.divinemedia.us/",
+    "real_sign_in_or_upload_submitted": false,
+    "blocked_writes": 0
+  },
+  "legacy_build_settings": {
+    "result": "pass",
+    "site_id": "b4e427bb-d612-415c-8458-e24423a9f1ec",
+    "previous_stop_builds": false,
+    "stop_builds": true,
+    "repository_and_branch_preserved": true
+  },
+  "legacy_redirect_deploy": {
+    "site_id": "b4e427bb-d612-415c-8458-e24423a9f1ec",
+    "deploy_id": "6aefb0c17119fcbf43d02aab",
+    "deploy_url": "https://6aefb0c17119fcbf43d02aab--divinemedia-staging.netlify.app"
+  }
+}

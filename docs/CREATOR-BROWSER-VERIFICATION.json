@@ -1,0 +1,44 @@
+{
+  "public_encoder_connection": {
+    "result": "pass",
+    "page": "public Encoder connection",
+    "viewportWidths": [
+      1440,
+      768,
+      390,
+      320
+    ],
+    "nativeFieldsVisible": true,
+    "horizontalOverflow": false,
+    "blockedWrites": 0,
+    "credentialsSubmitted": false
+  },
+  "sanitized_signed_in_encoder_fixture": {
+    "result": "pass",
+    "page": "sanitized isolated signed-in Encoder fixture",
+    "viewportWidths": [
+      1440,
+      768,
+      390,
+      320
+    ],
+    "nativeFieldsVisible": true,
+    "horizontalOverflow": false,
+    "blockedWrites": 0,
+    "credentialsSubmitted": false
+  },
+  "direct_upload_preview_widths": [
+    1440,
+    390
+  ],
+  "native_upload_mock_transport": {
+    "result": "pass",
+    "browse_input_preserved": true,
+    "automatic_submit_count": 1,
+    "progress_percent": 50,
+    "cancel_aborts": true,
+    "failure_state_retained": true,
+    "script_sha256": "db36b8958c294fb3ee88fd50b131554e157b9f983790bec9b9570d84ecbd3914",
+    "production_upload_sent": false
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "source": "off-VM downloaded copy",
+  "source_hashes_verified": true,
+  "media_count": 52,
+  "databases": [
+    {
+      "label": "avideo",
+      "restored_tables": 27,
+      "table_checks": "pass"
+    },
+    {
+      "label": "encoder",
+      "restored_tables": 7,
+      "table_checks": "pass"
+    }
+  ],
+  "recovery_images_verified": 5,
+  "restored_media_hashes_verified": 52,
+  "restored_video_rows": 16,
+  "apache_config": "pass",
+  "application_runtime_db_connections": "pass",
+  "scratch_session_status": "200",
+  "authenticated_direct_native_form": "pass",
+  "encoder_render_status": "200",
+  "encoder_render_controls": {
+    "fileupload": true,
+    "upload": true,
+    "mainTabs": true,
+    "loginForm": false,
+    "basicOptions": true,
+    "advancedOptions": true
+  },
+  "sanitized_encoder_fixture_bytes": 4820,
+  "authenticated_encoder_native_form": "pass",
+  "guest_encoder_native_form": "pass",
+  "native_handler_hashes_preserved": 4,
+  "rollback_reapply": "pass",
+  "result": "pass",
+  "scratch_network_removed": true,
+  "scratch_containers_removed": true,
+  "scratch_files_removed": true,
+  "commit": "61f96e4c30ae30cb8305d01b652b5d65313f2309",
+  "release": "0b8df6f2022d"
+}

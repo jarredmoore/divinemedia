@@ -1,0 +1,24 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/domains-20261107T222154Z-70a793/bootstrap-state-3bbad16b",
+  "no_container_restart": true,
+  "native_startup_not_executed": true,
+  "before_backup": {
+    "name": "bootstrap-before.tar.gz",
+    "sha256": "c4a9f53d28aaa7d45f0d03b5cecef72c3c2475e6bd8869312537a7a4c8337b9f",
+    "bytes": 1587,
+    "roundtrip_verified": true
+  },
+  "isolated_test": "valid configured dual-host certificate wins over unusable localhost defaults",
+  "after_backup": {
+    "name": "bootstrap-after.tar.gz",
+    "sha256": "c0fee1233052585a344e9b879a430dca8acf7a22bf788c2e43a67b412188295a",
+    "bytes": 1952,
+    "roundtrip_verified": true
+  },
+  "service": "avideo",
+  "compose_bind_mounts_added": 2,
+  "unrelated_compose_settings_unchanged": true,
+  "active_vhost_unchanged": true,
+  "native_encoder_startup_untouched": true
+}
