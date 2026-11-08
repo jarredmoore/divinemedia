@@ -1,0 +1,123 @@
+{
+  "runtime_version": "30.2",
+  "plugins": [
+    {
+      "name": "API",
+      "status": "active"
+    },
+    {
+      "name": "CustomizeAdvanced",
+      "status": "active"
+    },
+    {
+      "name": "CustomizeUser",
+      "status": "active"
+    },
+    {
+      "name": "Gallery",
+      "status": "active"
+    },
+    {
+      "name": "Layout",
+      "status": "active"
+    },
+    {
+      "name": "Permissions",
+      "status": "active"
+    },
+    {
+      "name": "PlayerSkins",
+      "status": "active"
+    },
+    {
+      "name": "Scheduler",
+      "status": "active"
+    },
+    {
+      "name": "UserNotifications",
+      "status": "active"
+    }
+  ],
+  "plugin_directories": [
+    "AD_Overlay",
+    "AD_Server",
+    "AD_Server_Location",
+    "ADs",
+    "AI",
+    "API",
+    "AdBlockerDetector",
+    "AdsForJesus",
+    "Articles",
+    "Audit",
+    "AuthorizeNet",
+    "AutoPostOnSocialMedia",
+    "BTCPayments",
+    "BitLy",
+    "BlockonomicsYPT",
+    "Bookmark",
+    "BulkEmbed",
+    "CDN",
+    "Cache",
+    "CloneSite",
+    "CookieAlert",
+    "CustomizeAdvanced",
+    "CustomizeUser",
+    "DiscordNotify",
+    "FirstPageChannelList",
+    "FloatVideo",
+    "Gallery",
+    "Hotkeys",
+    "ImageGallery",
+    "JustWatch",
+    "Layout",
+    "Live",
+    "LiveLinks",
+    "LoginApple",
+    "LoginControl",
+    "LoginFacebook",
+    "LoginGoogle",
+    "LoginLinkedin",
+    "LoginTwitter",
+    "LoginWordPress",
+    "LoginYahoo",
+    "MaintenanceMode",
+    "Meet",
+    "MobileManager",
+    "MobileYPT",
+    "MonetizeUsers",
+    "NextButton",
+    "OptionsTest",
+    "PHPBB3",
+    "PayPalYPT",
+    "Permissions",
+    "PlayLists",
+    "PlayerSkins",
+    "PredefinedCategory",
+    "RazorPayYPT",
+    "ReportVideo",
+    "Scheduler",
+    "SeekButton",
+    "Shorts",
+    "SlackBot",
+    "SlackNotify",
+    "SocialMediaPublisher",
+    "StripeYPT",
+    "TheaterButton",
+    "TopMenu",
+    "UserConnections",
+    "UserNotifications",
+    "User_Location",
+    "VR360",
+    "VideoLandscapeFullscreen",
+    "VideoLogoOverlay",
+    "VideoTags",
+    "VideosStatistics",
+    "VimeoAPI",
+    "WWBNIndex",
+    "WebRTC",
+    "YPTSocket",
+    "YPTWallet",
+    "YouPHPFlix2",
+    "YouTubeAPI"
+  ]
+}

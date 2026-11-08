@@ -1,0 +1,23 @@
+{
+  "result": "pass",
+  "rollback_verified": true,
+  "active_plugin_count": 9,
+  "active_plugins": [
+    "API",
+    "CustomizeAdvanced",
+    "CustomizeUser",
+    "Gallery",
+    "Layout",
+    "Permissions",
+    "PlayerSkins",
+    "Scheduler",
+    "UserNotifications"
+  ],
+  "candidate_plugins_not_left_active": true,
+  "media_hashes_unchanged": 54,
+  "catalog_unchanged": true,
+  "container_uptime_unchanged": true,
+  "native_startup_not_run": true,
+  "known_blocker": "Live native footer omitted utility controls; root cause unresolved",
+  "snapshot": "/srv/divinemedia/backups/player-utilities-05e99b1bac"
+}

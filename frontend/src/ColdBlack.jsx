@@ -1,4 +1,5 @@
 import React,{useEffect,useRef,useState} from 'react';
+import {NativeActions} from './NativeActions.jsx';
 import {ArrowDown,ArrowUpRight,Menu,Pause,Play,Search,X} from 'lucide-react';
 
 export const THEME_KEY='divine-media:theme:v1';
@@ -18,8 +19,8 @@ export function ColdBlackHeader({tab,go,query,setQuery,theme,onTheme,links}){
  useEffect(()=>{if(!expanded)return;const close=e=>{if(e.key==='Escape')setExpanded(false)};addEventListener('keydown',close);return()=>removeEventListener('keydown',close)},[expanded]);
  return <header className="cb-header">
   <button className="cb-wordmark" aria-label="Divine Media home" onClick={()=>{go('Discover');setExpanded(false)}}><svg viewBox="0 0 42 42" aria-hidden="true"><path d="M4 5v32" stroke="currentColor" strokeWidth="2"/><path d="M12 4h10c12 0 18 6 18 17S34 38 22 38H12zm9 8v18h2c6 0 9-3 9-9s-3-9-9-9z" fill="currentColor" fillRule="evenodd"/></svg><span>DIVINE MEDIA</span></button>
-  <nav className={'cb-navigation '+(expanded?'is-open':'')} id="cb-navigation" aria-label="Explore Divine Media">{links.map(([name])=><button type="button" key={name} aria-current={tab===name?'page':undefined} onClick={()=>{go(name);setExpanded(false)}}>{name}</button>)}<label className="cb-mobile-search search"><Search size={17}/><input aria-label="Search titles" placeholder="Search the culture…" value={query} onChange={e=>setQuery(e.target.value)}/></label></nav>
-  <div className="cb-header-tools"><label className="cb-desktop-search search"><Search size={17}/><input aria-label="Search titles" placeholder="Search…" value={query} onChange={e=>setQuery(e.target.value)}/></label><ThemePicker theme={theme} onChange={onTheme}/><button className="cb-menu" aria-label={expanded?'Close navigation':'Open navigation'} aria-expanded={expanded} aria-controls="cb-navigation" onClick={()=>setExpanded(v=>!v)}>{expanded?<X size={20}/>:<Menu size={20}/>}</button></div>
+  <nav className={'cb-navigation '+(expanded?'is-open':'')} id="cb-navigation" aria-label="Explore Divine Media">{links.map(([name])=><button type="button" key={name} aria-current={tab===name?'page':undefined} onClick={()=>{go(name);setExpanded(false)}}>{name}</button>)}<label className="cb-mobile-search search"><Search size={17}/><input aria-label="Search titles" placeholder="Search the culture…" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="cb-mobile-native"><NativeActions/></div></nav>
+  <div className="cb-header-tools"><label className="cb-desktop-search search"><Search size={17}/><input aria-label="Search titles" placeholder="Search…" value={query} onChange={e=>setQuery(e.target.value)}/></label><NativeActions/><ThemePicker theme={theme} onChange={onTheme}/><button className="cb-menu" aria-label={expanded?'Close navigation':'Open navigation'} aria-expanded={expanded} aria-controls="cb-navigation" onClick={()=>setExpanded(v=>!v)}>{expanded?<X size={20}/>:<Menu size={20}/>}</button></div>
  </header>;
 }
 

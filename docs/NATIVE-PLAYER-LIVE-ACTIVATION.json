@@ -1,0 +1,24 @@
+{
+  "result": "fail",
+  "state": "/srv/divinemedia/backups/player-utilities-05e99b1bac",
+  "before_backup": {
+    "name": "before.json",
+    "sha256": "b330ad75ad72051d04502884c2ef753081208c2864fd5802e5dcd6972155089f",
+    "bytes": 9177,
+    "roundtrip_verified": true
+  },
+  "native_plugins": [
+    "Hotkeys",
+    "NextButton",
+    "SeekButton",
+    "TheaterButton"
+  ],
+  "no_container_restart": true,
+  "migrations_run": false,
+  "native_markers": {
+    "hotkeys": false,
+    "seek": false
+  },
+  "rolled_back": true,
+  "error_type": "AssertionError"
+}
