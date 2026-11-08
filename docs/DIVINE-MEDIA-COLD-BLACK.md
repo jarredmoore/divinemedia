@@ -4,9 +4,9 @@ Code Black is an optional Watch frontend theme. First visits retain the existing
 
 The theme adds a floating smoked-glass navigation bar, a champagne D monogram and spaced wordmark, a full-screen stage background, a pinned split-scene scroll transition, full-bleed featured programming and quiet media shelves. All six existing navigation destinations remain accessible, including through the mobile menu. No Webflow template code, imagery or video is included.
 
-[Open the working Code Black preview](https://6aefc75309917db3b70bb1a8--mediaproduction.netlify.app/?theme=code-black) · [Pull request #10](https://github.com/jarredmoore/divinemedia/pull/10) · [Deployed browser verification](COLD-BLACK-BROWSER-VERIFICATION.json)
+[Open the working Code Black preview](https://6aefc9b7bac75e020823b88a--mediaproduction.netlify.app/?theme=code-black) · [Pull request #10](https://github.com/jarredmoore/divinemedia/pull/10) · [Deployed browser verification](COLD-BLACK-BROWSER-VERIFICATION.json)
 
-The Netlify draft is built from frontend commit `a20f3c33679f022ed22c8c38f17df2e9fc040bbf`. Later documentation/evidence commits do not change its frontend source. The existing public deploy and production-branch SHA were verified unchanged.
+The Netlify draft is built from frontend commit `26844c96b8242fda4529896c3990073e6420cdff`. Later documentation/evidence commits do not change its frontend source. The existing public deploy and production-branch SHA were verified unchanged.
 
 The base canvas is pure black (`#000000`). Legacy `?theme=cold-black` links and saved preferences still select Code Black. Internal asset filenames remain compatible.
 
@@ -17,6 +17,8 @@ The base canvas is pure black (`#000000`). Legacy `?theme=cold-black` links and 
 Only Code Black's Discover screen mounts the video. It is muted and inline, with a visible pause/play control. It pauses when off-screen, when the document is hidden, when a media dialog opens, or while dock audio is playing. Reduced-motion and supported data-saver preferences omit the video and use the still image without the pinned transition. Playback failure leaves the poster available. Browsers can also decline autoplay; the play control allows a manual retry.
 
 The reference informed the cinematic composition and scroll treatment. Scrolling remains native; there is no scroll hijacking or new animation dependency. Actual AVideo uploads, encoding, thumbnails, backend routes, databases and containers are unchanged.
+
+[Code Black name/color verification](CODE-BLACK-REFINEMENT-VERIFICATION.json) confirms the updated deployed canvas, mobile layout and legacy preference compatibility. The earlier full player/motion report remains the baseline.
 
 ## Validation
 
