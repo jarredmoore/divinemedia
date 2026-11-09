@@ -25,6 +25,7 @@ register_shutdown_function(function () {
 $keyFile = '/var/www/tmp/divine-frontend-gateway.key';
 $expected = is_file($keyFile) ? trim((string)file_get_contents($keyFile)) : '';
 if (strlen($expected) < 32 || !hash_equals($expected, (string)($_SERVER['HTTP_X_DIVINE_GATEWAY_KEY'] ?? ''))) { dm_error('Not found', 404); }
+define('DM_FRONTEND_API',true);
 $frontendOrigin = (string)($_SERVER['HTTP_X_DIVINE_FRONTEND_ORIGIN'] ?? '');
 if (!preg_match('~^https://(?:divinemedia\.us|(?:[a-f0-9]{24}|deploy-preview-\d+)--mediaproduction\.netlify\.app)$~D', $frontendOrigin)) { dm_error('Invalid frontend origin',403); }
 $action = (string)($_GET['action'] ?? '');
@@ -75,7 +76,14 @@ try {
         dm_reply(['user'=>dm_user(),'csrf'=>$_SESSION['dm_frontend_csrf']]);
     }
     if ($action === 'logout' && $method === 'POST') { User::logoff(); dm_reply(['message'=>'Signed out.']); }
-    if ($method === 'POST' && in_array($action,['register','recover','video-unlock'],true)) { require __DIR__ . '/anonymous.php'; }
+    if ($method === 'POST' && $action === 'playback') {
+        $id=dm_id($body['video']??0);dm_video($id);
+        $position=max(0,min(86400,(int)($body['position']??0)));
+        $seconds=max(0,min(30,(int)($body['seconds']??0)));
+        dm_native('objects/videoAddViewCount.json.php',['id'=>$id,'currentTime'=>$position,'seconds_watching_video'=>$seconds]);
+        dm_reply(['recorded'=>true]);
+    }
+    if ($method === 'POST' && in_array($action,['register','recover','reset-password','verify-email','video-unlock'],true)) { require __DIR__ . '/anonymous.php'; }
     require __DIR__ . '/read.php';
     if ($method === 'POST') { dm_require_user(); require __DIR__ . '/write.php'; }
     dm_error('Unknown platform action',404);

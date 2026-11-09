@@ -1,4 +1,5 @@
 <?php
+if(!defined('DM_FRONTEND_API')){http_response_code(404);exit;}
 dm_require_user();AVideoPlugin::loadPluginIfEnabled('UserNotifications');
 if($action==='notifications'){
     $rows=User_notifications::getAllForUsers_id(User::getId(),50,false);$out=[];

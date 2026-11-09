@@ -1,0 +1,65 @@
+{
+  "source": "off-VM downloaded copy",
+  "source_hashes_verified": true,
+  "media_count": 52,
+  "databases": [
+    {
+      "label": "avideo",
+      "restored_tables": 27,
+      "table_checks": "pass"
+    },
+    {
+      "label": "encoder",
+      "restored_tables": 7,
+      "table_checks": "pass"
+    }
+  ],
+  "recovery_images_verified": 5,
+  "restored_media_hashes_verified": 52,
+  "native_source_manifest_sha256": "2956e380a85df0dfd4b4b92df072d7636cb675639ad4eaccad66a6143e929361",
+  "restored_video_rows": 16,
+  "apache_config": "pass",
+  "application_runtime_db_connections": "pass",
+  "api_source_hashes": {
+    "write.php": "a692b415f9a909f2e8dbaffd1c17af51c271a861599ca57d95a4d87df07469a0",
+    "anonymous.php": "b18851fd94dd7b4eea357547293eafd0ae09ab6a9caff275a5e587fa2d3440d7",
+    "notifications.php": "493726b89c016ebecc396bb5a23e6dd29db19b6ed6ef99682925d7f8a47a3f67",
+    "creator.php": "b3c1c8e332364ee6eb57e08162560681cd124a03bf22822fd0fbc1abed1d6a77",
+    "public-redirect.php": "76f6c85ef77c50a95685570535c884fd191964786417c9aaeefeaef8d7d6be92",
+    "read.php": "be223f61a849fb3790c3348f0e799bd787d894a11d6f88ac0ecfb56273d5314c",
+    "index.php": "169f2b189fd92566ab6abf52e8473a2f016be59cdeb6443a7ce987b5874f30f5",
+    "encoder-worker.php": "2dd606356bbe1f487f9fb7fe85ec0903fea01b49e4ec03d6f71dd86ea8fb8e11",
+    "native.php": "009ea34505227258fa7f7c1a7b4578eb23d4c5d8b1c58f09d6a0812d53ba0c7a"
+  },
+  "last_request": {
+    "action": "session",
+    "status": 200,
+    "response_fields": [
+      "user",
+      "csrf",
+      "capabilities",
+      "captchaRequired"
+    ],
+    "error": null,
+    "session_header_present": true
+  },
+  "checks": {
+    "anonymous_authentication_and_csrf_guards": true,
+    "native_login_and_session_rotation": true,
+    "native_comments_reactions_and_comment_ownership": true,
+    "playlist_crud_library_and_cross_user_denials": true,
+    "native_discovery_and_creator_permission_guards": true,
+    "new_isolated_upload_reuses_native_handler": true,
+    "native_encoder_queue_and_cross_user_guards": true,
+    "native_recovery_verification_and_one_use_tokens": true,
+    "logout_ends_native_session": true
+  },
+  "original_restored_media_preserved": 52,
+  "public_accounts_or_content_changed": false,
+  "native_startup_not_executed": true,
+  "credentials_in_report": false,
+  "result": "pass",
+  "scratch_network_removed": true,
+  "scratch_containers_removed": true,
+  "scratch_files_removed": true
+}

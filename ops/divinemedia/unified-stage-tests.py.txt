@@ -3,6 +3,8 @@
  for p in pathlib.Path(app+'/divine-api').glob('*.php'):docker('exec',web,'php','-l','/var/www/html/AVideo/divine-api/'+p.name)
  key=secrets.token_hex(32)
  docker('exec','-i',web,'sh','-c','umask 077; cat > /var/www/tmp/divine-frontend-gateway.key; chown www-data:www-data /var/www/tmp/divine-frontend-gateway.key',data=key)
+ docker('cp',bundle+'/route-tests.php',web+':/tmp/dm-route-tests.php')
+ docker('exec',web,'php','/tmp/dm-route-tests.php','/var/www/html/AVideo/divine-api')
  phase='isolated-account-fixtures'
  # Only disposable database users and rows. Nothing is created in production.
  credentials={name:{'user':'dmqa_'+name+'_'+uuid.uuid4().hex[:8],'password':secrets.token_hex(20)} for name in ['owner','other']}
@@ -65,6 +67,7 @@
  comment=res['id'];assert call('comment',b,{'id':comment,'remove':True})[0]==403,'Other user deleted a comment'
  assert call('comments',anon,params={'video':video})[0]==200
  assert call('comment',a,{'id':comment,'remove':True})[0]==200
+ assert call('playback',anon,{'video':video,'position':1,'seconds':1})[0]==200
  checks['native_comments_reactions_and_comment_ownership']=True
  phase='playlists-and-ownership'
  status,res=call('playlist',a,{'name':'Divine isolated private playlist','status':'private'});assert status==200 and res['id']>0,'Playlist create failed'
@@ -100,7 +103,33 @@
  status,res=call('upload-init',a,{'name':'divine-isolated.mp3','size':size,'title':'Divine isolated upload'});assert status==200,'Upload initialize failed'
  ticket=res['ticket'];status,res=call('upload-chunk',a,form=['ticket='+ticket,'start=0','total='+str(size),'file=@/tmp/dm-qa.mp3;type=audio/mpeg'])
  assert status==200 and res.get('complete') and res.get('videoId',0)>video,'Native chunk upload finalization failed'
+ uploaded=res['videoId']
+ status,res=call('upload-init',a,{'name':'cancel-isolated.mp3','size':size,'title':'Canceled fixture'});assert status==200
+ canceled=res['ticket'];assert call('upload-cancel',b,{'ticket':canceled})[0] in [403,410]
+ assert call('upload-cancel',a,{'ticket':canceled})[0]==200
+ assert call('upload-cancel',a,{'ticket':canceled})[0]==410
  checks['new_isolated_upload_reuses_native_handler']=True
+ phase='native-encoder-ownership-and-queue'
+ status,res=call('encoder-action',a,{'operation':'enqueue','video':uploaded,'profile':'audio'});assert status==200 and res.get('id',0)>0,'Native Encoder enqueue failed'
+ job=res['id'];status,res=call('encoder-queue',a);assert status==200 and res['source']=='native-encoder' and any(j['id']==job for j in res['items']),'Native Encoder job not visible'
+ assert call('encoder-action',b,{'operation':'remove','id':job})[0]==403
+ assert call('encoder-action',a,{'operation':'remove','id':job})[0]==200
+ checks['native_encoder_queue_and_cross_user_guards']=True
+ phase='native-account-recovery-callbacks'
+ # Mint native callbacks for a disposable fixture account, without sending any email.
+ callback="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$id=(int)stream_get_contents(STDIN);$u=new User($id);$u->setEmailVerified(0);$token=$u->setRecoverPass(true);$u->save();$code=User::createVerificationCode($id);$u=new User($id);echo json_encode(['token'=>$u->getRecoverPass(),'code'=>$code]);"
+ raw=docker('exec','-i',web,'php','-r',callback,data=str(other)).stdout
+ callbacks=json.loads(raw.strip().splitlines()[-1])
+ assert call('verify-email',anon,{'code':callbacks['code']})[0]==200,'Native email verification callback failed'
+ reset={'user':credentials['other']['user'],'token':'incorrect','password':secrets.token_hex(20),'passwordConfirm':''}
+ reset['passwordConfirm']=reset['password']
+ assert call('reset-password',anon,reset)[0]==400,'Invalid recovery token accepted'
+ reset['token']=callbacks['token'];assert call('reset-password',anon,reset)[0]==200,'Native password reset failed'
+ assert call('reset-password',anon,reset)[0]==400,'Native recovery token was reused'
+ fresh={};assert call('session',fresh)[0]==200
+ assert call('login',fresh,{'user':reset['user'],'password':reset['password']})[0]==200,'Reset password did not authenticate'
+ assert call('logout',fresh,{})[0]==200
+ checks['native_recovery_verification_and_one_use_tokens']=True
  phase='session-logout'
  assert call('logout',a,{})[0]==200
  status,res=call('session',a);assert status==200 and res['user'] is None

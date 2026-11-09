@@ -36,7 +36,7 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
   if(action==='playlist-item'){const p=lists.find(p=>p.id===body.playlist);p.items=body.add?[item]:[];return send({message:'Updated.'})}
   if(action==='library')return send(post?{message:'Saved.'}:{items:[item]});
   if(action==='notifications')return send({items:[{id:1,title:'Welcome creator',text:'Your account is ready.',read:false}]});
-  if(action==='notification-read'||action==='profile'||action==='follow')return send({message:'Saved.'});
+  if(action==='notification-read'||action==='profile'||action==='follow'||action==='playback'||action==='playlist-order'||action==='upload-cancel')return send({message:'Saved.'});
   if(action==='live')return send({items:[]});
   if(action==='studio')return send({title:'Your live show',visibility:'unlisted',server:'rtmp://media.divinemedia.us/live?s=isolated-example',key:'isolated-not-a-real-key'});
   if(action==='studio-save')return send({message:'Broadcast settings saved.'});
@@ -69,6 +69,11 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
  await page.getByRole('button',{name:'Close workspace',exact:true}).click();await page.getByRole('button',{name:'Account and creator tools',exact:true}).click();await page.getByRole('button',{name:'Live studio',exact:true}).click();await page.getByRole('heading',{name:'Live studio',exact:true}).waitFor();await page.getByLabel('Broadcast title',{exact:true}).waitFor();
  const widths=[];for(const width of [1440,390,320]){await page.setViewportSize({width,height:1000});const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1||[...document.querySelectorAll('.dm-workspace')].some(e=>e.getBoundingClientRect().right>innerWidth+1));assert.equal(overflow,false,'Workspace overflows '+width);widths.push(width);if(width===390)await page.screenshot({path:dir+'/unified-studio-mobile.png'})}
  assert.equal(await page.locator('a[href^="https://media.divinemedia.us"]').count(),0);assert.equal(new URL(page.url()).origin,origin);assert.deepEqual(errors,[]);
- const report={result:'pass',mode:'frontend interaction fixtures; native backend verified separately',video_comments_likes_sharing_playlists_stay_on_frontend:true,account_login_same_origin:true,categories_and_creator_tools_same_origin:true,no_native_html_iframes:true,no_backend_navigation_links:true,upload_chunks_ui:true,widths,errors,action_names:[...new Set(actions)],real_accounts_or_backend_mutations:false};
+ await page.getByRole('button',{name:'Close workspace',exact:true}).click();
+ await page.getByRole('button',{name:'View Divine test video',exact:true}).click();
+ await page.goBack();await page.waitForFunction(()=>!document.querySelector('.watch-modal'));
+ await page.goForward();await page.locator('.watch-modal').waitFor();
+ assert.equal(new URL(page.url()).pathname,'/watch/101');
+ const report={result:'pass',mode:'frontend interaction fixtures; native backend verified separately',video_comments_likes_sharing_playlists_stay_on_frontend:true,account_login_same_origin:true,browser_back_forward_preserves_watch_routes:true,categories_and_creator_tools_same_origin:true,no_native_html_iframes:true,no_backend_navigation_links:true,upload_chunks_ui:true,widths,errors,action_names:[...new Set(actions)],real_accounts_or_backend_mutations:false};
  fs.writeFileSync(dir+'/unified-frontend-report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});

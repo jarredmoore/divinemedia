@@ -1,4 +1,5 @@
 <?php
+if(!defined('DM_FRONTEND_API')){http_response_code(404);exit;}
 if($action==='reaction'){
     $id=dm_id($body['video']??0);dm_video($id);$value=(int)($body['value']??0);
     if(!in_array($value,[-1,0,1],true)){dm_error('Invalid reaction.');}
@@ -48,7 +49,7 @@ if($action==='studio-save'){
     $live->setTitle($title);$live->setPublic(($body['visibility']??'')==='public'?1:0);
     if(!$live->save()){dm_error('Broadcast settings could not be saved.');}dm_reply(['message'=>'Broadcast settings saved.']);
 }
-if(in_array($action,['upload-init','upload-chunk','creator-video'],true)){require __DIR__.'/creator.php';}
+if(in_array($action,['upload-init','upload-chunk','upload-cancel','creator-video','encoder-action'],true)){require __DIR__.'/creator.php';}
 if($action==='notification-read'){require __DIR__.'/notifications.php';}
 
 if($action==='follow'){

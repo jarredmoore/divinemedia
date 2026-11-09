@@ -1,9 +1,17 @@
 <?php
-if($action==='encoder-queue'){
-    // Native video processing state, scoped to the signed-in owner; no Encoder administrator data.
-    $_REQUEST['rowCount']=100;$rows=Video::getAllVideos('',true);$out=[];
-    foreach($rows as $r){if((int)$r['users_id']===(int)User::getId()&&in_array($r['status'],['e','d','t','k','x','q'],true)){$out[]=['id'=>(int)$r['id'],'title'=>dm_text($r['title'],140),'status'=>dm_text(Video::$statusDesc[$r['status']]??$r['status'],100)];}}
-    dm_reply(['items'=>$out,'source'=>'native-video-processing']);
+if(!defined('DM_FRONTEND_API')){http_response_code(404);exit;}
+if($action==='encoder-queue'){dm_reply(dm_encoder('queue'));}
+if($action==='encoder-action'){
+    if(!User::canUpload()){dm_error('Encoding permission required.',403);}
+    $op=(string)($body['operation']??'');
+    if($op==='enqueue'){
+        $id=dm_id($body['video']??0);if(!Video::canEdit($id)){dm_error('Video access denied.',403);}
+        $video=new Video('','',$id);$source=Video::getFirstSource($video->getFilename());$url=dm_media_url($source['url']??$source['src']??null);
+        if(!$url){dm_error('This title has no supported source to encode.');}
+        dm_reply(dm_encoder('enqueue',['videoId'=>$id,'source'=>$url,'title'=>$video->getTitle(),'profile'=>(string)($body['profile']??'mp4')]));
+    }
+    if(!in_array($op,['retry','remove'],true)){dm_error('Unsupported encoding action.');}
+    dm_reply(dm_encoder($op,['id'=>dm_id($body['id']??0)]));
 }
 if($action==='creator-video'){
     $id=dm_id($body['id']??0);
@@ -16,7 +24,7 @@ if($action==='creator-video'){
     if(!$v->save()){dm_error('Video changes could not be saved.');}
     dm_reply(['message'=>'Video updated.']);
 }
-if(in_array($action,['upload-init','upload-chunk'],true)){
+if(in_array($action,['upload-init','upload-chunk','upload-cancel'],true)){
     if(!User::canUpload()){dm_error('Upload permission required.',403);}
     $base='/var/www/tmp/divine-frontend-uploads';
     if(!is_dir($base)&&!mkdir($base,0700,true)){dm_error('Upload storage unavailable.',503);}
@@ -39,6 +47,10 @@ if(in_array($action,['upload-init','upload-chunk'],true)){
     $upload=&$_SESSION['dm_uploads'][$ticket];
     if($upload['user']!==(int)User::getId()||$upload['expires']<time()){dm_error('Upload access denied.',403);}
     if($upload['state']!=='uploading'){dm_error('This upload is already being processed.',409);}
+    if($action==='upload-cancel'){
+        @unlink($base.'/'.$ticket.'.part');unset($_SESSION['dm_uploads'][$ticket]);
+        dm_reply(['message'=>'Upload canceled.']);
+    }
     $start=filter_var($body['start']??null,FILTER_VALIDATE_INT);$total=filter_var($body['total']??0,FILTER_VALIDATE_INT);
     $file=$_FILES['file']??null;
     if($start!==$upload['received']||$total!==$upload['size']||!is_array($file)||$file['error']!==UPLOAD_ERR_OK||$file['size']<1||$file['size']>1024*1024||!is_uploaded_file($file['tmp_name'])||$start+$file['size']>$total){dm_error('Invalid upload chunk.',409);}

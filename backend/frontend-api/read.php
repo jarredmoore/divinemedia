@@ -1,4 +1,5 @@
 <?php
+if(!defined('DM_FRONTEND_API')){http_response_code(404);exit;}
 if ($method === 'GET') {
     if ($action === 'captcha') { dm_reply(dm_native('objects/getCaptcha.php',[],true)); }
     if (in_array($action,['categories','channels','channel','catalog','creator-videos'],true)) {
@@ -6,7 +7,14 @@ if ($method === 'GET') {
         $_REQUEST['rowCount']=100; $_REQUEST['current']=max(1,min(100,(int)($query['page']??1)));
         if($action==='categories'){
             $rows=Category::getAllCategories(false,false,false,true,true,false);
-            dm_reply(['items'=>array_map(fn($r)=>['id'=>(int)$r['id'],'name'=>dm_text($r['name'],100),'parentId'=>(int)($r['parentId']??0)],array_values($rows))]);
+            dm_reply(['items'=>array_map(fn($r)=>['id'=>(int)$r['id'],'name'=>dm_text($r['name'],100),'slug'=>dm_text($r['clean_name']??'',100),'parentId'=>(int)($r['parentId']??0)],array_values($rows))]);
+        }
+        $category=0;
+        if($action==='catalog'&&!empty($query['category'])){
+            $value=(string)$query['category'];
+            if(ctype_digit($value)){$category=(int)$value;}
+            else{$categoryRow=Category::getCategoryByName(dm_text($value,100));$category=(int)($categoryRow['id']??0);}
+            if(!$category){dm_error('Category unavailable.',404);}
         }
         $own=$action==='creator-videos'; if($own){dm_require_user();}
         $rows=Video::getAllVideos($own?'':Video::SORT_TYPE_VIEWABLE,$own);
@@ -18,7 +26,7 @@ if ($method === 'GET') {
                 $key=$item['channel']; if(!isset($channels[$key])){$channels[$key]=['id'=>(int)$row['users_id'],'name'=>$item['creator'],'channel'=>$key,'count'=>0];}
                 $channels[$key]['count']++; continue;
             }
-            if($action==='catalog'&&!empty($query['category'])&&$item['categoryId']!==(int)$query['category']){continue;}
+            if($category&&$item['categoryId']!==$category){continue;}
             if($action==='channel'){
                 $filter=(string)($query['channel']??'');
                 if(str_starts_with($filter,'category:')){if($item['categoryId']!==(int)substr($filter,9)){continue;}}

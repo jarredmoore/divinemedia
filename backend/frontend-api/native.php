@@ -1,4 +1,5 @@
 <?php
+if(!defined('DM_FRONTEND_API')){http_response_code(404);exit;}
 function dm_text($value, int $limit = 200): string { return mb_substr(trim(strip_tags(is_scalar($value)?(string)$value:'')),0,$limit); }
 function dm_id($value): int { $id=filter_var($value,FILTER_VALIDATE_INT,['options'=>['min_range'=>1,'max_range'=>2147483647]]); if(!$id){dm_error('Invalid item identifier.');} return $id; }
 function dm_require_user(): int { if(!User::isLogged()){dm_error('Sign in to continue.',401);} return (int)User::getId(); }
@@ -8,7 +9,7 @@ function dm_user(): ?array {
     return ['id'=>(int)User::getId(),'username'=>dm_text($row['user']??'',100),'name'=>dm_text($row['name']??$row['user']??'',100),
         'permissions'=>['upload'=>(bool)User::canUpload(),'stream'=>(bool)User::canStream(),'comment'=>(bool)User::canComment()]];
 }
-function dm_native(string $path, array $data=[], bool $binary=false): array {
+function dm_native(string $path, array $data=[], bool $binary=false, bool $allowError=false): array {
     // Paths are hard-coded adapter calls, never supplied by the browser.
     $data['globalToken']=getToken(120);$data['do_not_login']=1;
     $cookie=session_name().'='.session_id();
@@ -24,7 +25,7 @@ function dm_native(string $path, array $data=[], bool $binary=false): array {
     if($binary){if(!in_array(explode(';',(string)$type)[0],['image/png','image/jpeg','image/gif'],true)||strlen($raw)>150000){dm_error('Verification image unavailable.',502);}return ['image'=>'data:'.explode(';',$type)[0].';base64,'.base64_encode($raw)];}
     $result=json_decode($raw,true);
     if(!is_array($result)){dm_error('The native service returned an unexpected response.',502);}
-    if(!empty($result['error'])){dm_error('The platform rejected this action. Check your permissions and verification.');}
+    if(!empty($result['error'])&&!$allowError){dm_error('The platform rejected this action. Check your permissions and verification.');}
     return $result;
 }
 function dm_video(int $id): array {
@@ -72,4 +73,16 @@ function dm_playlist_items(int $id): array {
         $video=Video::getVideo((int)($row['videos_id']??$row['id']),Video::SORT_TYPE_VIEWABLE,false,false,false,true);
         if(!empty($video['id'])){$out[]=dm_item($video);}
     }return $out;
+}
+function dm_encoder(string $op, array $data=[]): array {
+    dm_require_user();
+    $actor=['userId'=>(int)User::getId(),'username'=>(string)User::getUserName(),'canUpload'=>(bool)User::canUpload(),'isAdmin'=>(bool)User::isAdmin()];
+    if($op==='enqueue'){$actor['credential']=(string)User::getUserPass();$actor['allowedResolutions']=UserGroups::getAllowedResolutionsForUser(User::getId());}
+    _session_write_close();
+    $pipes=[];$process=proc_open(['/usr/bin/php',__DIR__.'/encoder-worker.php'],[0=>['pipe','r'],1=>['pipe','w'],2=>['file','/dev/null','a']],$pipes);
+    if(!is_resource($process)){dm_error('Encoder service unavailable.',503);}
+    fwrite($pipes[0],json_encode(['actor'=>$actor,'op'=>$op,'data'=>$data]));fclose($pipes[0]);unset($actor);
+    stream_set_timeout($pipes[1],20);$output=stream_get_contents($pipes[1],1024*1024);$meta=stream_get_meta_data($pipes[1]);fclose($pipes[1]);if(!empty($meta['timed_out'])){proc_terminate($process);}proc_close($process);
+    $result=json_decode((string)$output,true);if(!is_array($result)){dm_error('Encoder service unavailable.',502);}if(!empty($result['error'])){dm_error(dm_text($result['error'],180),403);}
+    return $result;
 }

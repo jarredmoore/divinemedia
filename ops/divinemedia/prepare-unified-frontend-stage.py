@@ -4,7 +4,7 @@ from pathlib import Path
 import argparse,base64,json,hashlib,os
 p=argparse.ArgumentParser();p.add_argument('--output',required=True);a=p.parse_args();os.umask(0o077)
 repo=Path(__file__).resolve().parents[2];out=Path(a.output);out.mkdir(parents=True,exist_ok=True)
-files={'native_live.py':(repo/'ops/divinemedia/native_live.py').read_text()}
+files={'route-tests.php':(repo/'ops/divinemedia/test-unified-routes.php').read_text(),'native_live.py':(repo/'ops/divinemedia/native_live.py').read_text()}
 for path in (repo/'backend/frontend-api').glob('*.php'):files['api/'+path.name]=path.read_text()
 tests=(repo/'ops/divinemedia/unified-stage-tests.py.txt').read_text()
 release=hashlib.sha256(json.dumps(files,sort_keys=True).encode()+tests.encode()+Path(__file__).read_bytes()).hexdigest()[:12]
@@ -17,6 +17,7 @@ s=s.replace(" app=scratch+'/app';media=app+'/.compose/videos'"," with tarfile.op
 s=s.replace(" phase='create-isolated-network'",'''
  phase='current-native-source-copy'
  for name in ['objects','plugin']:shutil.copytree(liveRoot/name,pathlib.Path(app)/name,dirs_exist_ok=True)
+ shutil.copytree(liveRoot/'.compose/encoder/objects',pathlib.Path(app)/'.compose/encoder/objects',dirs_exist_ok=True)
  for relative in ['.htaccess','.compose/videos/configuration.php','.compose/encoder/videos/configuration.php']:
   shutil.copyfile(liveRoot/relative,pathlib.Path(app)/relative)
  shutil.copytree(pathlib.Path(bundle)/'api',pathlib.Path(app)/'divine-api')
@@ -24,6 +25,9 @@ s=s.replace(" phase='create-isolated-network'",'''
  for path in (pathlib.Path(app)/'divine-api').glob('*.php'):path.chmod(0o644)
  sys.path.insert(0,bundle);import native_live as native
  proposal=native.inspect(app)
+ native_hashes={str(p.relative_to(liveRoot)):hashlib.sha256(p.read_bytes()).hexdigest() for folder in ['objects','plugin','.compose/encoder/objects'] for p in (liveRoot/folder).rglob('*.php')}
+ pathlib.Path(bundle+'/native-source-hashes.json').write_text(json.dumps(native_hashes,sort_keys=True))
+ report['native_source_manifest_sha256']=hashlib.sha256(pathlib.Path(bundle+'/native-source-hashes.json').read_bytes()).hexdigest()
  phase='create-isolated-network' ''',1)
 s=s.replace(" phase='start-recovered-cache'",'''
  phase='isolated-native-feature-tables'

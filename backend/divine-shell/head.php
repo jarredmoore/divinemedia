@@ -2,6 +2,9 @@
 /* Shared presentation only. Do not include this from API or upload handlers. */
 if (!defined('DM_ROUTE_SHELL_INCLUDED')) {
     define('DM_ROUTE_SHELL_INCLUDED', true);
+    $dmFrontendRedirect=dirname(__DIR__).'/divine-api/public-redirect.php';
+    if(is_file($dmFrontendRedirect)){require_once $dmFrontendRedirect;}
+
     $dmThemeValues = ['default', 'code-black', 'cold-black'];
     $dmRequestedTheme = $_GET['theme'] ?? null;
     $dmCookieTheme = $_COOKIE['dm_view_theme'] ?? null;
