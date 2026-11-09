@@ -4,6 +4,8 @@
 
 AVideo on Azure is the existing application backend. It remains the authority for account credentials, permissions, media visibility, categories, channels, playlists, interactions, uploads and processing. Its semi-branded administration is retained for private operator use. It is not a second viewer or creator website.
 
+See [the exact deployment diagram](docs/UNIFIED-FRONTEND-ARCHITECTURE.md) for the current device-testing release, including the still-accessible legacy HTML routes.
+
 ## Boundaries
 
 | Component | Responsibility |
