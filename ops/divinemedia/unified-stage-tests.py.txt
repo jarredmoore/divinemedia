@@ -1,0 +1,139 @@
+ phase='api-php-lint'
+ report['api_source_hashes']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in pathlib.Path(bundle+'/api').glob('*.php')}
+ for p in pathlib.Path(app+'/divine-api').glob('*.php'):docker('exec',web,'php','-l','/var/www/html/AVideo/divine-api/'+p.name)
+ key=secrets.token_hex(32)
+ docker('exec','-i',web,'sh','-c','umask 077; cat > /var/www/tmp/divine-frontend-gateway.key; chown www-data:www-data /var/www/tmp/divine-frontend-gateway.key',data=key)
+ docker('cp',bundle+'/route-tests.php',web+':/tmp/dm-route-tests.php')
+ docker('exec',web,'php','/tmp/dm-route-tests.php','/var/www/html/AVideo/divine-api')
+ phase='isolated-account-fixtures'
+ # Only disposable database users and rows. Nothing is created in production.
+ credentials={name:{'user':'dmqa_'+name+'_'+uuid.uuid4().hex[:8],'password':secrets.token_hex(20)} for name in ['owner','other']}
+ seed="""$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$out=[];foreach(json_decode(stream_get_contents(STDIN),true) as $role=>$d){$u=new User(0);$u->setUser($d['user']);$u->setPassword($d['password']);$u->setEmail($d['user'].'@example.invalid');$u->setName('Divine isolated '.$role);$u->setIsAdmin(0);$u->setEmailVerified(1);$u->setCanUpload($role==='owner'?1:0);$u->setCanStream($role==='owner'?1:0);$u->setStatus('a');$id=$u->save();if(!$id)exit(2);$out[$role]=(int)$id;}echo json_encode($out);"""
+ fixture=docker('exec','-i',web,'php','-r',seed,data=json.dumps(credentials)).stdout
+ pathlib.Path(bundle+'/fixture-seed-private.txt').write_text(fixture)
+ user_ids=json.loads(fixture.strip().splitlines()[-1]);owner=user_ids['owner'];other=user_ids['other']
+ # Reuse a restored file read-only under a new fixture row. Creator edits remain isolated.
+ sql("INSERT INTO videos(title,clean_title,filename,status,type,users_id,categories_id,duration,created,modified) SELECT 'Divine isolated fixture','"+uuid.uuid4().hex+"',filename,'a',type,"+str(owner)+",categories_id,duration,NOW(),NOW() FROM videos WHERE id=1;")
+ video=int(sql("SELECT MAX(id) FROM videos;"))
+ checks={}
+ def call(action,actor=None,data=None,params=None,bad_key=False,bad_csrf=False,form=None):
+  actor=actor if actor is not None else {}
+  query=urllib.parse.urlencode({'action':action,**(params or {})})
+  config=['url = '+json.dumps('https://media.divinemedia.us/divine-api/index.php?'+query),
+   'header = '+json.dumps('X-Divine-Gateway-Key: '+('invalid' if bad_key else key)),
+   'header = '+json.dumps('X-Divine-Frontend-Origin: https://divinemedia.us'),
+   'header = '+json.dumps('X-Divine-Client-IP: 192.0.2.44'),
+   'header = '+json.dumps('X-Divine-Session: '+actor.get('sid','')),
+   'header = '+json.dumps('X-Divine-CSRF: '+('incorrect' if bad_csrf else actor.get('csrf',''))),
+   'user-agent = "Mozilla/5.0 DivineMediaIsolatedQA"',
+   'resolve = "media.divinemedia.us:443:127.0.0.1"','noproxy = "media.divinemedia.us"',
+   'max-time = 45','silent','show-error','dump-header = "/tmp/dm-api-headers"','output = "/tmp/dm-api-body"','write-out = "%{http_code}"']
+  if data is not None:
+   config+=['request = "POST"','header = "Content-Type: application/json"','data = '+json.dumps(json.dumps({'payload':data}))]
+  if form:
+   config+=['request = "POST"']+['form = '+json.dumps(f) for f in form]
+  status=int(docker('exec','-i',web,'sh','-c','umask 077; exec curl --config -',data='\n'.join(config)+'\n').stdout.strip())
+  raw=docker('exec',web,'cat','/tmp/dm-api-body').stdout
+  pathlib.Path(bundle+'/last-response-private.json').write_text(raw)
+  try:result=json.loads(raw)
+  except Exception:raise AssertionError('API returned non-JSON for '+action+' '+str(status))
+  headers=docker('exec',web,'cat','/tmp/dm-api-headers').stdout
+  match=re.search(r'^X-Divine-Session:\s*(.+)$',headers,re.I|re.M)
+  if match:actor['sid']=match.group(1).strip()
+  if 'csrf' in result:actor['csrf']=result['csrf']
+  report['last_request']={'action':action,'status':status,'response_fields':list(result),'error':result.get('error'),'session_header_present':bool(match)}
+  return status,result
+ phase='anonymous-session-and-csrf'
+ anon={};status,res=call('session',anon);assert status==200 and res['user'] is None and anon.get('csrf') and anon.get('sid'), 'Anonymous session: '+str(status)+' fields='+str(list(res))+' sid='+str(bool(anon.get('sid')))
+ assert call('session',{},bad_key=True)[0]==404,'Gateway key guard'
+ assert call('login',anon,credentials['owner'],bad_csrf=True)[0]==403,'CSRF guard'
+ assert call('reaction',anon,{'video':video,'value':1})[0]==401,'Anonymous reaction guard'
+ assert call('session',anon)[1]['user'] is None,'Rejected CSRF login changed authentication state'
+ checks['anonymous_authentication_and_csrf_guards']=True
+ phase='native-account-login'
+ actors={}
+ for role in ['owner','other']:
+  actor={};assert call('session',actor)[0]==200;before=actor['sid'];status,res=call('login',actor,credentials[role])
+  assert status==200 and res['user']['id']==user_ids[role], 'Native login failed: '+role+' '+str(status)
+  assert actor['sid']!=before,'Session did not rotate after native login'
+  assert 'password' not in json.dumps(res).lower() and 'passhash' not in json.dumps(res).lower()
+  actors[role]=actor
+ a=actors['owner'];b=actors['other'];checks['native_login_and_session_rotation']=True
+ phase='comments-and-reactions'
+ assert call('video',a,params={'id':video})[0]==200
+ status,res=call('reaction',a,{'video':video,'value':1});assert status==200 and res['reaction']==1,'Native like failed'
+ status,res=call('reaction',a,{'video':video,'value':1});assert status==200 and res['reaction']==0,'Native like toggle failed'
+ status,res=call('comment',a,{'video':video,'text':'Divine isolated comment'});assert status==200 and res['id']>0,'Native comment failed'
+ comment=res['id'];assert call('comment',b,{'id':comment,'remove':True})[0]==403,'Other user deleted a comment'
+ assert call('comments',anon,params={'video':video})[0]==200
+ assert call('comment',a,{'id':comment,'remove':True})[0]==200
+ assert call('playback',anon,{'video':video,'position':1,'seconds':1})[0]==200
+ checks['native_comments_reactions_and_comment_ownership']=True
+ phase='playlists-and-ownership'
+ status,res=call('playlist',a,{'name':'Divine isolated private playlist','status':'private'});assert status==200 and res['id']>0,'Playlist create failed'
+ playlist=res['id']
+ assert call('playlist-item',a,{'playlist':playlist,'video':video,'add':True})[0]==200
+ status,res=call('playlists',a);assert status==200 and any(p['id']==playlist for p in res['items'])
+ assert call('playlist',b,params={'id':playlist})[0]==403
+ assert call('playlist-item',b,{'playlist':playlist,'video':video,'add':False})[0]==403
+ assert call('playlist',b,{'id':playlist,'name':'Not mine','status':'public'})[0]==403
+ assert call('library',a,{'kind':'later','video':video})[0]==200
+ status,res=call('library',a,params={'kind':'later'});assert status==200 and any(v['id']==video for v in res['items'])
+ assert call('playlist-order',b,{'playlist':playlist,'ids':[video]})[0]==403
+ assert call('playlist-order',a,{'playlist':playlist,'ids':[video]})[0]==200
+ assert call('playlist',a,{'id':playlist,'remove':True})[0]==200
+ checks['playlist_crud_library_and_cross_user_denials']=True
+ phase='categories-channels-and-creator-permissions'
+ for action in ['categories','channels','live']:assert call(action,anon)[0]==200,action
+ assert call('studio',b)[0]==403 and call('upload-init',b,{'name':'qa.mp3','size':1000,'title':'Denied'})[0]==403
+ status,res=call('creator-videos',b);assert status==200 and all(v['id']!=video for v in res['items'])
+ assert call('creator-video',b,{'id':video,'title':'Not mine','description':'','visibility':'public'})[0]==403
+ assert call('studio-save',a,{'title':'Divine isolated studio','visibility':'unlisted'})[0]==200
+ status,res=call('studio',a);assert status==200 and res['key'] and '?p=' not in res['server'],'Studio exposed password-hash transport'
+ assert call('notifications',a)[0]==200
+ assert call('encoder-queue',a)[0]==200
+ assert call('follow',a,{'userId':other})[0]==200
+ assert call('creator-video',a,{'id':video,'title':'Divine isolated fixture','description':'','visibility':'private'})[0]==200
+ assert call('video',b,params={'id':video})[0] in [403,404],'Hidden video exposed to another account'
+ assert call('creator-video',a,{'id':video,'title':'Divine isolated fixture','description':'','visibility':'public'})[0]==200
+ checks['native_discovery_and_creator_permission_guards']=True
+ phase='native-upload-chunks'
+ docker('exec',web,'ffmpeg','-hide_banner','-loglevel','error','-f','lavfi','-i','sine=frequency=440:sample_rate=44100','-t','1','-c:a','libmp3lame','/tmp/dm-qa.mp3')
+ size=int(docker('exec',web,'stat','-c','%s','/tmp/dm-qa.mp3').stdout)
+ status,res=call('upload-init',a,{'name':'divine-isolated.mp3','size':size,'title':'Divine isolated upload'});assert status==200,'Upload initialize failed'
+ ticket=res['ticket'];status,res=call('upload-chunk',a,form=['ticket='+ticket,'start=0','total='+str(size),'file=@/tmp/dm-qa.mp3;type=audio/mpeg'])
+ assert status==200 and res.get('complete') and res.get('videoId',0)>video,'Native chunk upload finalization failed'
+ uploaded=res['videoId']
+ status,res=call('upload-init',a,{'name':'cancel-isolated.mp3','size':size,'title':'Canceled fixture'});assert status==200
+ canceled=res['ticket'];assert call('upload-cancel',b,{'ticket':canceled})[0] in [403,410]
+ assert call('upload-cancel',a,{'ticket':canceled})[0]==200
+ assert call('upload-cancel',a,{'ticket':canceled})[0]==410
+ checks['new_isolated_upload_reuses_native_handler']=True
+ phase='native-encoder-ownership-and-queue'
+ status,res=call('encoder-action',a,{'operation':'enqueue','video':uploaded,'profile':'audio'});assert status==200 and res.get('id',0)>0,'Native Encoder enqueue failed'
+ job=res['id'];status,res=call('encoder-queue',a);assert status==200 and res['source']=='native-encoder' and any(j['id']==job for j in res['items']),'Native Encoder job not visible'
+ assert call('encoder-action',b,{'operation':'remove','id':job})[0]==403
+ assert call('encoder-action',a,{'operation':'remove','id':job})[0]==200
+ checks['native_encoder_queue_and_cross_user_guards']=True
+ phase='native-account-recovery-callbacks'
+ # Mint native callbacks for a disposable fixture account, without sending any email.
+ callback="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$id=(int)stream_get_contents(STDIN);$u=new User($id);$u->setEmailVerified(0);$token=$u->setRecoverPass(true);$u->save();$code=User::createVerificationCode($id);$u=new User($id);echo json_encode(['token'=>$u->getRecoverPass(),'code'=>$code]);"
+ raw=docker('exec','-i',web,'php','-r',callback,data=str(other)).stdout
+ callbacks=json.loads(raw.strip().splitlines()[-1])
+ assert call('verify-email',anon,{'code':callbacks['code']})[0]==200,'Native email verification callback failed'
+ reset={'user':credentials['other']['user'],'token':'incorrect','password':secrets.token_hex(20),'passwordConfirm':''}
+ reset['passwordConfirm']=reset['password']
+ assert call('reset-password',anon,reset)[0]==400,'Invalid recovery token accepted'
+ reset['token']=callbacks['token'];assert call('reset-password',anon,reset)[0]==200,'Native password reset failed'
+ assert call('reset-password',anon,reset)[0]==400,'Native recovery token was reused'
+ fresh={};assert call('session',fresh)[0]==200
+ assert call('login',fresh,{'user':reset['user'],'password':reset['password']})[0]==200,'Reset password did not authenticate'
+ assert call('logout',fresh,{})[0]==200
+ checks['native_recovery_verification_and_one_use_tokens']=True
+ phase='session-logout'
+ assert call('logout',a,{})[0]==200
+ status,res=call('session',a);assert status==200 and res['user'] is None
+ checks['logout_ends_native_session']=True
+ for row in recovered:
+  assert hashlib.sha256(pathlib.Path(media,row['path']).read_bytes()).hexdigest()==row['sha256'],'An existing restored media file changed'
+ report.update({'checks':checks,'original_restored_media_preserved':len(recovered),'public_accounts_or_content_changed':False,'native_startup_not_executed':True,'credentials_in_report':False})

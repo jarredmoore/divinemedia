@@ -1,29 +1,31 @@
-# Divine Media — Architecture and Operations
+# Divine Media architecture
 
-## Known components
-- Frontend source: GitHub jarredmoore/divinemedia, branch divine-media-2, folder frontend/.
-- Frontend tooling: React 19, React DOM 19, Vite 6, lucide-react (per frontend/package.json).
-- Frontend delivery: watch.divinecreativegroup.com, reported Netlify CLI deployment; exact deployed commit not yet verified.
-- Backend: AVideo on Azure VM vm-divinemedia-staging; public https://media.divinecreativegroup.com/.
-- Encoder: https://media.divinecreativegroup.com/Encoder/; installed within AVideo container rather than a separate Encoder service (per prior troubleshooting).
+**One public experience: https://divinemedia.us.** Viewers and creators stay in the React/Vite frontend for playback, accounts, sharing, comments, reactions, playlists, discovery, uploads and Live. Do not send users to AVideo pages or embed its full HTML interfaces as substitutes for frontend features.
+
+AVideo on Azure is the existing application backend. It remains the authority for account credentials, permissions, media visibility, categories, channels, playlists, interactions, uploads and processing. Its semi-branded administration is retained for private operator use. It is not a second viewer or creator website.
+
+See [the exact deployment diagram](docs/UNIFIED-FRONTEND-ARCHITECTURE.md) for the current device-testing release, including the still-accessible legacy HTML routes.
 
 ## Boundaries
-Frontend reads published media data and poster URLs from AVideo. Do not expose backend credentials or private administration endpoints in frontend bundles.
-Production videos, upload, encoding, and thumbnail pipeline are out of scope for the 3.1 design iteration.
 
-## Deployment safety
-1. Inspect current source and configuration; identify live deployment source and branch.
-2. Make frontend changes on dev/divine-media-3.1.
-3. Run dependency install/build and inspect generated assets.
-4. Validate API responses, playback, posters, navigation, mobile layouts, and error states in preview.
-5. Review and explicitly approve production deployment.
-6. Keep a rollback reference to the last known working production deploy.
+| Component | Responsibility |
+| --- | --- |
+| React/Vite on Netlify | All viewer and creator presentation, navigation and controls |
+| Same-origin /api/platform/* functions | Attest frontend origin, forward only supported actions, hold the server gateway secret, and issue the HttpOnly frontend session cookie |
+| Azure divine-api adapter | Project safe JSON using installed native AVideo classes/handlers; enforce native permissions and a session-bound CSRF nonce |
+| Existing AVideo, Encoder and stream server | Accounts, persistence, access policies, media processing, streaming and administration |
+| media.divinemedia.us | Technical API/media origin; native HTML routes become frontend redirects at the verified cutover |
 
-## Backup/repair reference
-Upload repair backup reported at /srv/divinemedia/backups/upload-restore-20261101T220406Z.
-Do not copy secrets or runtime config values into this repository.
+The API boundary shares the native AVideo session store. It introduces no account, comment, reaction or playlist database. Passwords go only to the server/native authentication path. Native login responses, password hashes, API secrets and credential cookies are never relayed to browser JavaScript. Sessions use an opaque __Host-dm_session cookie with Secure, HttpOnly, Path=/ and SameSite=Lax.
 
-## Open questions
-- Exact live Netlify site ID and deploy-to-source mapping.
-- Current frontend component structure and API integration details.
-- Production frontend release SHA and existing automated test coverage.
+AVideo plugins can attempt request-based authentication during initialization. The adapter suppresses that path and uses a nested server request envelope, then explicitly authenticates only after its own CSRF check. Origin checks and native role/ownership checks apply independently.
+
+## Migration and delivery
+
+Implement and verify authenticated video interactions first, then creator operations and callback compatibility. Do not remove working processing or lock creators out while replacements are incomplete. Frontend controls must report service errors without opening native backend pages.
+
+The frontend has its own /watch/:id and /embed/:id pages. Media bytes can come from the technical media origin; no native HTML player, login, notifications, upload or Encoder page should be presented to users.
+
+Use isolated fixtures for authentication, comments, playlists and uploads. Check session rotation, rejected-login side effects, cross-user ownership, moderation, private media, creator grants and existing media preservation. Never run the native startup entrypoint or reencode existing videos during this integration.
+
+GitHub is source of truth. Work is delivered on feature branches and pull requests, with a verified Netlify preview and deployment/recovery evidence. Never modify or merge into production/divine-media without owner approval. Production cutover follows verification and review; keep a rollback reference to the previous frontend and any backend boundary changes.

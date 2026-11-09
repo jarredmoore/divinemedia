@@ -1,0 +1,33 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/unified-api-deploy-cdee14fad287",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "3edded1dfa69c5ef99c5d019f4ccb50b68e4322faa95c79a6b226c9375afe04e",
+    "bytes": 3572,
+    "roundtrip_verified": true
+  },
+  "after_backup": {
+    "name": "after.tar.gz",
+    "sha256": "134010d32bf8dedf7c5f5890bc17ba384cebea254257cf18a8eefd337b4866d1",
+    "bytes": 15063,
+    "roundtrip_verified": true
+  },
+  "api_files": [
+    "anonymous.php",
+    "creator.php",
+    "encoder-worker.php",
+    "index.php",
+    "native.php",
+    "notifications.php",
+    "public-redirect.php",
+    "read.php",
+    "write.php"
+  ],
+  "media_hashes_preserved": 54,
+  "catalog_queue_permissions_unchanged": true,
+  "containers_not_restarted": true,
+  "public_html_redirects_enabled": false,
+  "native_source_files_unchanged": 1390,
+  "anonymous_and_csrf_checks_passed": true
+}

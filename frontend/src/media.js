@@ -1,3 +1,4 @@
+import {platform} from './platform-client.mjs';
 import {MEDIA_ORIGIN,MEDIA_ORIGINS,canonicalMediaUrl} from '../shared/domains.mjs';
 // Curated JSON feed adapter: no undocumented AVideo API calls or embedded credentials.
 const STORAGE_KEY='divine-media:saved:v1';
@@ -37,11 +38,12 @@ export function mapAVideoVideo(row){
  const sources=Array.isArray(row.sources)?row.sources.filter(s=>s?.type==='video/mp4'&&Number.isFinite(Number(s.res))):[];
  sources.sort((a,b)=>Number(b.res)-Number(a.res));
  const videoUrl=audio?undefined:safeAVideoUrl(sources[0]?.src||row.videos?.mp4?.['720']||row.videos?.mp4?.['480']);
- const item=normalizeMedia({title:row.title,tag:'AVIDEO · '+(row.channelName||(audio?'AUDIO':'VIDEO'))+(row.duration?' · '+row.duration:''),type:audio?'Listen':'Watch',watchUrl,img:audio&&[10,11,12,13,14,15,16].includes(Number(row.id))?murphyAlbumCover:image,videoUrl,audioUrl:audio?audioSource(row):undefined,creator:row.channelName||row.user||'Creator',channelUrl:row.wwbnChannelURL});
+ const item=normalizeMedia({title:row.title,tag:'DIVINE · '+(row.channelName||(audio?'AUDIO':'VIDEO'))+(row.duration?' · '+row.duration:''),type:audio?'Listen':'Watch',watchUrl,img:audio&&[10,11,12,13,14,15,16].includes(Number(row.id))?murphyAlbumCover:image,videoUrl,audioUrl:audio?audioSource(row):undefined,creator:row.channelName||row.user||'Creator',channelUrl:row.wwbnChannelURL});
  return item?{...item,avideoId:row.id}:null;
 }
 /** Read sanitized public AVideo catalog from same-origin Netlify function; no credentials. */
 export async function loadAVideoCatalog(){
+ try{const data=await platform('catalog');if(Array.isArray(data.items))return data.items.map(row=>({...row,avideoId:row.avideoId||row.id,img:row.type==='Listen'&&[10,11,12,13,14,15,16].includes(Number(row.id))?murphyAlbumCover:row.img}));}catch{/* The existing public-only feed remains available during service maintenance. */}
  const res=await fetch(catalogEndpoint,{cache:'no-store',credentials:'omit'});
  if(!res.ok)throw Error('AVideo catalog HTTP '+res.status);
  const data=await res.json();

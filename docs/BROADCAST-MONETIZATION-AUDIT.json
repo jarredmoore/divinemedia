@@ -1,0 +1,99 @@
+{
+  "read_only": true,
+  "plugins": [
+    {
+      "name": "Live",
+      "directory_present": true,
+      "status": "active"
+    },
+    {
+      "name": "PlayLists",
+      "directory_present": true,
+      "status": "active"
+    },
+    {
+      "name": "Scheduler",
+      "directory_present": true,
+      "status": "active"
+    },
+    {
+      "name": "Rebroadcaster",
+      "directory_present": false,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "VideoPlaylistScheduler",
+      "directory_present": false,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "YouPHPTV",
+      "directory_present": false,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "ADs",
+      "directory_present": true,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "AD_Server",
+      "directory_present": true,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "AD_Server_Location",
+      "directory_present": true,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "GoogleAds_IMA",
+      "directory_present": false,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "MonetizeUsers",
+      "directory_present": true,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "YPTWallet",
+      "directory_present": true,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "Subscription",
+      "directory_present": false,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "PayPerView",
+      "directory_present": false,
+      "status": "no explicit plugin record"
+    },
+    {
+      "name": "PayPerViewLive",
+      "directory_present": false,
+      "status": "no explicit plugin record"
+    }
+  ],
+  "native_adsense_field_nonempty": false,
+  "settings_changed": false,
+  "ad_requests_or_broadcasts_started": false,
+  "checked_date": "2026-11-09",
+  "upstream_documents_sha256": {
+    "ADs-plugin.md": "f1d68f4bb406de54119991550511c4784cbca6aff20a977b1fd5b9ad1fa28ea5",
+    "Rebroadcaster-Plugin.md": "23ce683e17a5e6b2daeb82b03eff19122de02efd08ddc0db59ad9e8dc4d45ab3",
+    "AD_Server-Plugin.md": "0fe5a10c14ed0636a4daa2fb7b8f1bce977411aa10d3f56a701f573982c1ca43",
+    "VideoPlaylistScheduler-plugin.md": "8d5c29275647c42207910a33a6a46efb9a8e72d4c75a839be824e348f6483db5",
+    "Plugin-Documentation-Index.md": "128ea95c36025f999c8e61a8d87f0e8e78cd1c3904ae5cb88e21ec808a9e45eb",
+    "GoogleAds_IMA---Videos-Ads-on-your-page.md": "c589526bf7a329de3e2b8e050a8f755c297252d6cd4322436245fdfb338a8ad0"
+  },
+  "public_ads_txt": {
+    "url": "https://divinemedia.us/ads.txt",
+    "status": 200,
+    "content_type": "text/html; charset=UTF-8",
+    "valid_advertising_authorization_file": false
+  },
+  "adsense_approval": "Unconfirmed; owner will check account"
+}

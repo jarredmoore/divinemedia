@@ -1,0 +1,64 @@
+{
+  "result": "published",
+  "site": "https://divinemedia.us",
+  "deploy_id": "6af238ccf0c731f869f5c1c9",
+  "source_commit": "837ea830c5dc378e01b08497507f1261a993edf9",
+  "previous_deploy_id": "6af1fcdf8e188044e7207f35",
+  "rollback": "Restore previous_deploy_id through Netlify; preserve user-created application data.",
+  "authorization": "Owner explicitly requested production publication for device testing on November 9, 2026.",
+  "published_at_utc": "2026-11-09T21:19:59.898593+00:00",
+  "backend_changes_this_release": false,
+  "legacy_html_redirects_enabled": false,
+  "production_git_branch_modified": false,
+  "ci": [
+    {
+      "id": 42701338230,
+      "name": "Branded route shell checks",
+      "conclusion": "success"
+    },
+    {
+      "id": 42701338374,
+      "name": "Unified frontend boundary",
+      "conclusion": "success"
+    },
+    {
+      "id": 42701338453,
+      "name": "Divine Media Watch Preview Build",
+      "conclusion": "success"
+    }
+  ],
+  "preview_read_only_browser_checks": true,
+  "performance_change": "Coalesce concurrent identical API reads; no persistent account-data cache.",
+  "performance_evidence": {
+    "same_browser_journey_previous_video_reads": 2,
+    "same_browser_journey_release_video_reads": 1,
+    "api_timing_caveat": "Observed through the managed executor proxy; not device or end-user benchmarks.",
+    "before_api_samples": [
+      {
+        "action": "session",
+        "seconds": 1.552,
+        "status": 200
+      },
+      {
+        "action": "catalog",
+        "seconds": 0.743,
+        "status": 200
+      },
+      {
+        "action": "video?id=1",
+        "seconds": 0.541,
+        "status": 200
+      },
+      {
+        "action": "video?id=1",
+        "seconds": 0.505,
+        "status": 200
+      },
+      {
+        "action": "categories",
+        "seconds": 0.503,
+        "status": 200
+      }
+    ]
+  }
+}
