@@ -1,5 +1,7 @@
 # Native AVideo features and frontend activation
 
+Current update: [native Live and account playlists](DIVINE-MEDIA-NATIVE-LIVE.md) are now enabled; explicitly active plugins total eleven. The nine-plugin counts and player-utility rollback below describe the earlier audit.
+
 [Open the working feature preview](https://6af0e7c0c7c99c2a27543abe--mediaproduction.netlify.app/?theme=code-black) · [Feature PR #12](https://github.com/jarredmoore/divinemedia/pull/12) · [Deployed browser evidence](NATIVE-FRONTEND-DEPLOYED-VERIFICATION.json)
 
 Frontend source for the draft is commit `f48a6cae`; later commits update documentation and evidence.

@@ -2,7 +2,7 @@
 
 Divine Media uses the installed free **AVideo Live 15.3** and **PlayLists 3.0** plugins. AVideo owns accounts, stream keys, publishing permissions, playlists and player behavior. Azure hosts the existing stream server and application. No second account system, chat service, replacement paid-plugin suite or additional public domain is introduced.
 
-## Intended delivery
+## Native routes
 
 - `https://media.divinemedia.us/live` is the native live directory. Watch's existing Live navigation opens it with the selected theme.
 - `https://media.divinemedia.us/plugin/Live/` is the native creator studio, protected by existing sign-in and streaming permissions.
@@ -33,3 +33,13 @@ Two shared-shell assets add the Live navigation link and change their cache vers
 Recovery uses `deploy-native-live.py --bundle <verified-bundle> --rollback <deployment-state>`. It leases exact plugin rows, source schemas, vhost and changed assets. It removes only the owned plugin records and restores original configuration. New tables are removed only while all are empty; otherwise they are retained to preserve user-created feature data. Later edits refuse rollback. Never restore the whole database to undo plugin activation.
 
 The production Git branch is not merged or modified. Deployment evidence and review links are added after verification.
+
+## Enabled installation
+
+The backend activation passed at `/srv/divinemedia/backups/native-live-deploy-aefd6ba740`; that directory contains the combined recovery plan and original files. The verified release bundle is `/srv/divinemedia/backups/native-live-a94b10db45c4`. The Live and PlayLists records increase the explicitly active plugins from nine to eleven. No player utilities or paid plugins were activated.
+
+The isolated test published a 24-second synthetic stream only inside the disposable network: an invalid key was rejected, an authorized stream produced an HTTPS HLS manifest and a 244,224-byte transport segment, and a native playlist player rendered. No public broadcast, production test account or production test playlist was created. Full public OBS-to-viewer verification with a real creator remains a separate check; the isolated test does not establish external end-to-end ingest.
+
+Azure NSG rule `AllowAVideoRTMP` opens TCP 1935 for authenticated native ingest. Other rules are preserved. To withdraw public ingest independently, remove that named rule; disabling a navigation link alone does not close ingest. Viewers use the existing HTTPS port 443. No socket/chat service, paid add-on or new subscription service was provisioned.
+
+Evidence: [isolated test](NATIVE-LIVE-STAGE-VERIFICATION.json), [backend preservation and off-VM snapshot verification](NATIVE-LIVE-BACKEND-VERIFICATION.json), [ingest rule](NATIVE-LIVE-INGEST-RULE.json), [player regression](NATIVE-LIVE-PLAYER-REGRESSION.json).
