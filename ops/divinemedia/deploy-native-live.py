@@ -71,8 +71,8 @@ if __name__=='__main__':
  uptime=run('docker','inspect','--format','{{.Name}} {{.State.StartedAt}}',WEB,DB,'app-database_encoder-1','app-memcached-1','app-live-1')
  (state/'before-state.json').write_text(json.dumps({'media':before_media,'catalog':before_catalog,'queue':before_queue,'permissions':before_users,'protected':protected_hashes,'uptime':uptime}))
  # Fresh native database snapshot is private and verified off VM before any DDL.
- dump=run('docker','exec',DB,'sh','-c','export MYSQL_PWD="$MYSQL_PASSWORD"; exec mariadb-dump --user="$MYSQL_USER" --single-transaction --routines --triggers "$MYSQL_DATABASE"')
- (state/'avideo-before.sql.gz').write_bytes(gzip.compress(dump.encode()))
+ dump=subprocess.run(['docker','exec',DB,'sh','-c','export MYSQL_PWD="$MYSQL_PASSWORD"; exec mariadb-dump --user="$MYSQL_USER" --single-transaction --hex-blob --routines --triggers "$MYSQL_DATABASE"'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=True,timeout=90).stdout
+ (state/'avideo-before.sql.gz').write_bytes(gzip.compress(dump))
  with tarfile.open(state/'before.tar.gz','w:gz') as tar:
   for name in ['vhost-before.conf','before-state.json','avideo-before.sql.gz','files']:tar.add(state/name,arcname=name)
  proof=backup.off_vm(state/'before.tar.gz',state.name)
