@@ -11,13 +11,22 @@
    if(!['media.divinemedia.us','divinemedia.us','www.divinemedia.us','media.divinecreativegroup.com','watch.divinecreativegroup.com'].includes(u.hostname))return value;
    if(/\.(mp3|mp4|m3u8|jpg|jpeg|png|gif|webp|vtt|srt|pdf|zip)$/i.test(u.pathname))return value;
    if([...u.searchParams.keys()].some(k=>/^(pass(word)?|token|api_secret|apisecret|key|secret|sid|session)$/i.test(k)))return value;
-   if(u.hostname==='media.divinecreativegroup.com')u.hostname='media.divinemedia.us';if(['watch.divinecreativegroup.com','www.divinemedia.us'].includes(u.hostname))u.hostname='divinemedia.us';u.protocol='https:';u.searchParams.set('theme',theme);return u.href;
+   if(u.hostname==='media.divinecreativegroup.com')u.hostname='media.divinemedia.us';if(['watch.divinecreativegroup.com','www.divinemedia.us'].includes(u.hostname))u.hostname='divinemedia.us';if(u.hostname==='media.divinemedia.us'&&u.pathname==='/plugin/Gallery/view/mainAreaLive.php')u.pathname='/live';u.protocol='https:';u.searchParams.set('theme',theme);return u.href;
   }catch{return value}
+ }
+ // Native toast callbacks use PHP_SELF for history entries. Keep the existing public Live alias.
+ for(const method of ['pushState','replaceState']){
+  const original=history[method];
+  history[method]=function(state,title,url){
+   let next=url;
+   if(url!=null){try{const u=new URL(String(url),location.href);if(u.origin===location.origin&&u.pathname==='/plugin/Gallery/view/mainAreaLive.php'){u.pathname='/live';next=u.href}}catch{}}
+   return original.call(this,state,title,next);
+  };
  }
  function updateLinks(root=document){for(const a of root.querySelectorAll('a[href]')){const raw=a.getAttribute('href');if(!raw||/^(#|javascript:|mailto:|tel:)/i.test(raw)||a.hasAttribute('download'))continue;const next=canonical(raw);if(next!==raw)a.setAttribute('href',next)}}
  function picker(){const label=document.createElement('label');label.className='dm-route-picker';const name=document.createElement('span');name.className='dm-route-sr';name.textContent='Viewing theme';const select=document.createElement('select');select.setAttribute('aria-label','Viewing theme');for(const [value,text] of [['default','Default'],['code-black','Code Black']]){const option=new Option(text,value);select.add(option)}select.value=theme;select.addEventListener('change',()=>{theme=select.value;persist();const u=new URL(location.href);u.searchParams.set('theme',theme);history.replaceState(null,'',u);for(const s of document.querySelectorAll('.dm-route-picker select'))s.value=theme;updateLinks()});label.append(name,select);return label}
  function mount(){
-  persist();updateLinks();
+  persist();if(location.pathname==='/plugin/Gallery/view/mainAreaLive.php'){history.replaceState(null,'',canonical(location.href))}if(location.pathname==='/live'||location.pathname==='/live/'){const link=document.querySelector('link[rel=canonical]');if(link)link.href='https://media.divinemedia.us/live';const meta=document.querySelector('meta[property="og:url"]');if(meta)meta.content='https://media.divinemedia.us/live'}updateLinks();
   // In-page anchors and dynamically inserted native menus keep their native handlers.
   document.addEventListener('click',e=>{const a=e.target.closest?.('a[href]');if(a&&!a.hasAttribute('download')){const raw=a.getAttribute('href');if(raw&&!/^(#|javascript:|mailto:|tel:)/i.test(raw))a.setAttribute('href',canonical(raw))}},true);
   const compact=params.get('noNavbar');

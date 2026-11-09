@@ -17,7 +17,7 @@ if (!defined('DM_ROUTE_SHELL_INCLUDED')) {
 <script class="doNotSepareteTag" data-divine-route-theme>document.documentElement.dataset.dmTheme=<?= json_encode($dmTheme) ?>;</script>
 <style class="doNotSepareteTag" data-divine-route-critical>html,body{background:<?= $dmInk ?>!important;color:#f2f0ec;color-scheme:dark}</style>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="/divine-shell/shell.css?v=33-native-live-1">
+<link rel="stylesheet" href="/divine-shell/shell.css?v=33-native-live-2">
 <link rel="icon" type="image/svg+xml" href="/divine-shell/mark.svg">
-<script class="doNotSepareteTag" src="/divine-shell/shell.js?v=33-native-live-1" defer></script>
+<script class="doNotSepareteTag" src="/divine-shell/shell.js?v=33-native-live-2" defer></script>
 <?php } ?>
