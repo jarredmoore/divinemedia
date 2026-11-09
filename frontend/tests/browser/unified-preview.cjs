@@ -2,7 +2,7 @@
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const fs=require('fs'),path=require('path'),assert=require('assert'),crypto=require('crypto'),{execFile}=require('child_process');
 process.umask(0o077);const watch=process.env.UNIFIED_TEST_URL,dir=process.env.BROWSER_ARTIFACTS||'/tmp/divine-unified-preview';
-if(!/^https:\/\/[a-f0-9]{24}--mediaproduction\.netlify\.app$/.test(watch||''))throw Error('Use an immutable Divine Media draft URL.');
+if(!/^https:\/\/(?:divinemedia\.us|[a-f0-9]{24}--mediaproduction\.netlify\.app)$/.test(watch||''))throw Error('Use the canonical Divine Media URL or an immutable draft URL.');
 fs.mkdirSync(dir,{recursive:true});let serial=0,blockedWrites=0;const cache=new Map();
 function fetchPublic(url,cookie='',requestHeaders={}){
  const key=url+'|'+crypto.createHash('sha256').update(cookie+JSON.stringify(requestHeaders)).digest('hex');if(cache.has(key))return cache.get(key);
