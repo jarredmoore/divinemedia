@@ -1,0 +1,21 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/native-live-deploy-aefd6ba740/presentation-de540fb1",
+  "combined_rollback_state": "/srv/divinemedia/backups/native-live-deploy-aefd6ba740",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "3f3a69f41634b83e9d29ecafb041bfbfd669c7be35411ee488ac28ab16c173fa",
+    "bytes": 7070,
+    "roundtrip_verified": true
+  },
+  "after_backup": {
+    "name": "after.json",
+    "sha256": "6215c822ff0fb300617eddb218f64343668b925e4aa363be2ea576917d7ad5cd",
+    "bytes": 11246,
+    "roundtrip_verified": true
+  },
+  "media_hashes_preserved": 54,
+  "native_plugin_configuration_unchanged": true,
+  "database_or_streaming_config_changed": false,
+  "combined_rollback_lease_updated": true
+}
