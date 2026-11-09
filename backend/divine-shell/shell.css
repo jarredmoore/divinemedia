@@ -52,3 +52,8 @@ html[data-dm-theme] .swal-modal,html[data-dm-theme] .swal2-popup{background:var(
 html[data-dm-theme] .swal-title,html[data-dm-theme] .swal-text,html[data-dm-theme] .swal2-title,html[data-dm-theme] .swal2-html-container{color:var(--dm-route-text)!important}
 html[data-dm-theme] .swal-button,html[data-dm-theme] .swal2-confirm{background:var(--dm-route-gold)!important;color:#101010!important}
 html[data-dm-theme] .swal-icon--success__hide-corners,html[data-dm-theme] .swal-icon--success:before,html[data-dm-theme] .swal-icon--success:after{background:var(--dm-route-card)!important}
+
+.dm-route-branded .row.mainArea{margin-left:0!important;margin-right:0!important}
+.dm-route-live-intro{max-width:1240px;margin:26px auto 14px;padding:0 22px;color:var(--dm-route-text)}
+.dm-route-live-intro h1{font-family:'Manrope','Segoe UI',sans-serif;font-size:clamp(26px,4vw,42px);font-weight:500;letter-spacing:-.035em;margin:0 0 12px}
+.dm-route-live-intro p{color:var(--dm-route-muted);line-height:1.6;margin:0}
