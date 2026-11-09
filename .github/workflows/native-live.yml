@@ -1,0 +1,21 @@
+name: Native Live and playlists checks
+on:
+  pull_request:
+    paths:
+      - 'ops/divinemedia/*native*'
+      - 'tests/backend/test_native_live.py'
+      - '.github/workflows/native-live.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests/backend -v
+      - run: python ops/divinemedia/prepare-native-live-stage.py --output /tmp/native-live-build
+      - run: python -c "import ast,pathlib; [ast.parse(p.read_text()) for p in pathlib.Path('ops/divinemedia').glob('*native*.py')]"
+      - run: git diff --check

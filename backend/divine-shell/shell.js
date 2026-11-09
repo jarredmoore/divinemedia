@@ -25,7 +25,7 @@
   document.body.classList.add('dm-route-branded');
   const existing=document.querySelector('.dm-auth-shell .dm-header,.dm-entrance .dm-header,.dmc-header');
   if(existing){const tools=document.createElement('div');tools.className='dm-route-existing-tools';tools.append(picker());existing.append(tools);return}
-  const header=document.createElement('header');header.className='dm-route-header';header.innerHTML='<a class="dm-route-brand" href="https://divinemedia.us/"><img src="/divine-shell/mark.svg" width="34" height="34" alt=""><span>DIVINE MEDIA</span></a><nav aria-label="Divine Media navigation"><a href="https://divinemedia.us/">Watch &amp; Listen</a><a href="/view/">Media library</a><a href="/upload">Upload</a><a href="/Encoder/">Encoder</a><a href="/user">My account</a></nav><div class="dm-route-tools"></div>';
+  const header=document.createElement('header');header.className='dm-route-header';header.innerHTML='<a class="dm-route-brand" href="https://divinemedia.us/"><img src="/divine-shell/mark.svg" width="34" height="34" alt=""><span>DIVINE MEDIA</span></a><nav aria-label="Divine Media navigation"><a href="https://divinemedia.us/">Watch &amp; Listen</a><a href="/view/">Media library</a><a href="/live">Live</a><a href="/upload">Upload</a><a href="/Encoder/">Encoder</a><a href="/user">My account</a></nav><div class="dm-route-tools"></div>';
   header.querySelector('.dm-route-tools').append(picker());document.body.prepend(header);document.body.classList.add('dm-route-shell');updateLinks(header);
   for(const img of document.querySelectorAll('.navbar-brand img')){if(/(?:avideo|youphptube|logo\.png|logo\.svg)/i.test(img.getAttribute('src')||'')){img.src='/divine-shell/mark.svg';img.alt='Divine Media';img.classList.add('dm-route-native-mark')}}
  }

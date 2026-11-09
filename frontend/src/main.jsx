@@ -51,7 +51,7 @@ function App(){
  const creators=[...new Set(items.filter(i=>i.creator).map(i=>i.creator))].sort();
  const featured=items.find(i=>i.avideoId&&i.type==='Watch')||items.find(i=>i.videoUrl||i.watchUrl);
  const visible=items.filter(i=>(tab==='Discover'||tab==='Library'&&saved.includes(i.title)||tab==='Watch'&&i.type==='Watch'||tab==='Listen'&&i.type==='Listen'||tab==='Live'&&i.type==='Live'||tab==='Creators'&&(creatorFilter?i.creator===creatorFilter:Boolean(i.creator)))&&(i.title+' '+i.tag).toLowerCase().includes(query.toLowerCase())).sort((a,b)=>sort==='title'?a.title.localeCompare(b.title):sort==='creator'?(a.creator||'').localeCompare(b.creator||''):0);
- const go=t=>{if(coldBlack)window.scrollTo({top:0,behavior:'instant'});setCreatorFilter(null);setTab(t);setMenu(false);setSelected(null);setPlaying(false)};
+ const go=t=>{if(t==='Live'){window.location.assign(themedUrl(avideoOrigin+'/live',theme));return}if(coldBlack)window.scrollTo({top:0,behavior:'instant'});setCreatorFilter(null);setTab(t);setMenu(false);setSelected(null);setPlaying(false)};
  const toggle=t=>setSaved(v=>v.includes(t)?v.filter(x=>x!==t):[...v,t]);
  return <div className={"app "+(coldBlack?"cold-black ":"")+(sidebarCollapsed?"sidebar-collapsed":"")}>
  {!coldBlack&&<aside className={'sidebar '+(menu?'open':'')}>
