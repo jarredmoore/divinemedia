@@ -2,7 +2,7 @@
   "source": "https://github.com/WWBN/AVideo/wiki/Plugin-Documentation-Index",
   "marketplace": "https://streamphp.com/marketplace/",
   "runtime_version": "30.2",
-  "inventory_phase": "before player-utility activation",
+  "inventory_phase": "Baseline plus verified native Live/PlayLists activation; see DIVINE-MEDIA-NATIVE-LIVE.md",
   "prices_are_listings_not_quotes": true,
   "plugins": [
     {
@@ -170,7 +170,7 @@
       "name": "PlayLists",
       "availability": "Free",
       "group": "Video, player and content",
-      "runtime": "Installed; inactive",
+      "runtime": "Active; account playlists",
       "price_usd": "\u2014"
     },
     {
@@ -436,7 +436,7 @@
       "name": "Live",
       "availability": "Free",
       "group": "Live, meetings and real-time features",
-      "runtime": "Installed; inactive",
+      "runtime": "Active; configured",
       "price_usd": "\u2014"
     },
     {

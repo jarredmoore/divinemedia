@@ -1,6 +1,6 @@
 # AVideo plugin options
 
-Inventory baseline: AVideo 30.2, 80 plugin directories and 9 explicitly active plugin records. No paid package directories were present. Folder presence does not establish activation, licensing or configuration. The four player utilities have a separate activation report.
+Inventory baseline: AVideo 30.2, 80 plugin directories and 9 explicitly active plugin records. Live and PlayLists were subsequently enabled through the [verified native rollout](DIVINE-MEDIA-NATIVE-LIVE.md), bringing the current explicitly active count to eleven. No paid package directories were present. Folder presence does not establish activation, licensing or configuration. The four player utilities have a separate activation report.
 
 This matrix covers every named plugin in the current [upstream documentation index](https://github.com/WWBN/AVideo/wiki/Plugin-Documentation-Index), with installed status from the Azure audit. Prices are current USD listings from the [official marketplace](https://streamphp.com/marketplace/), not checkout quotes; taxes, support, service usage and future price changes may differ. No purchase was made. Free integrations can still require paid external services.
 
@@ -41,7 +41,7 @@ This matrix covers every named plugin in the current [upstream documentation ind
 | Plugin | Distribution | Azure baseline | USD listing |
 | --- | --- | --- | --- |
 | PlayerSkins | Free | Active | — |
-| PlayLists | Free | Installed; inactive | — |
+| PlayLists | Free | Active; account playlists | — |
 | VideoPlaylistScheduler | Paid | Not installed | $59.99 |
 | VideoHLS | Paid | Not installed | $59.99 |
 | VideoHLSOverlay | Paid | Not installed | — |
@@ -89,7 +89,7 @@ This matrix covers every named plugin in the current [upstream documentation ind
 
 | Plugin | Distribution | Azure baseline | USD listing |
 | --- | --- | --- | --- |
-| Live | Free | Installed; inactive | — |
+| Live | Free | Active; configured | — |
 | LiveLinks | Free | Installed; inactive | — |
 | LiveUsers | Paid | Not installed | $29.99 |
 | Rebroadcaster | Paid | Not installed | $59.99 |
