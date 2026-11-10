@@ -1,0 +1,25 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/native-thumbnail-deploy-463ed2c318cc",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "611c888c75b20db1ea40ba76b7b15c3e11b2b217a3b20bb96410715e2b37bed2",
+    "bytes": 6243,
+    "roundtrip_verified": true
+  },
+  "after_backup": {
+    "name": "after.tar.gz",
+    "sha256": "9d945ac5e45dc4cf775ceb94646b6c331f6363804d29414b2b86f23604ebcd5e",
+    "bytes": 88918,
+    "roundtrip_verified": true
+  },
+  "active_plugin": "DivineThumbnails",
+  "video_id": 19,
+  "cover_sha256": "2ca1ec163bebfbadc6d008877f7d73e234d87e2b6fd82496f750e424ed7ccd00",
+  "cover_bytes": 81225,
+  "existing_media_and_artwork_files_preserved": 119,
+  "catalog_queue_permissions_and_uptimes_unchanged": true,
+  "native_source_files_preserved": 1390,
+  "thumbnail_only": true,
+  "encoder_queue_dispatched": false
+}

@@ -13,3 +13,7 @@ CLI worker and cache-maintenance files reject HTTP execution. Queue input uses n
 Verification uses a restored, isolated application: upload a new generated MP4 through the real native handler, wait for its automatic JPEG, check a second invocation preserves that cover, check audio is skipped, and compare all original restored media hashes. Deployment requires those tests to pass and checks staged/native source hashes. Before/after private snapshots are round-trip verified off VM. Existing catalog rows, permissions, queue entries, video/media files, covers and container uptimes are compared around activation.
 
 Rollback disables/removes only the new plugin record and unchanged plugin files. Keep generated covers and all user-created application data; never restore the full database to undo this hook.
+
+## Enabled deployment
+
+DivineThumbnails is active on Azure. Video 19 now has a publicly accessible JPEG cover (81,225 bytes), confirmed through the frontend API and media URL. Installation preserved all 119 existing media/artwork files, catalog rows, permissions, Encoder queue and container uptimes, and all 1,390 audited native PHP source files. Private before/after snapshots were round-trip verified off VM. No frontend deployment or production Git merge was needed. See the stage, deployment and public-verification JSON reports next to this document.
