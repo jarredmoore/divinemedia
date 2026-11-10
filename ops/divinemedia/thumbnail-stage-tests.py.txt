@@ -11,7 +11,11 @@
   thumb=json.loads(output.strip().splitlines()[-1])
   if thumb['exists']:break
   time.sleep(0.5)
- report['thumbnail_generated']=thumb['exists'];assert thumb['jpeg'],'Automatic native upload thumbnail missing'
+ report['thumbnail_generated']=thumb['exists']
+ if not thumb['exists']:
+  diag="$q='/var/www/tmp/divine-thumbnails';echo json_encode(['queue_exists'=>is_dir($q),'jobs'=>count(glob($q.'/*.json')?:[]),'worker_result'=>is_file($q.'/last-result.private.report')?json_decode(file_get_contents($q.'/last-result.private.report'),true):null]);"
+  report['thumbnail_worker_diagnostic']=json.loads(docker('exec',web,'php','-r',diag).stdout)
+ assert thumb['jpeg'],'Automatic native upload thumbnail missing'
  original=thumb['sha']
  repeat="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';AVideoPlugin::loadPlugin('DivineThumbnails');echo json_encode(['queued'=>DivineThumbnails::enqueue((int)$argv[1])]);"
  raw=docker('exec',web,'php','-r',repeat,str(thumb_video)).stdout;assert json.loads(raw.strip().splitlines()[-1])['queued'] is False,'Existing cover was requeued'
