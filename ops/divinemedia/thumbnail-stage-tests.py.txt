@@ -1,0 +1,25 @@
+ phase='automatic-thumbnail-after-native-upload'
+ for path in pathlib.Path(bundle+'/thumbnail-plugin').glob('*.php'):docker('exec',web,'php','-l','/var/www/html/AVideo/plugin/DivineThumbnails/'+path.name)
+ docker('exec',web,'ffmpeg','-hide_banner','-loglevel','error','-f','lavfi','-i','testsrc2=size=320x180:rate=10','-t','3','-c:v','libx264','-pix_fmt','yuv420p','/tmp/dm-thumbnail-qa.mp4')
+ size=int(docker('exec',web,'stat','-c','%s','/tmp/dm-thumbnail-qa.mp4').stdout)
+ status,res=call('upload-init',a,{'name':'thumbnail-isolated.mp4','size':size,'title':'Divine isolated thumbnail upload'});assert status==200
+ ticket=res['ticket'];status,res=call('upload-chunk',a,form=['ticket='+ticket,'start=0','total='+str(size),'file=@/tmp/dm-thumbnail-qa.mp4;type=video/mp4']);assert status==200 and res.get('complete')
+ thumb_video=res['videoId']
+ check="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$v=new Video('','',(int)$argv[1]);$p=Video::getPathToFile($v->getFilename().'.jpg');$i=is_file($p)?getimagesize($p):false;echo json_encode(['exists'=>(bool)$i,'jpeg'=>$i&&$i[2]===IMAGETYPE_JPEG,'sha'=>$i?hash_file('sha256',$p):null]);"
+ for attempt in range(60):
+  output=docker('exec',web,'php','-r',check,str(thumb_video)).stdout
+  thumb=json.loads(output.strip().splitlines()[-1])
+  if thumb['exists']:break
+  time.sleep(0.5)
+ report['thumbnail_generated']=thumb['exists']
+ if not thumb['exists']:
+  diag="$q='/var/www/tmp/divine-thumbnails';echo json_encode(['queue_exists'=>is_dir($q),'jobs'=>count(glob($q.'/*.json')?:[]),'worker_result'=>is_file($q.'/last-result.private.report')?json_decode(file_get_contents($q.'/last-result.private.report'),true):null]);"
+  report['thumbnail_worker_diagnostic']=json.loads(docker('exec',web,'php','-r',diag).stdout)
+ assert thumb['jpeg'],'Automatic native upload thumbnail missing'
+ original=thumb['sha']
+ repeat="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';AVideoPlugin::loadPlugin('DivineThumbnails');echo json_encode(['queued'=>DivineThumbnails::enqueue((int)$argv[1])]);"
+ raw=docker('exec',web,'php','-r',repeat,str(thumb_video)).stdout;assert json.loads(raw.strip().splitlines()[-1])['queued'] is False,'Existing cover was requeued'
+ raw=docker('exec',web,'php','-r',repeat,str(uploaded)).stdout;assert json.loads(raw.strip().splitlines()[-1])['queued'] is False,'Audio artwork was requeued'
+ thumb=json.loads(docker('exec',web,'php','-r',check,str(thumb_video)).stdout.strip().splitlines()[-1]);assert thumb['sha']==original,'Existing cover changed'
+ checks['automatic_thumbnail_on_native_video_upload']=True
+ checks['existing_covers_and_audio_artwork_preserved']=True
