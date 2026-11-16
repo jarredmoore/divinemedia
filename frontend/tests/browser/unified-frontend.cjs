@@ -12,6 +12,11 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
  await context.addInitScript(()=>{Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.__copied=text}}})});
  await context.route('**/*',async route=>{
   const req=route.request(),url=new URL(req.url());
+  if(url.hostname==='media.divinemedia.us'&&url.pathname==='/videos/isolated-fixture.mp4'){
+   const data=fs.readFileSync(require('path').join(__dirname,'../../public/themes/cold-black/stage-loop.mp4')),range=req.headers().range?.match(/bytes=(\d+)-(\d*)/);
+   if(range){const start=Number(range[1]),end=range[2]?Math.min(Number(range[2]),data.length-1):data.length-1;return route.fulfill({status:206,headers:{'content-type':'video/mp4','content-range':`bytes ${start}-${end}/${data.length}`,'accept-ranges':'bytes'},body:data.subarray(start,end+1)})}
+   return route.fulfill({contentType:'video/mp4',body:data});
+  }
   if(url.origin!==origin){return route.abort()}
   if(url.pathname==='/media.json')return route.fulfill({json:[]});
   if(url.pathname==='/api/public-catalog')return route.fulfill({json:{response:{rows:[]}}});
@@ -24,10 +29,10 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
   if(action==='catalog')return send({items:[item]});
   if(action==='categories')return send({items:[{id:1,name:'Music'}]});
   if(action==='channels')return send({items:[{id:7,name:'Test creator',channel:'test-creator',count:1}]});
-  if(action==='channel')return send({items:[item],channel:{userId:7,followers:0,following:false}});
+  if(action==='channel')return send({items:[item,{...item,id:10,avideoId:10,title:'Album artwork fallback',type:'Listen',image:'/missing-art.jpg',img:'/missing-art.jpg'}],channel:{userId:7,followers:0,following:false}});
   if(action==='login'){user={id:7,name:'Test creator',username:'creator',permissions:{upload:true,stream:true,comment:true}};return send({user,csrf:'isolated-authenticated-nonce'})}
   if(action==='logout'){user=null;return send({message:'Signed out.'})}
-  if(action==='video')return send({item,likes,dislikes:0,reaction:likes?1:0});
+  if(action==='video')return send({item,likes,dislikes:0,reaction:likes?1:0,player:{seek:{enabled:true,back:2,forward:5,hideOnMobile:false},hotkeys:true,theater:true,miniPlayer:true}});
   if(action==='reaction'){likes=likes?0:1;return send({likes,dislikes:0,reaction:likes?1:0})}
   if(action==='comments')return send({items:comments});
   if(action==='comment'){if(body.remove)comments=comments.filter(c=>c.id!==body.id);else comments.push({id:1,author:'Test creator',text:body.text,created:'Today',canDelete:true});return send({id:1})}
@@ -51,7 +56,18 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
  await page.getByRole('button',{name:'View Divine test video',exact:true}).click();
  assert.equal(new URL(page.url()).pathname,'/watch/101');assert.equal(await page.locator('iframe').count(),0);
  assert(await page.locator('video.real-video').getAttribute('controls')!==null);
- await page.getByRole('button',{name:'Copy link',exact:true}).click();assert.equal(await page.evaluate(()=>window.__copied),'https://divinemedia.us/watch/101');
+ await page.waitForFunction(()=>document.querySelector('video.real-video')?.readyState>=1);
+ await page.getByRole('button',{name:'Forward 5 seconds',exact:true}).click();
+ await page.waitForFunction(()=>document.querySelector('video.real-video').currentTime>1);
+ await page.getByRole('button',{name:'Playback options',exact:true}).click();await page.getByLabel('Playback speed',{exact:true}).selectOption('1.5');
+ assert.equal(await page.locator('video.real-video').evaluate(el=>el.playbackRate),1.5);
+ await page.getByRole('button',{name:'Theater mode',exact:true}).click();assert.equal(await page.locator('.dm-player').getAttribute('data-theater'),'true');
+ await page.screenshot({path:dir+'/player-options-desktop.png'});await page.keyboard.press('Escape');
+ assert.equal(await page.getByRole('button',{name:'Playback options',exact:true}).getAttribute('aria-expanded'),'false');
+ await page.locator('video.real-video').focus();await page.keyboard.press('ArrowLeft');
+ assert(await page.locator('video.real-video').evaluate(el=>el.currentTime<=Math.max(0,Math.min(5,el.duration)-1)));
+
+ await page.getByRole('button',{name:'More video options',exact:true}).click();await page.getByRole('button',{name:'Copy link',exact:true}).click();assert.equal(await page.evaluate(()=>window.__copied),'https://divinemedia.us/watch/101');
  await page.getByRole('button',{name:'Like video',exact:true}).click();await page.getByRole('dialog',{name:'Your account',exact:true}).waitFor();
  await page.getByLabel('Email or username').fill('creator');await page.getByLabel('Password',{exact:true}).fill('isolated-not-real-password');await page.getByRole('button',{name:'Sign in',exact:true}).click();await page.getByText('Signed in as',{exact:false}).waitFor();
  await page.getByRole('button',{name:'Close workspace',exact:true}).click();assert.equal(new URL(page.url()).pathname,'/watch/101');
@@ -74,6 +90,18 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
  await page.goBack();await page.waitForFunction(()=>!document.querySelector('.watch-modal'));
  await page.goForward();await page.locator('.watch-modal').waitFor();
  assert.equal(new URL(page.url()).pathname,'/watch/101');
- const report={result:'pass',mode:'frontend interaction fixtures; native backend verified separately',video_comments_likes_sharing_playlists_stay_on_frontend:true,account_login_same_origin:true,browser_back_forward_preserves_watch_routes:true,categories_and_creator_tools_same_origin:true,no_native_html_iframes:true,no_backend_navigation_links:true,upload_chunks_ui:true,widths,errors,action_names:[...new Set(actions)],real_accounts_or_backend_mutations:false};
+ for(const width of [390,320]){
+  await page.setViewportSize({width,height:900});await page.getByRole('button',{name:'More video options',exact:true}).click();
+  assert.equal(await page.locator('.dm-more-panel').evaluate(el=>el.getBoundingClientRect().right>innerWidth+1),false);
+  await page.screenshot({path:dir+'/more-options-'+width+'.png'});await page.keyboard.press('Escape');
+  await page.getByRole('button',{name:'Playback options',exact:true}).click();
+  await page.locator('.dm-player-panel').scrollIntoViewIfNeeded();
+  assert.equal(await page.locator('.dm-player-panel').evaluate(el=>{const r=el.getBoundingClientRect();return r.left<0||r.right>innerWidth+1||r.top<0||r.bottom>innerHeight+1}),false);
+  await page.screenshot({path:dir+'/player-options-'+width+'.png'});await page.keyboard.press('Escape');
+ }
+ await page.goto(origin+'/channel/test-creator?theme=code-black');
+ await page.waitForFunction(()=>[...document.querySelectorAll('.dm-workspace-tile img')].some(img=>img.getAttribute('src')==='/2ndTimeAround.jpg'&&img.naturalWidth>0));
+ assert.deepEqual(errors,[]);
+ const report={result:'pass',mode:'frontend interaction fixtures; native backend verified separately',video_comments_likes_sharing_playlists_stay_on_frontend:true,account_login_same_origin:true,player_controls_and_native_preferences:true,more_menu_and_mobile_layout:true,broken_channel_artwork_fallback:true,browser_back_forward_preserves_watch_routes:true,categories_and_creator_tools_same_origin:true,no_native_html_iframes:true,no_backend_navigation_links:true,upload_chunks_ui:true,widths,errors,action_names:[...new Set(actions)],real_accounts_or_backend_mutations:false};
  fs.writeFileSync(dir+'/unified-frontend-report.json',JSON.stringify(report,null,2));console.log(JSON.stringify(report));await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});

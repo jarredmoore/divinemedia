@@ -86,3 +86,13 @@ function dm_encoder(string $op, array $data=[]): array {
     $result=json_decode((string)$output,true);if(!is_array($result)){dm_error('Encoder service unavailable.',502);}if(!empty($result['error'])){dm_error(dm_text($result['error'],180),403);}
     return $result;
 }
+
+function dm_player_preferences(): array {
+    $seekEnabled=AVideoPlugin::isEnabledByName('SeekButton');
+    $seek=$seekEnabled?AVideoPlugin::getObjectData('SeekButton'):null;
+    $floatEnabled=AVideoPlugin::isEnabledByName('FloatVideo');
+    $float=$floatEnabled?AVideoPlugin::getObjectData('FloatVideo'):null;
+    return ['seek'=>['enabled'=>(bool)$seekEnabled,'back'=>max(1,min(300,(int)($seek->back??10))),'forward'=>max(1,min(300,(int)($seek->forward??30))),'hideOnMobile'=>(bool)($seek->hideOnMobile??true)],
+        'hotkeys'=>(bool)AVideoPlugin::isEnabledByName('Hotkeys'),'theater'=>(bool)AVideoPlugin::isEnabledByName('TheaterButton'),
+        'miniPlayer'=>(bool)$floatEnabled&&empty($float->doNotFloatVideo)];
+}
