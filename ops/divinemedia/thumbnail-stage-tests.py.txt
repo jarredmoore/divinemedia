@@ -5,7 +5,7 @@
  status,res=call('upload-init',a,{'name':'thumbnail-isolated.mp4','size':size,'title':'Divine isolated thumbnail upload'});assert status==200
  ticket=res['ticket'];status,res=call('upload-chunk',a,form=['ticket='+ticket,'start=0','total='+str(size),'file=@/tmp/dm-thumbnail-qa.mp4;type=video/mp4']);assert status==200 and res.get('complete')
  thumb_video=res['videoId']
- check="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$v=new Video('','',(int)$argv[1]);$p=Video::getPathToFile($v->getFilename().'.jpg');$i=is_file($p)?getimagesize($p):false;echo json_encode(['exists'=>(bool)$i,'jpeg'=>$i&&$i[2]===IMAGETYPE_JPEG,'sha'=>$i?hash_file('sha256',$p):null]);"
+ check="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$v=new Video('','',(int)$argv[1]);$p=Video::getPathToFile($v->getFilename().'.jpg');$i=is_file($p)?getimagesize($p):false;echo json_encode(['exists'=>(bool)$i,'jpeg'=>$i&&$i[2]===IMAGETYPE_JPEG,'sha'=>$i?hash_file('sha256',$p):null,'width'=>$i?$i[0]:0,'height'=>$i?$i[1]:0]);"
  for attempt in range(60):
   output=docker('exec',web,'php','-r',check,str(thumb_video)).stdout
   thumb=json.loads(output.strip().splitlines()[-1])
@@ -19,7 +19,53 @@
  original=thumb['sha']
  repeat="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';AVideoPlugin::loadPlugin('DivineThumbnails');echo json_encode(['queued'=>DivineThumbnails::enqueue((int)$argv[1])]);"
  raw=docker('exec',web,'php','-r',repeat,str(thumb_video)).stdout;assert json.loads(raw.strip().splitlines()[-1])['queued'] is False,'Existing cover was requeued'
- raw=docker('exec',web,'php','-r',repeat,str(uploaded)).stdout;assert json.loads(raw.strip().splitlines()[-1])['queued'] is False,'Audio artwork was requeued'
+ for attempt in range(60):
+  audio_thumb=json.loads(docker('exec',web,'php','-r',check,str(uploaded)).stdout.strip().splitlines()[-1])
+  if audio_thumb['exists']:break
+  time.sleep(0.5)
+ assert audio_thumb['jpeg'],'Audio without embedded art did not receive a waveform'
+ raw=docker('exec',web,'php','-r',repeat,str(uploaded)).stdout;assert json.loads(raw.strip().splitlines()[-1])['queued'] is False,'Existing audio artwork was requeued'
+ checks['automatic_audio_waveform_fallback']=True
+
+ phase='registered-album-and-embedded-audio-covers'
+ docker('exec',web,'ffmpeg','-hide_banner','-loglevel','error','-i','/tmp/dm-qa.mp3','-c','copy','-metadata','artist=Murphy Lee','-metadata','album=2nd Time Around','/tmp/dm-tagged.mp3')
+ docker('exec',web,'ffmpeg','-hide_banner','-loglevel','error','-f','lavfi','-i','color=blue:size=64x64','-frames:v','1','/tmp/dm-embedded.jpg')
+ docker('exec',web,'ffmpeg','-hide_banner','-loglevel','error','-i','/tmp/dm-qa.mp3','-i','/tmp/dm-embedded.jpg','-map','0:a','-map','1:v','-c','copy','-id3v2_version','3','-metadata:s:v','comment=Cover (front)','/tmp/dm-with-art.mp3')
+ for label,path in [('album','/tmp/dm-tagged.mp3'),('embedded','/tmp/dm-with-art.mp3')]:
+  size=int(docker('exec',web,'stat','-c','%s',path).stdout)
+  status,res=call('upload-init',a,{'name':label+'.mp3','size':size,'title':'Isolated '+label+' cover'});assert status==200
+  status,res=call('upload-chunk',a,form=['ticket='+res['ticket'],'start=0','total='+str(size),'file=@'+path+';type=audio/mpeg']);assert status==200 and res.get('complete')
+  fixture_id=res['videoId']
+  for attempt in range(60):
+   info=json.loads(docker('exec',web,'php','-r',check,str(fixture_id)).stdout.strip().splitlines()[-1])
+   if info['exists']:break
+   time.sleep(0.5)
+  report['audio_'+label+'_cover_dimensions']=[info['width'],info['height']]
+  assert info['jpeg'],label+' cover missing'
+  assert (info['width']==64 and info['height']==64) if label=='embedded' else (info['width']==info['height'] and info['width']<=720),label+' cover selection or sizing failed'
+ checks['registered_album_metadata_match_and_embedded_art']=True
+
+ phase='audio_batch_drains_beyond_eight'
+ batch=[]
+ for n in range(9):
+  filename='dm_audio_batch_'+uuid.uuid4().hex
+  sql("INSERT INTO videos(title,clean_title,filename,status,type,users_id,categories_id,duration,created,modified) SELECT 'Isolated batch audio','"+filename+"','"+filename+"','a','audio',users_id,categories_id,duration,NOW(),NOW() FROM videos WHERE id="+str(uploaded)+';')
+  batch.append(int(sql('SELECT MAX(id) FROM videos;')))
+ # Hold the single worker lock while queuing >8 jobs, then start only one drain.
+ guard=subprocess.Popen(['docker','exec',web,'php','-r',"$l=fopen('/var/www/tmp/divine-thumbnails/worker.lock','c');flock($l,LOCK_EX);echo \"locked\\n\";flush();for($i=0;$i<200&&!file_exists('/tmp/dm-release-lock');$i++){usleep(100000);}"],stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+ assert guard.stdout.readline().strip()=='locked'
+ prepare="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';AVideoPlugin::loadPlugin('DivineThumbnails');$input=json_decode(stream_get_contents(STDIN),true);$src=new Video('','',$input['source']);foreach($input['ids'] as $id){$v=new Video('','',$id);copy(Video::getPathToFile($src->getFilename().'.mp3'),Video::getPathToFile($v->getFilename().'.mp3',true));if(!DivineThumbnails::enqueue($id)){exit(4);}}"
+ docker('exec','-i',web,'php','-r',prepare,data=json.dumps({'source':uploaded,'ids':batch}))
+ docker('exec',web,'touch','/tmp/dm-release-lock');guard.communicate(timeout=20)
+ kick="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$p=AVideoPlugin::loadPlugin('DivineThumbnails');$p->executeEveryMinute();"
+ docker('exec',web,'php','-r',kick)
+ batch_check="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$n=0;foreach(json_decode(stream_get_contents(STDIN),true) as $id){$v=new Video('','',$id);if(is_file(Video::getPathToFile($v->getFilename().'.jpg'))){$n++;}}echo $n;"
+ for attempt in range(90):
+  generated=int(docker('exec','-i',web,'php','-r',batch_check,data=json.dumps(batch)).stdout.strip().splitlines()[-1])
+  if generated==9:break
+  time.sleep(0.5)
+ assert generated==9,'Worker did not drain audio batch beyond eight jobs'
+ checks['batch_larger_than_eight_drains_automatically']=True
  thumb=json.loads(docker('exec',web,'php','-r',check,str(thumb_video)).stdout.strip().splitlines()[-1]);assert thumb['sha']==original,'Existing cover changed'
  checks['automatic_thumbnail_on_native_video_upload']=True
  checks['existing_covers_and_audio_artwork_preserved']=True
