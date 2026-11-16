@@ -41,7 +41,9 @@ if __name__=='__main__':
   assert len(covers)==11,'Not all new audio covers were produced'
   after=base.state();assert all(after['files'].get(n)==h for n,h in before['files'].items()),'An existing media or artwork file changed'
   added=set(after['files'])-set(before['files']);assert all(any(pathlib.Path(n).name.startswith(v['filename']) for v in rows) and pathlib.Path(n).suffix in ['.jpg','.png','.webp'] for n in added),'Unexpected media added'
-  assert all(after[k]==before[k] for k in ['catalog','queue','permissions','uptimes']),'Catalog, queue, permissions or uptimes changed'
+  # Playback may legitimately update a row's modified timestamp during this operation.
+  core=lambda value:[json.loads(line)[:-1] for line in value.splitlines() if line]
+  assert core(after['catalog'])==core(before['catalog']) and all(after[k]==before[k] for k in ['queue','permissions','uptimes']),'Catalog content, queue, permissions or uptimes changed'
   assert all(sha(ROOT/n)==h for n,h in native.items() if not n.startswith('plugin/DivineThumbnails/'))
   assert {str(p.relative_to(target)):sha(p) for p in target.rglob('*') if p.is_file()}==expected
   (snapshot/'after-state.json').write_text(json.dumps(after))
@@ -49,7 +51,7 @@ if __name__=='__main__':
    tar.add(target,arcname='plugin-after');tar.add(snapshot/'after-state.json',arcname='after-state.json')
    for id,path in covers.items():tar.add(path,arcname='covers/'+str(id)+'.jpg')
   after_proof=backup.off_vm(snapshot/'after.tar.gz',snapshot.name)
-  report.update({'result':'pass','after_backup':after_proof,'plugin_version':'1.1','generated_cover_ids':sorted(covers),'existing_media_and_artwork_preserved':len(before['files']),'catalog_queue_permissions_uptimes_unchanged':True,'native_core_sources_unchanged':True,'encoder_queue_dispatched':False,'cover_hashes':{str(id):sha(path) for id,path in covers.items()}})
+  report.update({'result':'pass','after_backup':after_proof,'plugin_version':'1.1','generated_cover_ids':sorted(covers),'existing_media_and_artwork_preserved':len(before['files']),'catalog_content_queue_permissions_uptimes_unchanged':True,'native_core_sources_unchanged':True,'encoder_queue_dispatched':False,'cover_hashes':{str(id):sha(path) for id,path in covers.items()}})
  except Exception as e:
   if changed:
    current={str(p.relative_to(target)):sha(p) for p in target.rglob('*') if p.is_file()}
