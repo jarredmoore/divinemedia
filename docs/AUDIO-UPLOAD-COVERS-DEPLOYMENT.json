@@ -1,0 +1,47 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/audio-cover-upgrade-4cc94d09b447",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "5cb5544efadb2a57030184e9e1ab46aaa29938850028fcc169ff26d54024d937",
+    "bytes": 10584,
+    "roundtrip_verified": true
+  },
+  "after_backup": {
+    "name": "after.tar.gz",
+    "sha256": "8fd9328b9b5e736dd2eb2539486c6cfa8537061b0c3e978047e63faea46ecadb",
+    "bytes": 3035469,
+    "roundtrip_verified": true
+  },
+  "plugin_version": "1.1",
+  "generated_cover_ids": [
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
+  ],
+  "existing_media_and_artwork_preserved": 133,
+  "catalog_content_queue_permissions_uptimes_unchanged": true,
+  "native_core_sources_unchanged": true,
+  "encoder_queue_dispatched": false,
+  "cover_hashes": {
+    "20": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "21": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "22": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "23": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "24": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "25": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "26": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "27": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "28": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "29": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+    "30": "bafc143dba15928d080cc92c2d4bde0622da8120b7c61ff79f3c4db4ed887cec"
+  }
+}

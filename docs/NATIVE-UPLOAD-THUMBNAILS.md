@@ -27,3 +27,7 @@ Version 1.1 recognizes exact normalized artist+album metadata against album-cove
 The worker now schedules another bounded batch after releasing its lock when pending jobs remain, so more than eight uploads drain without waiting for Scheduler's next minute. Existing covers remain untouched. The isolated regression checks native video uploads, waveform fallback, tagged-album selection, embedded art, preservation, and a nine-job audio batch with one initial kick.
 
 The upgrade is leased against the installed 1.0 plugin hashes and native sources, with private off-VM before/after snapshots. It changes only the thumbnail hook/configuration and missing covers for the reviewed audio IDs; audio bytes, video bytes, publishing states, account permissions, the Encoder queue and container uptimes are verified unchanged.
+
+### Verified audio rollout
+
+Plugin 1.1 is active. Public HTTP and hash checks passed for all eleven repaired covers: IDs 20–29 use 720px album artwork (106,249 bytes each), and ID 30 uses a waveform cover (26,256 bytes). All 133 existing media/artwork files were preserved. Catalog content, permissions, Encoder queue, container uptimes and native core sources were unchanged. Private upgrade snapshots were verified off VM; deployment state is /srv/divinemedia/backups/audio-cover-upgrade-4cc94d09b447. No Netlify release or production Git merge was needed. The earlier 1.0 deployment section is historical.
