@@ -116,3 +116,11 @@ Descriptions and guide links below come from AVideo's documentation index, cross
 | YouTubeAPI | 1.0 | Shows YouTube search results on your home page (does not upload; see SocialMediaPublisher) | [YouTubeAPI](https://github.com/WWBN/AVideo/wiki/YouTubeAPI-Plugin) |
 | YPTSocket | 2.3 | Real-time connection (WebSocket) used by chat, notifications and live features | [YPTSocket](https://github.com/WWBN/AVideo/wiki/YPTSocket-Plugin) |
 | YPTWallet | 6.3 | User wallet: add funds, pay, donate | [YPTWallet](https://github.com/WWBN/AVideo/wiki/YPTWallet-Usage) |
+
+## Review preview and verification
+
+[Code Black player preview](https://6afb700cb12830e37268ab52--mediaproduction.netlify.app/?theme=code-black) uses source `4f12d1a4b81da2e206999e3745fd583f11f74c93`. It has not been promoted to production.
+
+The read-only player-preferences API bridge is deployed. Its guarded deployment preserved all 166 existing media/artwork files and changed no plugin settings, catalog content, permissions, or Encoder jobs. See [deployment evidence](PLAYER-PREFERENCES-API-DEPLOYMENT.json).
+
+Verification passed: 22 frontend tests, 15 backend tests, production build, restored native staging rehearsal, isolated browser interactions, and read-only deployed preview checks at mobile widths 320px and 390px. Both source GitHub build workflows passed. See [preview evidence](PLUGIN-PLAYER-UI-PREVIEW-VERIFICATION.json). Browser mini-player availability remains device-dependent. The YouTube import/runtime and bot-verification error is a separate unresolved Encoder issue.

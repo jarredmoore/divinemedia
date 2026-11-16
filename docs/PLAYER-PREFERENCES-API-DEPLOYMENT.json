@@ -1,0 +1,39 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/player-preferences-a68d0b4bba19",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "54706f7bb6b243539a77bf774644917c768d3b4e3af7bf9e506d9be22be3e541",
+    "bytes": 12791,
+    "roundtrip_verified": true
+  },
+  "after_backup": {
+    "name": "after.tar.gz",
+    "sha256": "737db3d2b742555fd1b9b702d22baf397728349146216db00b053ade37e200b9",
+    "bytes": 13067,
+    "roundtrip_verified": true
+  },
+  "api_files": [
+    "native.php",
+    "read.php"
+  ],
+  "public_projection": {
+    "status": 200,
+    "player": {
+      "seek": {
+        "enabled": true,
+        "back": 10,
+        "forward": 30,
+        "hideOnMobile": true
+      },
+      "hotkeys": true,
+      "theater": true,
+      "miniPlayer": true
+    }
+  },
+  "existing_media_artwork_preserved": 166,
+  "catalog_content_queue_permissions_uptimes_unchanged": true,
+  "native_sources_unchanged": true,
+  "plugin_settings_written": false,
+  "encoder_jobs_started": false
+}
