@@ -1,0 +1,50 @@
+{
+  "source": "off-VM downloaded copy",
+  "source_hashes_verified": true,
+  "media_count": 52,
+  "databases": [
+    {
+      "label": "avideo",
+      "restored_tables": 27,
+      "table_checks": "pass"
+    },
+    {
+      "label": "encoder",
+      "restored_tables": 7,
+      "table_checks": "pass"
+    }
+  ],
+  "recovery_images_verified": 5,
+  "restored_media_hashes_verified": 52,
+  "native_source_manifest_sha256": "2956e380a85df0dfd4b4b92df072d7636cb675639ad4eaccad66a6143e929361",
+  "restored_video_rows": 16,
+  "thumbnail_source_hashes": {
+    "DivineThumbnails.php": "33e7502dc781993f6ae3981e3ab4c451b57acbd67aa510c1babb31a8df9c961d",
+    "clear-cache.php": "e71760782bf6cecedffd35f9be11690fd71731ec2d4b01866ee1bc3a2bfeab5c",
+    "worker.php": "0cef2225d04c96d6a939452a9bcde3430642322eee869543088d7cbb9dfc1d2d"
+  },
+  "apache_config": "pass",
+  "application_runtime_db_connections": "pass",
+  "thumbnail_generated": true,
+  "checks": {
+    "anonymous_authentication_and_csrf_guards": true,
+    "native_login_and_session_rotation": true,
+    "native_comments_reactions_and_comment_ownership": true,
+    "playlist_crud_library_and_cross_user_denials": true,
+    "native_discovery_and_creator_permission_guards": true,
+    "new_isolated_upload_reuses_native_handler": true,
+    "native_encoder_queue_and_cross_user_guards": true,
+    "native_recovery_verification_and_one_use_tokens": true,
+    "automatic_thumbnail_on_native_video_upload": true,
+    "existing_covers_and_audio_artwork_preserved": true,
+    "logout_ends_native_session": true
+  },
+  "original_restored_media_preserved": 52,
+  "public_accounts_or_content_changed": false,
+  "native_startup_not_executed": true,
+  "credentials_in_report": false,
+  "result": "pass",
+  "scratch_network_removed": true,
+  "scratch_containers_removed": true,
+  "scratch_files_removed": true
+}

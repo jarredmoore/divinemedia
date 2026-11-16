@@ -1,0 +1,80 @@
+ phase='start-isolated-live-server'
+ live=prefix+'-live';containers.append(live)
+ live_record=json.loads(docker('inspect','app-live-1').stdout)[0]
+ nginx_bin=docker('exec','app-live-1','sh','-c',"for p in /proc/[0-9]*/comm; do if [ \"$(cat $p)\" = nginx ]; then readlink \"${p%/comm}/exe\"; break; fi; done").stdout.strip()
+ assert nginx_bin.startswith('/'),'Cannot identify active nginx executable'
+ report['isolated_nginx_executable']=nginx_bin
+ nginx=docker('exec','app-live-1','cat','/usr/local/nginx/conf/nginx.conf').stdout
+ report['nginx_automatic_exec_directives']=re.findall(r'^\s*exec\w*\s+[^;]+;',nginx,re.M)
+ nginx_path=pathlib.Path(scratch)/'nginx.conf';nginx_path.write_text(nginx)
+ live_ssl=pathlib.Path(scratch)/'live-ssl';docker('cp','app-live-1:/etc/apache2/ssl',str(live_ssl))
+ docker('run','-d','--name',live,'--network',network,'--network-alias','live','--memory','512m','--memory-swap','512m','--cpus','0.5','--pids-limit','128','--entrypoint','/bin/sh','--mount','type=bind,src='+str(live_ssl)+',dst=/etc/apache2/ssl,readonly','--mount','type=bind,src='+str(hls)+',dst=/HLS','--mount','type=bind,src='+str(nginx_path)+',dst=/usr/local/nginx/conf/nginx.conf,readonly',live_record['Image'],'-c',nginx_bin+' -c /usr/local/nginx/conf/nginx.conf -g \"daemon off;\"')
+ time.sleep(2)
+ docker('exec',live,nginx_bin,'-t','-c','/usr/local/nginx/conf/nginx.conf')
+ assert docker('inspect','--format','{{.State.Running}}',live).stdout.strip()=='true','Isolated nginx startup failed'
+ def get(path,referer=False):
+  args=['exec',web,'curl','--user-agent','Mozilla/5.0 DivineMediaVerification','--max-time','30','--noproxy','media.divinemedia.us','--resolve','media.divinemedia.us:443:127.0.0.1','-sS','-D','/tmp/native-headers','-o','/tmp/native-body','-w','%{http_code}']
+  if referer:args+=['-e','https://media.divinemedia.us/']
+  status=docker(*(args+['https://media.divinemedia.us'+path])).stdout.strip()
+  body=docker('exec',web,'cat','/tmp/native-body').stdout
+  return status,body
+ phase='native-live-html'
+ report['html_routes']={}
+ for path in ['/live?theme=code-black','/plugin/Live/?theme=code-black','/watch-later?theme=code-black','/favorite?theme=code-black','/view/?theme=code-black']:
+  status,body=get(path)
+  assert status in ['200','302'],path+' HTTP '+status
+  if status=='200':assert '/divine-shell/shell.css' in body and not re.search('Fatal error|Parse error',body),path+' missing branded native rendering'
+  report['html_routes'][path]=status
+ phase='native-cache-activation'
+ # Native UI needs to discover enabled rows through a real HTTP request, not just SQL.
+ status,body=get('/view/?theme=code-black')
+ report['live_footer_discovered']='Live Footer Begin' in body
+ report['playlists_footer_discovered']='PlayLists Footer Begin' in body
+ # Add one public playlist only to the disposable restored database.
+ phase='native-playlist-playback'
+ plid=sql("INSERT INTO playlists (name,users_id,status,created,modified) VALUES ('Divine isolated QA',1,'public',NOW(),NOW()); SELECT LAST_INSERT_ID();").strip()
+ sql('INSERT INTO playlists_has_videos (playlists_id,videos_id) VALUES ('+plid+',1);')
+ status,body=get('/play/'+plid+'?theme=code-black')
+ assert status=='200' and '/divine-shell/shell.css' in body and not re.search('Fatal error|Parse error',body),'Native playlist player failed'
+ report['native_playlist_player']=True
+ phase='isolated-rtmp-auth-and-hls'
+ # Synthetic stream credentials are disposable and exist only in the restored database.
+ key='dmqa'+uuid.uuid4().hex;password=uuid.uuid4().hex
+ sql('UPDATE users SET password='+native.literal(password)+' WHERE id=1;')
+ cat=sql('SELECT id FROM categories ORDER BY id LIMIT 1;')
+ sql('INSERT INTO live_transmitions (title,public,saveTransmition,`key`,users_id,categories_id,password,created,modified) VALUES (\'Divine isolated QA\',1,0,'+native.literal(key)+',1,'+cat+",'',NOW(),NOW());")
+ ffmpeg=docker('exec',web,'sh','-c','command -v ffmpeg').stdout.strip();assert ffmpeg,'No FFmpeg for isolated synthetic ingest test'
+ def start_stream(name):
+  return subprocess.Popen(['docker','exec',web,ffmpeg,'-hide_banner','-loglevel','error','-re','-f','lavfi','-i','testsrc2=size=320x180:rate=12','-f','lavfi','-i','sine=frequency=440:sample_rate=44100','-t','24','-c:v','libx264','-preset','ultrafast','-tune','zerolatency','-g','24','-pix_fmt','yuv420p','-c:a','aac','-b:a','64k','-f','flv','rtmp://live/live/'+name],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+ bad=start_stream('invalid-'+uuid.uuid4().hex)
+ try:bad.communicate(timeout=10)
+ except subprocess.TimeoutExpired:bad.kill();bad.communicate();raise AssertionError('Invalid RTMP publish was not rejected')
+ assert bad.returncode!=0,'Invalid RTMP publish accepted'
+ good=start_stream(key+'?p='+password)
+ try:
+  got=False
+  for attempt in range(18):
+   time.sleep(1)
+   status,body=get('/hls/live/'+key+'/index.m3u8',True)
+   if status=='200' and '#EXTM3U' in body:got=True;break
+  assert got,'Authorized RTMP did not produce playable HLS'
+  segment=next((l.strip() for l in body.splitlines() if l.strip().endswith('.ts')),None);assert segment,'No HLS transport segment'
+  # curl saves binary data privately; report only HTTP status and byte count.
+  status=docker('exec',web,'curl','--max-time','15','--noproxy','media.divinemedia.us','--resolve','media.divinemedia.us:443:127.0.0.1','-sS','-e','https://media.divinemedia.us/','-o','/tmp/live-qa-segment','-w','%{http_code} %{size_download}','https://media.divinemedia.us/hls/live/'+key+'/'+segment).stdout.split()
+  assert status[0]=='200' and int(status[1])>188,'HLS segment delivery failed'
+  report['authorized_rtmp_to_https_hls']=True;report['invalid_rtmp_rejected']=True
+  report['hls_segment_bytes']=int(status[1])
+ finally:
+  try:good_output,good_error=good.communicate(timeout=15)
+  except subprocess.TimeoutExpired:good.kill();good_output,good_error=good.communicate()
+  diagnostic={'nginx_binary':nginx_bin,'last_hls_status':status,'ffmpeg':good_error.decode(errors='replace').replace(key,'[test-key]').replace(password,'[test-password]')[-900:]}
+  for label,command in [('nginx',['exec',live,'sh','-c','tail -c 5000 /usr/local/nginx/logs/error.log']),('avideo',['exec',web,'sh','-c','tail -c 12000 /var/www/html/AVideo/videos/avideo.log'])]:
+   raw=docker(*command,check=False).stdout
+   pathlib.Path(bundle+'/'+label+'-stage-private.log').write_text(raw)
+   lines=[l for l in raw.splitlines() if re.search('Live publish|NGINX ON Publish|notify:|Unknown column|Fatal error|Connection refused',l,re.I)]
+   diagnostic[label]='\n'.join(lines[-8:]).replace(key,'[test-key]').replace(password,'[test-password]')[-1800:]
+  pathlib.Path(bundle+'/diagnostic.json').write_text(json.dumps(diagnostic));report['stream_diagnostic']=diagnostic
+ assert not list(hls.rglob('*.flv')),'Unexpected automatic live recording'
+ report['automatic_recording_off']=True
+ report['playlist_rebroadcast_off']=not proposal['PlayLists']['options']['showPlayLiveButton']
+ report['native_startup_not_executed']=True

@@ -1,0 +1,309 @@
+{
+  "active": [
+    {
+      "name": "AD_Overlay",
+      "version": "2.1"
+    },
+    {
+      "name": "AD_Server",
+      "version": "5.0"
+    },
+    {
+      "name": "AD_Server_Location",
+      "version": "1.0"
+    },
+    {
+      "name": "AdBlockerDetector",
+      "version": "1.0"
+    },
+    {
+      "name": "ADs",
+      "version": "1.1"
+    },
+    {
+      "name": "AI",
+      "version": "6.1"
+    },
+    {
+      "name": "API",
+      "version": "1.0"
+    },
+    {
+      "name": "Articles",
+      "version": "1.0"
+    },
+    {
+      "name": "Audit",
+      "version": "2.0"
+    },
+    {
+      "name": "AuthorizeNet",
+      "version": "1.2"
+    },
+    {
+      "name": "AutoPostOnSocialMedia",
+      "version": "1.0"
+    },
+    {
+      "name": "BitLy",
+      "version": "1.0"
+    },
+    {
+      "name": "Bookmark",
+      "version": "1.0"
+    },
+    {
+      "name": "BTCPayments",
+      "version": "1.1"
+    },
+    {
+      "name": "BulkEmbed",
+      "version": "1.2"
+    },
+    {
+      "name": "Cache",
+      "version": "10.0"
+    },
+    {
+      "name": "CDN",
+      "version": "2.0"
+    },
+    {
+      "name": "CloneSite",
+      "version": "1.1"
+    },
+    {
+      "name": "CookieAlert",
+      "version": "1.0"
+    },
+    {
+      "name": "CustomizeAdvanced",
+      "version": "1.0"
+    },
+    {
+      "name": "CustomizeUser",
+      "version": "4.1"
+    },
+    {
+      "name": "DiscordNotify",
+      "version": "1.2"
+    },
+    {
+      "name": "DivineThumbnails",
+      "version": "1.1"
+    },
+    {
+      "name": "FirstPageChannelList",
+      "version": "1.0"
+    },
+    {
+      "name": "FloatVideo",
+      "version": "1.0"
+    },
+    {
+      "name": "Gallery",
+      "version": "1.0"
+    },
+    {
+      "name": "Hotkeys",
+      "version": "1.1"
+    },
+    {
+      "name": "ImageGallery",
+      "version": "1.0"
+    },
+    {
+      "name": "JustWatch",
+      "version": "1.0"
+    },
+    {
+      "name": "Layout",
+      "version": "1.1"
+    },
+    {
+      "name": "Live",
+      "version": "15.3"
+    },
+    {
+      "name": "LiveLinks",
+      "version": "4.4"
+    },
+    {
+      "name": "LoginApple",
+      "version": "1.0"
+    },
+    {
+      "name": "LoginControl",
+      "version": "3.0"
+    },
+    {
+      "name": "LoginFacebook",
+      "version": "1.0"
+    },
+    {
+      "name": "LoginGoogle",
+      "version": "1.0"
+    },
+    {
+      "name": "LoginLinkedin",
+      "version": "1.0"
+    },
+    {
+      "name": "LoginTwitter",
+      "version": "1.0"
+    },
+    {
+      "name": "LoginWordPress",
+      "version": "1.0"
+    },
+    {
+      "name": "LoginYahoo",
+      "version": "1.0"
+    },
+    {
+      "name": "Meet",
+      "version": "3.0"
+    },
+    {
+      "name": "MobileManager",
+      "version": "1.5"
+    },
+    {
+      "name": "MobileYPT",
+      "version": "1.0"
+    },
+    {
+      "name": "MonetizeUsers",
+      "version": "3.2"
+    },
+    {
+      "name": "NextButton",
+      "version": "1.0"
+    },
+    {
+      "name": "Permissions",
+      "version": "1.0"
+    },
+    {
+      "name": "PlayerSkins",
+      "version": "1.1"
+    },
+    {
+      "name": "PlayLists",
+      "version": "3.0"
+    },
+    {
+      "name": "PredefinedCategory",
+      "version": "1.0"
+    },
+    {
+      "name": "RazorPayYPT",
+      "version": "1.0"
+    },
+    {
+      "name": "ReportVideo",
+      "version": "2.3"
+    },
+    {
+      "name": "Scheduler",
+      "version": "5.4"
+    },
+    {
+      "name": "SeekButton",
+      "version": "1.1"
+    },
+    {
+      "name": "Shorts",
+      "version": "1.0"
+    },
+    {
+      "name": "SlackBot",
+      "version": "1.0"
+    },
+    {
+      "name": "SlackNotify",
+      "version": "1.0"
+    },
+    {
+      "name": "SocialMediaPublisher",
+      "version": "1.0"
+    },
+    {
+      "name": "StripeYPT",
+      "version": "2.5"
+    },
+    {
+      "name": "TheaterButton",
+      "version": "1.1"
+    },
+    {
+      "name": "TopMenu",
+      "version": "2.2"
+    },
+    {
+      "name": "User_Location",
+      "version": "1.0"
+    },
+    {
+      "name": "UserConnections",
+      "version": "1.0"
+    },
+    {
+      "name": "UserNotifications",
+      "version": "2.0"
+    },
+    {
+      "name": "VideoLandscapeFullscreen",
+      "version": "1.0"
+    },
+    {
+      "name": "VideoLogoOverlay",
+      "version": "2.2"
+    },
+    {
+      "name": "VideosStatistics",
+      "version": "1.0"
+    },
+    {
+      "name": "VideoTags",
+      "version": "3.0"
+    },
+    {
+      "name": "VimeoAPI",
+      "version": "1.0"
+    },
+    {
+      "name": "VR360",
+      "version": "1.0"
+    },
+    {
+      "name": "WebRTC",
+      "version": "1.1"
+    },
+    {
+      "name": "WWBNIndex",
+      "version": "1.0"
+    },
+    {
+      "name": "YouPHPFlix2",
+      "version": "1.0"
+    },
+    {
+      "name": "YouTubeAPI",
+      "version": "1.0"
+    },
+    {
+      "name": "YPTSocket",
+      "version": "2.3"
+    },
+    {
+      "name": "YPTWallet",
+      "version": "6.3"
+    }
+  ],
+  "inactive": [],
+  "configuration_keys_saved": true,
+  "configuration_values_exposed": false,
+  "read_only": true,
+  "settings_changed": false
+}

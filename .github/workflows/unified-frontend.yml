@@ -1,0 +1,27 @@
+name: Unified frontend boundary
+on:
+  pull_request:
+    paths:
+      - 'backend/frontend-api/**'
+      - 'ops/divinemedia/*unified*'
+      - 'frontend/netlify/functions/platform.mjs'
+      - 'frontend/tests/platform.test.mjs'
+      - '.github/workflows/unified-frontend.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: find backend/frontend-api -name '*.php' -print0 | xargs -0 -n1 php -l
+      - run: php ops/divinemedia/test-unified-routes.php backend/frontend-api
+      - run: python ops/divinemedia/prepare-unified-frontend-stage.py --output /tmp/unified-build
+      - run: node --test frontend/tests/platform.test.mjs
+      - run: git diff --check

@@ -1,0 +1,198 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/",
+    "title": [
+      "Divine Media \u2014 Independent voices. Shared experiences."
+    ],
+    "custom_assets": true,
+    "old_domain_occurrences": 0,
+    "bytes": 4168
+  },
+  {
+    "path": "/view/",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/view/",
+    "title": [
+      "Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 385647
+  },
+  {
+    "path": "/user",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/user",
+    "title": [
+      "My Account &middot; Divine Media"
+    ],
+    "custom_assets": true,
+    "old_domain_occurrences": 0,
+    "bytes": 101519
+  },
+  {
+    "path": "/signUp",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/signUp",
+    "title": [
+      "Sign Up &middot; Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 96024
+  },
+  {
+    "path": "/recoverPass",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/recoverPass",
+    "title": [],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 125
+  },
+  {
+    "path": "/categories",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/?error=You%20can%20not%20manage%20categories",
+    "title": [
+      "Error &middot; Divine Media &middot;  &middot; Error &middot; Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 386522
+  },
+  {
+    "path": "/cat/music",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/cat/music",
+    "title": [
+      "Video Not Available &middot; Divine Media &middot;  &middot; music &middot; Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 83784
+  },
+  {
+    "path": "/view/channels.php",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/view/channels.php",
+    "title": [
+      "Channels &middot; Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 106649
+  },
+  {
+    "path": "/mvideos",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/user?redirectUri=https://media.divinemedia.us/mvideos",
+    "title": [
+      "My Account &middot; Divine Media"
+    ],
+    "custom_assets": true,
+    "old_domain_occurrences": 0,
+    "bytes": 105987
+  },
+  {
+    "path": "/subscribes",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/?error=You%20can%20not%20manage%20subscribes",
+    "title": [
+      "Error &middot; Divine Media &middot;  &middot; Error &middot; Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 386176
+  },
+  {
+    "path": "/myComments",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/user?redirectUri=https%3A%2F%2Fmedia.divinemedia.us%2Fview%2FmyComments.php&comebackhere=1",
+    "title": [
+      "My Account &middot; Divine Media"
+    ],
+    "custom_assets": true,
+    "old_domain_occurrences": 0,
+    "bytes": 99726
+  },
+  {
+    "path": "/upload",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/user",
+    "title": [
+      "My Account &middot; Divine Media"
+    ],
+    "custom_assets": true,
+    "old_domain_occurrences": 0,
+    "bytes": 101817
+  },
+  {
+    "path": "/Encoder/",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/Encoder/",
+    "title": [
+      "Encoder"
+    ],
+    "custom_assets": true,
+    "old_domain_occurrences": 0,
+    "bytes": 21618
+  },
+  {
+    "path": "/Encoder/view/index.php",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/Encoder/view/index.php",
+    "title": [
+      "Encoder"
+    ],
+    "custom_assets": true,
+    "old_domain_occurrences": 0,
+    "bytes": 21618
+  },
+  {
+    "path": "/plugin/UserNotifications/embed.php",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/plugin/UserNotifications/embed.php",
+    "title": [
+      "Notification &middot; Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 43631
+  },
+  {
+    "path": "/videoEmbed/1",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/videoEmbed/1",
+    "title": [
+      "Divine Creative Group _ New Media \u252c\u2556 Art \u252c\u2556 Entertainment &middot; Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 63891
+  },
+  {
+    "path": "/channel/admin",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/channel/admin",
+    "title": [
+      "Admin &middot; Channel &middot;  &middot; admin &middot; Divine Media"
+    ],
+    "custom_assets": false,
+    "old_domain_occurrences": 0,
+    "bytes": 346933
+  },
+  {
+    "path": "/admin/",
+    "status": 200,
+    "final_url": "https://media.divinemedia.us/",
+    "title": [
+      "Divine Media \u2014 Independent voices. Shared experiences."
+    ],
+    "custom_assets": true,
+    "old_domain_occurrences": 0,
+    "bytes": 4168
+  }
+]

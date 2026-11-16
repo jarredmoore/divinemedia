@@ -1,0 +1,63 @@
+{
+  "source": "off-VM downloaded copy",
+  "source_hashes_verified": true,
+  "media_count": 52,
+  "databases": [
+    {
+      "label": "avideo",
+      "restored_tables": 27,
+      "table_checks": "pass"
+    },
+    {
+      "label": "encoder",
+      "restored_tables": 7,
+      "table_checks": "pass"
+    }
+  ],
+  "recovery_images_verified": 5,
+  "restored_media_hashes_verified": 52,
+  "native_source_manifest_sha256": "a57a38e989b8991ed1a4288f2aa12b40568ff3819ce95a0e0d2f2eac9455d28f",
+  "restored_video_rows": 16,
+  "thumbnail_source_hashes": {
+    "DivineThumbnails.php": "1bb35f728ea31a7a9d68815ad925a2e81b776d1e228ffd4d5489f22db1dbbf06",
+    "clear-cache.php": "16ff2ceabbec073d21650c4327e77889fb5ffeb03be24260d19345637cc1a02e",
+    "album-covers.json": "c6d4c6a24560bf88765f52b5e50e3be1eb9d45c2b388e910b64767518aa51931",
+    "worker.php": "998f691f9e96939f4ed9e15cbceb28a8a7143dda1be86c1574188a03844e5162",
+    "covers/2ndTimeAround.jpg": "2a8f63c7a2cd99b78032166e71fb3e04afb730e067fd91c7bd75d7f886c4786a"
+  },
+  "apache_config": "pass",
+  "application_runtime_db_connections": "pass",
+  "thumbnail_generated": true,
+  "audio_album_cover_dimensions": [
+    720,
+    720
+  ],
+  "audio_embedded_cover_dimensions": [
+    64,
+    64
+  ],
+  "checks": {
+    "anonymous_authentication_and_csrf_guards": true,
+    "native_login_and_session_rotation": true,
+    "native_comments_reactions_and_comment_ownership": true,
+    "playlist_crud_library_and_cross_user_denials": true,
+    "native_discovery_and_creator_permission_guards": true,
+    "new_isolated_upload_reuses_native_handler": true,
+    "native_encoder_queue_and_cross_user_guards": true,
+    "native_recovery_verification_and_one_use_tokens": true,
+    "automatic_audio_waveform_fallback": true,
+    "registered_album_metadata_match_and_embedded_art": true,
+    "batch_larger_than_eight_drains_automatically": true,
+    "automatic_thumbnail_on_native_video_upload": true,
+    "existing_covers_and_audio_artwork_preserved": true,
+    "logout_ends_native_session": true
+  },
+  "original_restored_media_preserved": 52,
+  "public_accounts_or_content_changed": false,
+  "native_startup_not_executed": true,
+  "credentials_in_report": false,
+  "result": "pass",
+  "scratch_network_removed": true,
+  "scratch_containers_removed": true,
+  "scratch_files_removed": true
+}

@@ -1,0 +1,26 @@
+name: Branded route shell checks
+on:
+  pull_request:
+    paths:
+      - 'backend/divine-shell/**'
+      - 'ops/divinemedia/*route*'
+      - 'tests/backend/test_route_shell.py'
+      - '.github/workflows/route-shell.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: python -m unittest discover -s tests/backend -v
+      - run: find backend/divine-shell -name '*.php' -print0 | xargs -0 -n1 php -l
+      - run: node --check backend/divine-shell/shell.js
+      - run: python -c "import ast,pathlib; [ast.parse(p.read_text()) for p in pathlib.Path('ops/divinemedia').glob('*route*.py')]"
+      - run: git diff --check

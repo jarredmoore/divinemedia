@@ -1,0 +1,37 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/route-shell-0ac6faa36d",
+  "before_backup": {
+    "name": "route-before.tar.gz",
+    "sha256": "18764b1c7932e46af32ebc786531e2d7f90c4adadaa22fde8aafaefe5e9eb945",
+    "bytes": 16968,
+    "roundtrip_verified": true
+  },
+  "no_container_restart": true,
+  "no_database_settings_changed": true,
+  "after_backup": {
+    "name": "route-after.tar.gz",
+    "sha256": "d9a03450219af00215cd3fe8c0cb8beb17eece15a877c433f611f7541d935728",
+    "bytes": 17557,
+    "roundtrip_verified": true
+  },
+  "rollback_snapshot": "/srv/divinemedia/backups/route-shell-0ac6faa36d/routes-20261108T222817Z-4e6833",
+  "html_routes_verified": [
+    "/",
+    "/?theme=code-black",
+    "/view/?theme=code-black",
+    "/user?theme=code-black",
+    "/signUp?theme=code-black",
+    "/cat/default?theme=code-black",
+    "/view/channels.php?theme=code-black",
+    "/channel/admin?theme=code-black",
+    "/Encoder/?theme=code-black",
+    "/plugin/UserNotifications/embed.php?theme=code-black",
+    "/videoEmbed/1?theme=code-black"
+  ],
+  "media_hashes_preserved": 54,
+  "catalog_and_encoder_queue_unchanged": true,
+  "protected_native_files_unchanged": 11,
+  "all_container_uptimes_unchanged": true,
+  "native_startup_not_run": true
+}

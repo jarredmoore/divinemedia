@@ -91,7 +91,7 @@ See the [AVideo administrator manual](https://github.com/WWBN/AVideo/wiki/Admin-
 
 | Version / milestone | Status and scope |
 | --- | --- |
-| **3.3 — In development** | Branded entrance, matching login, shared creator workspace, audio discovery/player improvements, and the `divinemedia.us` domain structure are deployed from feature branches. Production-branch promotion remains a separate approval step; this is not a completed 3.3 release. |
+| **3.3 — Viewer foundation released** | Canonical domains, audio/player fixes, branded media entrance and creator workspace, plus selectable Default and Code Black viewing themes. Production promotion was approved and completed through PR #11. Broader native account/plugin integration continues separately in PR #12. |
 | **3.1 — Development baseline, November 1, 2026** | Established `dev/divine-media-3.1` from the existing Divine Media frontend work. Upload, thumbnail display, and playback were confirmed working as the baseline for the Watch redesign. |
 | **2.x — Earlier frontend foundation** | Existing Watch development on `divine-media-2`, carried forward into the 3.1 integration branch. |
 
@@ -103,6 +103,9 @@ Current work and implementation details:
 - [Branded entrance and login — PR #5](https://github.com/jarredmoore/divinemedia/pull/5)
 - [Creator workspace — PR #6](https://github.com/jarredmoore/divinemedia/pull/6)
 - [Canonical domains and integrated 3.3 foundation — PR #8](https://github.com/jarredmoore/divinemedia/pull/8)
+- [Code Black viewing theme — PR #10](https://github.com/jarredmoore/divinemedia/pull/10)
+- [Approved production release — PR #11](https://github.com/jarredmoore/divinemedia/pull/11)
+- [Native feature activation and free/paid plugin audit — PR #12](https://github.com/jarredmoore/divinemedia/pull/12)
 
 Project references on the integration branch: [Project charter](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/PROJECT.md), [experience direction](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/EXPERIENCE_DIRECTION.md), and [changelog](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/CHANGELOG.md). These documents describe their recorded baseline; the linked pull requests contain subsequent work.
 

@@ -1,0 +1,44 @@
+{
+  "source": "off-VM downloaded copy",
+  "source_hashes_verified": true,
+  "media_count": 52,
+  "recovery_images_verified": 5,
+  "restored_media_hashes_verified": 52,
+  "restored_video_rows": 16,
+  "apache_config": "pass",
+  "application_runtime_db_connections": "pass",
+  "isolated_nginx_executable": "/usr/local/nginx/sbin/nginx",
+  "nginx_automatic_exec_directives": [
+    "\n                        exec ffmpeg -i rtmp://localhost/live/$name -vn -c:a aac -b:a 64k -ar 44100 -ac 2 -f flv rtmp://localhost/audio/${name};"
+  ],
+  "html_routes": {
+    "/live?theme=code-black": "200",
+    "/plugin/Live/?theme=code-black": "302",
+    "/watch-later?theme=code-black": "302",
+    "/favorite?theme=code-black": "302",
+    "/view/?theme=code-black": "200"
+  },
+  "live_footer_discovered": true,
+  "playlists_footer_discovered": true,
+  "native_playlist_player": true,
+  "authorized_rtmp_to_https_hls": true,
+  "invalid_rtmp_rejected": true,
+  "hls_segment_bytes": 244224,
+  "stream_diagnostic": {
+    "nginx_binary": "/usr/local/nginx/sbin/nginx",
+    "last_hls_status": [
+      "200",
+      "244224"
+    ],
+    "ffmpeg": "",
+    "nginx": "",
+    "avideo": ""
+  },
+  "automatic_recording_off": true,
+  "playlist_rebroadcast_off": true,
+  "native_startup_not_executed": true,
+  "result": "pass",
+  "scratch_network_removed": true,
+  "scratch_containers_removed": true,
+  "scratch_files_removed": true
+}

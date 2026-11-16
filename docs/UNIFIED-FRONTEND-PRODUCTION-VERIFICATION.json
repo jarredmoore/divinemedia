@@ -1,0 +1,243 @@
+{
+  "result": "pass",
+  "preview": "https://divinemedia.us",
+  "transport": "TLS-verified curl responses in Chromium; no certificate bypass",
+  "read_only": true,
+  "real_accounts_or_content_mutated": false,
+  "frontend_video_element": true,
+  "native_html_iframes": false,
+  "backend_navigation_links": false,
+  "httpOnly_secure_frontend_session": true,
+  "creator_routes_stay_on_frontend": true,
+  "route_checks": [
+    {
+      "width": 390,
+      "route": "/creator/upload",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/creator/encoding",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/creator/live",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/library/playlists",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/categories",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/category/default",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/live",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/creator/upload",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/creator/encoding",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/creator/live",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/library/playlists",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/categories",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/category/default",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/live",
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "video",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "categories",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "categories",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    }
+  ],
+  "published_deploy_id": "6af238ccf0c731f869f5c1c9",
+  "source_commit": "837ea830c5dc378e01b08497507f1261a993edf9",
+  "api_smoke": {
+    "session": {
+      "status": 200,
+      "items": 0
+    },
+    "catalog": {
+      "status": 200,
+      "items": 18
+    },
+    "categories": {
+      "status": 200,
+      "items": 1
+    },
+    "live": {
+      "status": 200,
+      "items": 0
+    }
+  }
+}

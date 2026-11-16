@@ -1,0 +1,284 @@
+{
+  "result": "pass",
+  "preview": "https://6af2333621fcf813417c819a--mediaproduction.netlify.app",
+  "transport": "TLS-verified curl responses in Chromium; no certificate bypass",
+  "read_only": true,
+  "real_accounts_or_content_mutated": false,
+  "frontend_video_element": true,
+  "native_html_iframes": false,
+  "backend_navigation_links": false,
+  "httpOnly_secure_frontend_session": true,
+  "creator_routes_stay_on_frontend": true,
+  "route_checks": [
+    {
+      "width": 390,
+      "route": "/creator/upload",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/creator/encoding",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/creator/live",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/library/playlists",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/categories",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/category/default",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/live",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/creator/upload",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/creator/encoding",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/creator/live",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/library/playlists",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/categories",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/category/default",
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "route": "/live",
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "video",
+      "status": 200
+    },
+    {
+      "action": "video",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "categories",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "categories",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "catalog",
+      "status": 200
+    },
+    {
+      "action": "session",
+      "status": 200
+    }
+  ],
+  "source_commit": "026b334dfb23320f255e0eb44cbc73304cd7a202",
+  "deploy_id": "6af2333621fcf813417c819a",
+  "boundary_checks": {
+    "cross_site_post_rejected": true,
+    "missing_csrf_rejected": true,
+    "backend_requires_gateway_key": true
+  },
+  "api_smoke": {
+    "session": {
+      "status": 200,
+      "fields": [
+        "user",
+        "csrf",
+        "capabilities",
+        "captchaRequired"
+      ],
+      "items": 0
+    },
+    "catalog": {
+      "status": 200,
+      "fields": [
+        "items",
+        "channel",
+        "page"
+      ],
+      "items": 18
+    },
+    "categories": {
+      "status": 200,
+      "fields": [
+        "items"
+      ],
+      "items": 1
+    },
+    "live": {
+      "status": 200,
+      "fields": [
+        "items"
+      ],
+      "items": 0
+    },
+    "frontend_cookie_flags": [
+      {
+        "secure": true,
+        "httpOnly": true,
+        "host_only": true,
+        "sameSite": "Lax"
+      }
+    ]
+  },
+  "gateway_key_absent_from_static_assets": true,
+  "published_frontend_unchanged": true,
+  "published_deploy_id": "6af1fcdf8e188044e7207f35"
+}

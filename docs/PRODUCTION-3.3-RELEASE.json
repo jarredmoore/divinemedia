@@ -1,0 +1,9 @@
+{
+  "result": "pass",
+  "published_deploy": "6aefc9b7bac75e020823b88a",
+  "previous_deploy": "6aefae007b01dc9671e0b50f",
+  "production_merge": "5067877dbd56bcd769812f42b46b15576848753f",
+  "frontend_source": "26844c96",
+  "canonical_domain": "divinemedia.us",
+  "automatic_git_delivery": false
+}

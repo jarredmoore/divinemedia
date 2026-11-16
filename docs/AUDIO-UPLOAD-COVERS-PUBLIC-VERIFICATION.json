@@ -1,0 +1,97 @@
+{
+  "result": "pass",
+  "all_eleven_public_covers_verified": true,
+  "registered_album_covers": 10,
+  "waveform_covers": 1,
+  "checks": [
+    {
+      "id": 20,
+      "title": "Murphy Lee \u2013 2nd Time Around (Continuous Album Track)",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 21,
+      "title": "6SheIsHer",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 22,
+      "title": "8StLouisCheatCode",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 23,
+      "title": "7TalkThatShitTime",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 24,
+      "title": "14StillAtIt",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 25,
+      "title": "9NinetythreeRiverfrontFlow",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 26,
+      "title": "13IDoWhatIDo",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 27,
+      "title": "10DearlyBeloved",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 28,
+      "title": "11MrWinslow",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 29,
+      "title": "12FlowersandBars",
+      "http_status": 200,
+      "bytes": 106249,
+      "sha256": "da0b58bfad720ec04a3363db24bd019e3bbd43903a4a1f4dcc0feb93125382e7",
+      "cover_kind": "registered album"
+    },
+    {
+      "id": 30,
+      "title": "Handle It",
+      "http_status": 200,
+      "bytes": 26256,
+      "sha256": "bafc143dba15928d080cc92c2d4bde0622da8120b7c61ff79f3c4db4ed887cec",
+      "cover_kind": "generated waveform"
+    }
+  ],
+  "audio_video_files_reencoded": false
+}

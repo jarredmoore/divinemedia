@@ -1,0 +1,26 @@
+{
+  "result": "pass",
+  "tested_url": "https://divinemedia.us",
+  "default_preserved": true,
+  "no_default_video_requests": true,
+  "theme_switch_persistence_and_url": true,
+  "background_video_play_pause": true,
+  "background_pause_offscreen_and_modal": true,
+  "scroll_split_reveal": true,
+  "reduced_motion_and_data_saver_still": true,
+  "actual_mp3_playback": true,
+  "murphy_lee_artwork": true,
+  "volume_seek_previous_next": true,
+  "player_survives_theme_switch": true,
+  "mobile_navigation_search": true,
+  "viewport_widths": [
+    1440,
+    1024,
+    768,
+    390,
+    320
+  ],
+  "horizontal_overflow": false,
+  "console_errors": [],
+  "blocked_writes": 0
+}

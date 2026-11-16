@@ -1,0 +1,19 @@
+{
+  "result": "pass",
+  "resource_group": "RG-DIVINEMEDIA-STAGING",
+  "network_security_group": "vm-divinemedia-staging-nsg",
+  "rule_name": "AllowAVideoRTMP",
+  "configuration": {
+    "access": "Allow",
+    "direction": "Inbound",
+    "protocol": "Tcp",
+    "sourceAddressPrefix": "Internet",
+    "sourcePortRange": "*",
+    "destinationAddressPrefix": "*",
+    "destinationPortRange": "1935",
+    "priority": 1030
+  },
+  "native_backend_verified_before_opening": true,
+  "other_rules_unchanged": true,
+  "azure_etags_excluded_from_semantic_comparison": true
+}

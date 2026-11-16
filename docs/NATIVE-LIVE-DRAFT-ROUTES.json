@@ -1,0 +1,466 @@
+{
+  "result": "pass",
+  "watch_candidate": "https://6af1fcdf8e188044e7207f35--mediaproduction.netlify.app",
+  "watch_apex_mapped_to_candidate": true,
+  "watch_encoder_watch_signup_round_trip": true,
+  "watch_live_navigation": true,
+  "shared_cookie_overrides_stale_local_preference": true,
+  "server_prepaint_uses_shared_cookie": true,
+  "native_encoder_default_origin": "https://media.divinemedia.us/",
+  "embedded_player_without_duplicate_header": true,
+  "read_only_browser_checks": [
+    {
+      "width": 1440,
+      "route": "/live",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/plugin/Live/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/watch-later",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/favorite",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/view/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/user",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/signUp",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/cat/default",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/cat/not-a-real-category",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/view/channels.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/channel/admin",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/Encoder/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/Encoder/view/index.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 1440,
+      "route": "/plugin/UserNotifications/embed.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/live",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/plugin/Live/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/watch-later",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/favorite",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/view/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/user",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/signUp",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/cat/default",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/cat/not-a-real-category",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/view/channels.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/channel/admin",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/Encoder/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/Encoder/view/index.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 390,
+      "route": "/plugin/UserNotifications/embed.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/live",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/plugin/Live/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/watch-later",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/favorite",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/view/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/user",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/signUp",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/cat/default",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/cat/not-a-real-category",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/view/channels.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/channel/admin",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/Encoder/",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/Encoder/view/index.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    },
+    {
+      "width": 320,
+      "route": "/plugin/UserNotifications/embed.php",
+      "theme": "code-black",
+      "background": "rgb(0, 0, 0)",
+      "overflow": false,
+      "headers": 1,
+      "old_links": 0,
+      "light_ui": 0
+    }
+  ],
+  "non_get_requests_blocked": 5,
+  "auth_upload_or_encode_submitted": false,
+  "own_javascript_errors": []
+}

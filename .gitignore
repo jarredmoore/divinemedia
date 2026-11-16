@@ -59,3 +59,7 @@
 /iptvsource_one_one.csv
 # Local Netlify folder
 .netlify
+
+# Python verification artifacts
+__pycache__/
+*.py[cod]

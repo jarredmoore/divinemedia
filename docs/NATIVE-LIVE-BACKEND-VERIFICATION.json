@@ -1,0 +1,40 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/native-live-deploy-aefd6ba740",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "7bae3ac1858d272006de8a8900ef4bf57eede02f05cb763ad65f0874f94d0165",
+    "bytes": 31720,
+    "roundtrip_verified": true
+  },
+  "after_backup": {
+    "name": "after.json",
+    "sha256": "52ac679c8748bd3a8b96e429b573f59a0ca50252be4c6763620f81dc309bdb83",
+    "bytes": 11666,
+    "roundtrip_verified": true
+  },
+  "active_native_plugins": [
+    "Live",
+    "PlayLists"
+  ],
+  "new_tables": [
+    "live_transmitions",
+    "live_transmitions_has_users_groups",
+    "live_transmitions_history",
+    "live_transmition_history_log",
+    "live_servers",
+    "live_restreams",
+    "live_schedule",
+    "live_restreams_logs",
+    "playlists_schedules"
+  ],
+  "media_hashes_preserved": 54,
+  "catalog_and_encoder_queue_unchanged": true,
+  "creator_permissions_unchanged": true,
+  "containers_not_restarted": true,
+  "existing_thumbnail_processing_unchanged": true,
+  "recording_default_off": true,
+  "restreaming_off": true,
+  "playlist_broadcasting_off": true,
+  "public_broadcast_not_started": true
+}

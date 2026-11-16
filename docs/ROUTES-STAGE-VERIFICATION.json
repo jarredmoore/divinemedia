@@ -1,0 +1,65 @@
+{
+  "source": "off-VM downloaded copy",
+  "source_hashes_verified": true,
+  "media_count": 52,
+  "databases": [
+    {
+      "label": "avideo",
+      "restored_tables": 27,
+      "table_checks": "pass"
+    },
+    {
+      "label": "encoder",
+      "restored_tables": 7,
+      "table_checks": "pass"
+    }
+  ],
+  "recovery_images_verified": 5,
+  "restored_media_hashes_verified": 52,
+  "route_plan": {
+    "before": {
+      ".htaccess": "a9b04f34ef6ab523b1bc16c6dbe585236fb47609a07fdfb41d3a127c6737954d",
+      "view/include/head.php": "0085bf6201cf9c61da02734240e8dc261fc7e8b1105f49b99f283899142eeef3",
+      ".compose/encoder/view/index.header.php": "32406410dc82476f9078d3ae3612066bb43931772217a0a9267f772a1c806c30",
+      "divine-entrance/landing.php": "bc412a4f0d514ef6b9fb57c5df90a69092652474fb6f78b38c5fb020c85e1350"
+    },
+    "after": {
+      ".htaccess": "eb4c438c9e0eb84852b3c0ee11b9071f63987e5358f2068e2f83e2dd0c9af3fc",
+      "view/include/head.php": "067ccb71d3589a9cbbef34131e1392b12cf3b129f62f282762c456939b0854e9",
+      ".compose/encoder/view/index.header.php": "ae29980c8e487b84bfaa82526df2ce1743a57c2fa73b702df37eca3bd5bf597d",
+      "divine-entrance/landing.php": "20a6617fed5666442cb88a6727021b21717c6310900eae2e0f5340641e3d5eb2"
+    },
+    "assets": {
+      "head.php": "457ab7d5c324d92632737cf7e034f684a7176f28fbed347e6f80414e5198f897",
+      "legacy-entry.php": "cc8d364f8238cbda1bc9b47469b993b500cb05b1e874db0945b8d0070d0805cf",
+      "mark.svg": "9358c1d5e20da9015359d1c3f14315eaaa0d15e32d69e3a5f36e925958e6a235",
+      "shell.css": "53d146428f1fcf67e9439b95938ca5508f7c8d801e22d769f3605b60f7d6833f",
+      "shell.js": "d6712e3823782d01379e40563285ec667a5a312de83beb4786bff85b0106e11c"
+    },
+    "snapshot": "/srv/divinemedia/backups/rehearsal-k83qjg4c/routes-backups/routes-20261108T222604Z-779976"
+  },
+  "rollback_reapply_passed": true,
+  "restored_video_rows": 16,
+  "apache_config": "pass",
+  "application_runtime_db_connections": "pass",
+  "html_routes": {
+    "/": "200",
+    "/?theme=code-black": "200",
+    "/view/?theme=code-black": "200",
+    "/user?theme=code-black": "200",
+    "/signUp?theme=code-black": "200",
+    "/cat/default?theme=code-black": "200",
+    "/view/channels.php?theme=code-black": "200",
+    "/channel/admin?theme=code-black": "200",
+    "/Encoder/?theme=code-black": "200",
+    "/plugin/UserNotifications/embed.php?theme=code-black": "200",
+    "/videoEmbed/1?theme=code-black": "200"
+  },
+  "legacy_browser_entries": "302 to canonical, credential query discarded",
+  "media_ranges_and_api_unchanged": true,
+  "native_startup_not_executed": true,
+  "result": "pass",
+  "scratch_network_removed": true,
+  "scratch_containers_removed": true,
+  "scratch_files_removed": true
+}

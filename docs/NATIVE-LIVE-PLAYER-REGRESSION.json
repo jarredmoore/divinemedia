@@ -1,0 +1,24 @@
+{
+  "result": "pass",
+  "tested_url": "https://6af1fcdf8e188044e7207f35--mediaproduction.netlify.app",
+  "account_and_creator_links": true,
+  "native_notifications": true,
+  "configured_native_embed": true,
+  "native_play_and_fullscreen_controls_initialized": true,
+  "share_copy_embed_controls": true,
+  "audio_track_options_and_actual_playback": true,
+  "sort_titles": true,
+  "viewport_widths": [
+    1440,
+    1200,
+    1024,
+    768,
+    390,
+    320
+  ],
+  "default_and_code_black": true,
+  "horizontal_overflow": false,
+  "parent_javascript_errors": [],
+  "non_get_requests_blocked": 1,
+  "production_uploads_or_account_mutations_submitted": false
+}
