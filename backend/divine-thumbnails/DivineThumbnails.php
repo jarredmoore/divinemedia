@@ -6,8 +6,8 @@ class DivineThumbnails extends PluginAbstract {
     const QUEUE='/var/www/tmp/divine-thumbnails';
     public function getName(){return 'DivineThumbnails';}
     public function getUUID(){return self::UUID;}
-    public function getPluginVersion(){return '1.0';}
-    public function getDescription(){return 'Generate a missing still cover after a new local video upload, using the installed Encoder image extractor. Existing covers are preserved.';}
+    public function getPluginVersion(){return '1.1';}
+    public function getDescription(){return 'Generate a missing still cover after a new local video or audio upload, using the installed Encoder image extractor. Existing covers are preserved.';}
     public function getEmptyDataObject(){return new stdClass();}
     public function onUploadIsDone($id){self::enqueue((int)$id);}
     public function onEncoderNotifyIsDone($id){self::enqueue((int)$id);}
@@ -15,20 +15,20 @@ class DivineThumbnails extends PluginAbstract {
     public function executeEveryMinute(){self::kick();}
     public static function enqueue(int $id): bool {
         try{
-            $v=new Video('','',$id);if(!$id||!$v->getId()||$v->getType()!=='video'){return false;}
+            $v=new Video('','',$id);if(!$id||!$v->getId()||!in_array($v->getType(),['video','audio'],true)){return false;}
             $filename=$v->getFilename();if(!preg_match('/^[A-Za-z0-9_.-]+$/D',$filename)||str_contains($filename,'..')){return false;}
             $root=realpath(Video::getStoragePath());if(!$root){return false;}
             $destination=Video::getPathToFile($filename.'.jpg',true);
             if(!$destination||!str_starts_with(realpath(dirname($destination)).'/',rtrim($root,'/').'/')){return false;}
             foreach(['.jpg','.png','_portrait.jpg'] as $ext){if(file_exists(Video::getPathToFile($filename.$ext))){return false;}}
             $source=null;
-            foreach(['.mp4','.webm'] as $ext){$p=realpath(Video::getPathToFile($filename.$ext));if($p&&str_starts_with($p,$root.'/')&&is_file($p)){$source=$p;break;}}
-            if(!$source){$s=Video::getHigestResolutionVideoMP4Source($filename,false,true);$p=realpath($s['path']??'');if($p&&str_starts_with($p,$root.'/')&&is_file($p)){$source=$p;}}
+            foreach($v->getType()==='audio'?['.mp3','.ogg','.m4a','.wav','.flac']:['.mp4','.webm'] as $ext){$p=realpath(Video::getPathToFile($filename.$ext));if($p&&str_starts_with($p,$root.'/')&&is_file($p)){$source=$p;break;}}
+            if(!$source&&$v->getType()==='video'){$s=Video::getHigestResolutionVideoMP4Source($filename,false,true);$p=realpath($s['path']??'');if($p&&str_starts_with($p,$root.'/')&&is_file($p)){$source=$p;}}
             if(!$source){return false;}
             if(!is_dir(self::QUEUE)&&!mkdir(self::QUEUE,0700,true)){return false;}
             $job=self::QUEUE.'/'.$id.'.json';if(!is_file($job)){
                 $seconds=max(0,min(10,parseDurationToSeconds($v->getDuration())*0.1));
-                $data=['id'=>$id,'source'=>$source,'destination'=>$destination,'root'=>$root,'seconds'=>$seconds,'attempts'=>0];
+                $data=['id'=>$id,'kind'=>$v->getType(),'source'=>$source,'destination'=>$destination,'root'=>$root,'seconds'=>$seconds,'attempts'=>0];
                 $tmp=tempnam(self::QUEUE,'.job-');file_put_contents($tmp,json_encode($data));chmod($tmp,0600);rename($tmp,$job);
             }
             self::kick();return true;

@@ -7,5 +7,5 @@ $v=new Video('','',$id);
 if($v->getId()){
     // Only this video's metadata/image cache; never delete covers or flush all videos.
     $cache=new VideoCacheHandler($v->getFilename());$cache->deleteCache(false,false);
-    Video::clearImageCache($v->getFilename(),'video');
+    Video::clearImageCache($v->getFilename(),$v->getType());
 }
