@@ -40,7 +40,7 @@ if ($method === 'GET') {
     }
     if($action==='video'){
         $row=dm_video(dm_id($query['id']??0));if(($query['mode']??'')==='embed'){forbiddenPageIfCannotEmbed((int)$row['id']);}$likes=Video::getVideoLikes((int)$row['id']);
-        dm_reply(['item'=>dm_item($row),'likes'=>(int)$likes->likes,'dislikes'=>(int)$likes->dislikes,'reaction'=>(int)$likes->myVote]);
+        dm_reply(['player'=>dm_player_preferences(),'item'=>dm_item($row),'likes'=>(int)$likes->likes,'dislikes'=>(int)$likes->dislikes,'reaction'=>(int)$likes->myVote]);
     }
     if($action==='comments'){
         require_once $root.'objects/comment.php';$id=dm_id($query['video']??0);dm_video($id);

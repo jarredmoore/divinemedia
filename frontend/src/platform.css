@@ -2,3 +2,4 @@
 
 html[data-theme="code-black"] :is(.dm-workspace,.native-dialog){--dm-panel:#000000;--dm-accent:#e9c994;--dm-text:#f2f0ec;--dm-muted:#b4b7bc}
 .dm-captcha{flex:1 1 100%;display:flex;flex-wrap:wrap;align-items:center;gap:12px}.dm-captcha img{max-width:220px;height:auto}.dm-captcha label{flex-basis:100%}
+.dm-workspace-tile{min-width:0;justify-content:flex-start;gap:10px;height:100%}.dm-workspace-tile img{display:block;background:#000;min-height:100px}.dm-workspace-tile strong{overflow-wrap:anywhere;line-height:1.4;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.dm-workspace-tile span{margin-top:auto}.dm-workspace-tile:hover{border-color:var(--dm-accent,#e9c994);background:#ffffff08}

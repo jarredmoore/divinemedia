@@ -130,6 +130,25 @@
  assert call('login',fresh,{'user':reset['user'],'password':reset['password']})[0]==200,'Reset password did not authenticate'
  assert call('logout',fresh,{})[0]==200
  checks['native_recovery_verification_and_one_use_tokens']=True
+ phase='native-player-preferences-projection'
+ for name,options in [('SeekButton',{'back':5,'forward':20,'hideOnMobile':False}),('Hotkeys',{}),('TheaterButton',{}),('FloatVideo',{'doNotFloatVideo':False})]:
+  text=(pathlib.Path(app)/'plugin'/name/(name+'.php')).read_text()
+  def method_value(method):
+   match=re.search(r'function\s+'+method+r'\s*\(\).*?return\s+[\'\"]([^\'\"]+)',text,re.S)
+   assert match or method=='getPluginVersion','Missing native plugin UUID for '+name
+   return match.group(1) if match else '1.0'
+  meta={'uuid':method_value('getUUID'),'version':method_value('getPluginVersion'),'options':options}
+  sql(native.insert_plugin(name,meta))
+  invalidate="$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';Plugin::deletePluginCache($argv[1]);"
+  docker('exec',web,'php','-r',invalidate,meta['uuid'])
+ status,res=call('video',a,params={'id':video});assert status==200
+ prefs=res['player'];assert prefs['seek']=={'enabled':True,'back':5,'forward':20,'hideOnMobile':False} and prefs['hotkeys'] and prefs['theater'] and prefs['miniPlayer'],'Native player settings were not projected'
+ assert set(prefs)=={'seek','hotkeys','theater','miniPlayer'},'Player projection contains unexpected fields'
+ sql("UPDATE plugins SET status='inactive' WHERE name='SeekButton';")
+ seek_text=(pathlib.Path(app)/'plugin/SeekButton/SeekButton.php').read_text();seek_uuid=re.search(r'function\s+getUUID\s*\(\).*?return\s+[\'\"]([^\'\"]+)',seek_text,re.S).group(1)
+ docker('exec',web,'php','-r',invalidate,seek_uuid)
+ assert call('video',a,params={'id':video})[1]['player']['seek']['enabled'] is False,'Disabled SeekButton remained enabled'
+ checks['native_player_configuration_and_disable_switch']=True
  phase='session-logout'
  assert call('logout',a,{})[0]==200
  status,res=call('session',a);assert status==200 and res['user'] is None
