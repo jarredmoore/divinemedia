@@ -4,3 +4,5 @@
 @media(prefers-reduced-motion:reduce){.dm-social-card{transition:none}}
 
 @media(min-width:601px) and (max-width:1000px){.dm-social-links{grid-template-columns:1fr}}
+
+.dm-social-arrow{flex-shrink:0}
