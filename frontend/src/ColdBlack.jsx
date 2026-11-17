@@ -2,12 +2,12 @@ import InstallApp from './InstallApp.jsx';
 import DisplayControls from './DisplayControls.jsx';
 import React,{useEffect,useRef,useState} from 'react';
 import {NativeActions} from './NativeActions.jsx';
-import {ArrowDown,ArrowUpRight,Menu,Pause,Play,Search,X} from 'lucide-react';
+import {ArrowDown,ArrowUpRight,Headphones,Menu,Pause,Play,Search,X} from './GlassIcons.jsx';
 
 export {THEME_KEY} from '../shared/theme.mjs';
 export {readCurrentTheme as readTheme} from '../shared/theme.mjs';
 export function ThemePicker({theme,onChange}){
- return <label className="theme-picker"><span className="sr-only">Viewing theme</span><select aria-label="Viewing theme" value={theme} onChange={e=>onChange(e.target.value)}><option value="default">Default</option><option value="code-black">Code Black</option></select></label>;
+ return <label className="theme-picker"><span className="sr-only">Viewing theme</span><select aria-label="Viewing theme" value={theme} onChange={e=>onChange(e.target.value)}><option value="default">Cozy</option><option value="code-black">Code Black</option></select></label>;
 }
 export function ColdBlackHeader({tab,go,query,setQuery,theme,onTheme,links}){
  const[expanded,setExpanded]=useState(false);
@@ -49,7 +49,7 @@ export function ColdBlackHero({onWatch,onListen,suspended}){
    <div className="cb-scene-backdrop" aria-hidden="true"><img className="cb-poster" src={POSTER} alt="" fetchPriority="high"/>{motionAllowed&&!failed&&<video ref={video} className="cb-background-video" muted loop playsInline preload="none" poster={POSTER} onPlaying={()=>setPlaying(true)} onPause={()=>setPlaying(false)} onError={()=>setFailed(true)}><source src="/themes/cold-black/stage-loop.mp4" type="video/mp4"/></video>}<div className="cb-split cb-split-left" style={{backgroundImage:`url(${POSTER})`}}/><div className="cb-split cb-split-right" style={{backgroundImage:`url(${POSTER})`}}/></div>
    <div className="cb-scene-shade" aria-hidden="true"/>
    <div className="cb-orbit" aria-hidden="true"><span>D</span></div>
-   <div className="cb-hero-copy"><div className="eyebrow">THE DIVINE MEDIA EXPERIENCE</div><h1>Stories. Sound.<br/><em>Connection.</em></h1><p>Independent voices. Unforgettable moments.</p><div className="hero-actions"><button className="primary" onClick={onWatch}><Play size={16} fill="currentColor"/> Watch now</button><button className="secondary" onClick={onListen}>Explore music <ArrowUpRight size={16}/></button></div></div>
+   <div className="cb-hero-copy"><div className="eyebrow">THE DIVINE MEDIA EXPERIENCE</div><h1>Stories. Sound.<br/><em>Connection.</em></h1><p>Independent voices. Unforgettable moments.</p><div className="hero-actions"><button className="primary" onClick={onWatch}><Play size={16} fill="currentColor"/> Watch now</button><button className="secondary" onClick={onListen}><Headphones size={16}/>Explore music <ArrowUpRight size={16}/></button></div></div>
    <div className="cb-scene-reveal"><span className="eyebrow">A DIFFERENT POINT OF VIEW</span><h2>Find your next<br/><em>connection.</em></h2><button className="secondary" onClick={scrollToTitles}>Discover the collection <ArrowDown size={17}/></button></div>
    <button className="cb-scroll-cue" onClick={scrollToTitles}>SCROLL TO DISCOVER<span/></button>
    {motionAllowed&&!failed&&<button className="cb-motion-control" aria-label={playing?'Pause background animation':'Play background animation'} onClick={()=>{if(playing)setPaused(true);else{setPaused(false);if(!suspended)video.current?.play().catch(()=>setPlaying(false))}}}>{playing?<Pause size={15}/>:<Play size={15}/>}<span>{playing?'Pause motion':'Play motion'}</span></button>}

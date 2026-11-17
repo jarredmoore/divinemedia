@@ -1,0 +1,48 @@
+/* Shared final surface treatment. Layout, source imagery and player behavior stay in existing components. */
+:root[data-theme="code-black"]{--dm-bg:#000;--dm-panel:#101215;--dm-surface:#101215;--dm-surface-raised:#191b20;--dm-text:#f5f5f7;--dm-muted:#b3b6bd;--dm-accent:#f5f5f7;--dm-focus:#fff;--dcg-line:#ffffff24}
+body,.app,.cold-black{background:var(--dm-bg);color:var(--dm-text)}
+.cb-wordmark,.cb-wordmark svg,.cb-wordmark span{color:#fff}
+.cb-navigation>button[aria-current]{color:#fff}.cb-navigation>button[aria-current]:after{background:#fff;box-shadow:none}
+h1,h2,h3,.hero h1 em,.cb-hero-copy h1 em,.cb-scene-reveal h2 em,.experience-copy h1 em,.creator-directory h1 em,.manifesto h2 em{color:var(--dm-text)}
+.eyebrow,.cold-black .eyebrow,.cold-black .section-head .eyebrow,.side-label,.side-bottom>span,.dm-workspace-heading>span,.dm-player-brand{color:var(--dm-muted)}
+.cb-orbit,.cb-orbit:before{border-color:#ffffff08}.cb-scroll-cue{color:#b3b6bd}.cb-scroll-cue span{background:linear-gradient(#c1c4ca,transparent)}
+.primary,.secondary,.cold-black .primary,.cold-black .secondary,.brand-icon,.avatar,.play-float,.cold-black .play-float,.pill,.cold-black .pill,.dm-dock .dm-dock-play,.cold-black .dm-dock .dm-dock-play,.dm-video-dock .dm-dock-resume,.dm-install-trigger,.dm-install-card button,.dm-install-confirm,.dm-workspace .dm-primary,.player-controls .player-main{color:var(--dm-text);background:var(--dm-glass-solid);border:1px solid var(--dm-border);box-shadow:var(--dm-shadow)}
+.primary:hover,.secondary:hover,.cold-black .primary:hover,.cold-black .secondary:hover,.dm-dock .dm-dock-play:hover,.dm-video-dock .dm-dock-resume:hover,.dm-install-trigger:hover,.dm-install-card button:hover{background:#24262beb;border-color:#ffffff50;box-shadow:0 10px 25px #0005,inset 0 1px #ffffff10;color:#fff}
+.cb-header,.cold-black .cb-header,.sidebar,.cb-navigation.is-open,.modal,.cold-black .modal,.native-dialog,.native-account-panel,.dm-workspace,.dm-player-panel,.dm-display-panel,.dm-more-panel,.dm-install-dialog,.dm-dock,.cold-black .dm-dock,.dm-player-toolbar,.dm-install-card,.media-card,.cold-black .media-card,.manifesto,.cold-black .manifesto,.search,.cold-black .search,.featured-program,.dm-workspace-row,.dm-inline-panel{background:var(--dm-glass-solid);border-color:var(--dm-border);box-shadow:var(--dm-shadow)}
+.dm-workspace button,.dm-inline-panel button,.dm-player-toolbar button,.dm-player-panel button,.dm-player-panel select,.dm-display-trigger,.dm-display-panel button,.media-native-actions button,.account-library-link,.native-actions>button,.creator-chips button,.cold-black .creator-chips button,.theme-picker select{background:#14171bd9;color:var(--dm-text);border-color:var(--dm-border)}
+.dm-workspace input,.dm-workspace textarea,.dm-workspace select,.dm-inline-panel input,.dm-inline-panel textarea{background:#0c0e11b3;color:var(--dm-text);border-color:var(--dm-border)}
+.dm-workspace button:hover,.media-native-actions button:hover,.native-actions>button:hover,.native-account-panel>button:hover,.dm-player-toolbar button:hover,.dm-player-panel button:hover,.dm-display-panel button:hover{background:#ffffff0c;color:#fff;border-color:#ffffff50}
+.nav-link.active,.cold-black .creator-chips button.selected{background:#ffffff0b;color:#fff;border-color:#ffffff50}.cold-black .media-card:hover{border-color:#ffffff45}
+.dm-dock,.cold-black .dm-dock{border-top-color:var(--dm-border)}.dm-dock-progress,.dm-dock-volume input[type=range],.cold-black .dm-dock-volume input[type=range],.dm-workspace progress{accent-color:#e4e6eb}
+.search:focus-within,.cold-black .search:focus-within{background:#191c21e8;color:#fff;border-color:#ffffff70;box-shadow:0 0 0 2px #ffffff20}
+.dm-player-panel button[aria-pressed=true],.dm-interactions [aria-pressed=true]{border-color:#ffffff70;color:#fff}
+.dm-workspace-error{background:#191b20;border-color:#ffffff35;color:#e0e2e7}
+.skip-content{background:#24262b;color:#fff}.save:hover,.save.is-saved,.cold-black .save:hover,.cold-black .save.is-saved{color:#fff}
+.dm-install-card strong,.dm-install-dialog h2{color:#fff}.dm-install-card p,.dm-install-dialog p{color:var(--dm-muted)}
+.brand-icon .dm-glass-icon{background:none;border:0;box-shadow:none;color:#fff}.brand-icon .dm-glass-icon svg{filter:none}
+.dm-glass-icon{--dm-icon-ink:var(--dm-icon-cyan);--dm-icon-tint:#39b9ff24;position:relative;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:var(--dm-icon-size,20px);height:var(--dm-icon-size,20px);flex:0 0 var(--dm-icon-size,20px);border:1px solid #ffffff30;border-radius:6px;color:var(--dm-icon-ink);background:linear-gradient(145deg,#ffffff20,var(--dm-icon-tint) 55%,#05090f80);box-shadow:inset 0 1px 0 #ffffff30,inset 0 -1px 0 #0008,0 2px 5px #0005;line-height:1}
+.dm-glass-icon svg{flex:none;filter:drop-shadow(0 1px 1px #000b) drop-shadow(0 0 2px var(--dm-icon-tint))}
+.dm-icon-blue{--dm-icon-ink:var(--dm-icon-blue);--dm-icon-tint:#487cff28}.dm-icon-purple{--dm-icon-ink:var(--dm-icon-purple);--dm-icon-tint:#9a65ff28}.dm-icon-pink{--dm-icon-ink:var(--dm-icon-pink);--dm-icon-tint:#ed65b628}.dm-icon-green{--dm-icon-ink:var(--dm-icon-green);--dm-icon-tint:#32db9a25}
+.dm-display :focus-visible,.dm-workspace :focus-visible,.dm-interactions :focus-visible,.dm-player-toolbar :focus-visible,.dm-player-panel :focus-visible,.dm-install-trigger:focus-visible,.dm-install-card button:focus-visible,.dm-install-dialog :focus-visible{outline:2px solid var(--dm-focus);outline-offset:4px}
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ .cb-header,.cold-black .cb-header,.sidebar,.cb-navigation.is-open,.modal,.cold-black .modal,.native-dialog,.native-account-panel,.dm-workspace,.dm-player-panel,.dm-display-panel,.dm-more-panel,.dm-install-dialog,.dm-dock,.cold-black .dm-dock,.dm-player-toolbar,.dm-install-card,.cold-black .media-card,.media-card,.manifesto,.cold-black .manifesto{background:var(--dm-glass);backdrop-filter:blur(var(--dm-blur));-webkit-backdrop-filter:blur(var(--dm-blur))}
+ .primary,.secondary,.cold-black .primary,.cold-black .secondary,.play-float,.cold-black .play-float,.pill,.cold-black .pill,.dm-install-trigger,.dm-video-dock .dm-dock-resume,.dm-dock .dm-dock-play{background:#14171bd9;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ .modal-backdrop,.native-dialog-backdrop,.dm-workspace-backdrop,.dm-install-backdrop{background:#000e}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}.reveal{opacity:1!important;transform:none!important}}
+.app .dm-glass-icon svg,.dm-workspace .dm-glass-icon svg,.dm-display-panel .dm-glass-icon svg,.dm-install-dialog .dm-glass-icon svg{width:calc(var(--dm-icon-size) - 6px);height:calc(var(--dm-icon-size) - 6px)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+ .primary,.secondary,.cold-black .primary,.cold-black .secondary,.dm-workspace button,.dm-inline-panel button,.dm-player-toolbar button,.dm-player-panel button,.dm-player-panel select,.dm-display-trigger,.dm-display-panel button,.media-native-actions button,.native-actions>button,.dm-install-trigger,.dm-video-dock .dm-dock-resume{background:var(--dm-glass-solid)}
+}
+/* Cozy is the existing Default preference, retaining Divine brand yellow on glass. */
+:root[data-theme="default"]{--dm-accent:#ffcc2f;--dm-focus:#ffcc2f}
+:root[data-theme="default"] .primary,:root[data-theme="default"] .dm-workspace .dm-primary,:root[data-theme="default"] .dm-dock .dm-dock-play,:root[data-theme="default"] .dm-video-dock .dm-dock-resume{background:#ffcc2fed;color:#0b0d10;border-color:#ffcc2f80;box-shadow:var(--dm-shadow)}
+:root[data-theme="default"] .primary:hover,:root[data-theme="default"] .dm-dock .dm-dock-play:hover,:root[data-theme="default"] .dm-video-dock .dm-dock-resume:hover{background:#ffdf66;color:#0b0d10;border-color:#ffdf66}
+:root[data-theme="default"] .brand-icon,:root[data-theme="default"] .avatar{background:#ffcc2f;color:#0b0d10}
+:root[data-theme="default"] .brand-icon .dm-glass-icon svg{stroke:#0b0d10;fill:none}
+:root[data-theme="default"] .nav-link.active,:root[data-theme="default"] .eyebrow,:root[data-theme="default"] .side-bottom>span{color:#ffcc2f}
+:root[data-theme="default"] .nav-link.active{background:#ffcc2f12}
+:root[data-theme="default"] .dm-dock-progress,:root[data-theme="default"] .dm-dock-volume input[type=range],:root[data-theme="default"] .dm-workspace progress{accent-color:#ffcc2f}
+@media(min-width:601px){.app:not(.cold-black) .native-actions>.native-upload{width:auto;min-width:88px}}

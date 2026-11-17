@@ -4,7 +4,7 @@ import {recoverArtwork} from './artwork.mjs';
 import useNativePlayback from './useNativePlayback.js';
 import React,{useState,useEffect,useRef} from 'react';
 import{createRoot}from'react-dom/client';
-import{Search,Compass,Clapperboard,Headphones,Radio,Users,Library,Play,ArrowUpRight,Menu,X,Heart,Plus,Volume2,SkipForward,SkipBack,Pause,ArrowLeft,PanelLeftClose,PanelLeftOpen}from'lucide-react';
+import{Search,Compass,Clapperboard,Headphones,Radio,Users,Library,Play,ArrowUpRight,Menu,X,Heart,Plus,Volume2,SkipForward,SkipBack,Pause,ArrowLeft,PanelLeftClose,PanelLeftOpen}from'./GlassIcons.jsx';
 import './style.css';
 import './dcg-tokens.css';
 import './dcg-theme.css';
@@ -17,6 +17,7 @@ import PlatformWorkspace from './PlatformWorkspace.jsx';
 import {platform,workspace} from './platform-client.mjs';
 import {ColdBlackHeader,ColdBlackHero,ThemePicker,readTheme,THEME_KEY} from './ColdBlack.jsx';
 import {loadMedia, loadAVideoCatalog, readSaved, writeSaved, avideoOrigin} from './media.js';
+import './black-glass.css';
 const photos={
  hero:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600&q=85',
  film:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=720&q=80',

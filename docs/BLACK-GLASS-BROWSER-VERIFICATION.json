@@ -1,0 +1,82 @@
+{
+  "result": "pass",
+  "checks": [
+    {
+      "theme": "code-black",
+      "width": 1440,
+      "homepage": true,
+      "navigation": true,
+      "cards": true,
+      "player": true,
+      "sticky_player": true,
+      "upload": true,
+      "focus": true
+    },
+    {
+      "theme": "code-black",
+      "width": 390,
+      "homepage": true,
+      "navigation": true,
+      "cards": true,
+      "player": true,
+      "sticky_player": true,
+      "upload": true,
+      "focus": true
+    },
+    {
+      "theme": "code-black",
+      "width": 320,
+      "homepage": true,
+      "navigation": true,
+      "cards": true,
+      "player": true,
+      "sticky_player": true,
+      "upload": true,
+      "focus": true
+    },
+    {
+      "theme": "default",
+      "width": 1440,
+      "homepage": true,
+      "navigation": true,
+      "cards": true,
+      "player": true,
+      "sticky_player": true,
+      "upload": true,
+      "focus": true
+    },
+    {
+      "theme": "default",
+      "width": 390,
+      "homepage": true,
+      "navigation": true,
+      "cards": true,
+      "player": true,
+      "sticky_player": true,
+      "upload": true,
+      "focus": true
+    },
+    {
+      "theme": "default",
+      "width": 320,
+      "homepage": true,
+      "navigation": true,
+      "cards": true,
+      "player": true,
+      "sticky_player": true,
+      "upload": true,
+      "focus": true
+    }
+  ],
+  "solid_charcoal_fallback": "rendered with unsupported feature query simulated",
+  "reduced_motion": true,
+  "code_black_warm_color_scan": "pass",
+  "cozy_brand_yellow": "preserved",
+  "saved_default_preferences": "compatible",
+  "artwork_and_cinematic_media_modified": false,
+  "real_accounts_or_backend_mutations": false,
+  "errors": [],
+  "unit_tests": 30,
+  "production_build": "pass",
+  "full_frontend_interaction_regression": "pass"
+}

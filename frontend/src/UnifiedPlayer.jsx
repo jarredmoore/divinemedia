@@ -2,7 +2,7 @@ import DisplayControls from './DisplayControls.jsx';
 import React,{useEffect,useId,useRef,useState} from 'react';
 import useNativePlayback from './useNativePlayback.js';
 import {usePlatform} from './PlatformContext.jsx';
-import {Settings2,SkipBack,SkipForward,Maximize,PictureInPicture,RectangleHorizontal} from 'lucide-react';
+import {Settings2,SkipBack,SkipForward,Maximize,PictureInPicture,RectangleHorizontal} from './GlassIcons.jsx';
 import './player.css';
 import {platform} from './platform-client.mjs';
 export default function UnifiedPlayer({item,embedded=false}){

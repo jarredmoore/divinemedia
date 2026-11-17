@@ -1,5 +1,5 @@
 import React,{useEffect,useId,useRef,useState} from 'react';
-import {Airplay,Cast,Maximize,MonitorUp,X} from 'lucide-react';
+import {Airplay,Cast,Maximize,MonitorUp,X} from './GlassIcons.jsx';
 import {activeMedia,castMedia,loadCastSender,siteFullscreen} from './display.mjs';
 import './display.css';
 export default function DisplayControls(){

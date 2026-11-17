@@ -1,6 +1,6 @@
 export const THEME_KEY='divine-media:theme:v1';
 export const THEME_COOKIE='dm_view_theme';
-export function normalizeTheme(value){return value==='cold-black'?'code-black':['default','code-black'].includes(value)?value:null}
+export function normalizeTheme(value){if(value==='cozy')return 'default';return value==='cold-black'?'code-black':['default','code-black'].includes(value)?value:null}
 export function resolveTheme({search='',cookie='',stored=null}={}){
  const requested=normalizeTheme(new URLSearchParams(search).get('theme'));if(requested)return requested;
  const match=cookie.split(';').map(v=>v.trim()).find(v=>v.startsWith(THEME_COOKIE+'='));
