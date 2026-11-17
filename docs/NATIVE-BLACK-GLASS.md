@@ -11,3 +11,9 @@ Historical sanitized markup from an isolated backup restore separately verified 
 Deployment creates a verified private off-VM before/after backup, checks audited source leases and PHP syntax, writes assets atomically with original permissions, and compares media/artwork hashes, catalog rows, Encoder queue, protected native source and container uptimes. Failure restores only unchanged presentation files written by this deployment; media/database state is never restored or modified. Rollback uses the script and private state recorded in the deployment evidence.
 
 Code is reviewed on a feature branch; no production Git branch merge is included. The unrelated frontend social-links PR remains separate. The login issue was confirmed by the owner to be an incorrect username and is resolved; this task makes no authentication changes.
+
+## Deployed verification
+
+The live presentation deployment passed, with 195 existing media/artwork files preserved and catalog, queue, protected native handlers and container uptimes unchanged. Before/after private off-VM backups were roundtrip verified. State: `/srv/divinemedia/backups/native-glass-3bb8ecb16ba2`; source bundle: `/srv/divinemedia/backups/native-glass-source-2c76a8467059`. Rollback is `python3 <source-bundle>/deploy-native-glass.py --bundle <source-bundle> --rollback <state>` and refuses later presentation changes.
+
+The post-deployment read-only browser run passed all 42 route/viewport combinations with zero response overrides and no own script errors. Cozy label, black backgrounds, no warm Code Black control styling, current unfiltered logo URLs and no horizontal overflow were verified. All five source CI workflows passed. See NATIVE-BLACK-GLASS-DEPLOYMENT.json and NATIVE-BLACK-GLASS-LIVE-BROWSER.json.

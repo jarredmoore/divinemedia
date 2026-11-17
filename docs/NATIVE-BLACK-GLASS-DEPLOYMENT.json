@@ -1,0 +1,51 @@
+{
+  "result": "pass",
+  "state": "/srv/divinemedia/backups/native-glass-3bb8ecb16ba2",
+  "before_backup": {
+    "name": "before.tar.gz",
+    "sha256": "35f2e312aa4ea852a9d051ee0d4af71a74da6c658647aad7bcb39251fcc9b724",
+    "bytes": 25896,
+    "roundtrip_verified": true
+  },
+  "after_backup": {
+    "name": "after.tar.gz",
+    "sha256": "abc0f21c32707bc483c9a0c1e81346fe7455fe2b3f3d9b917b0823c18b3847e1",
+    "bytes": 17406,
+    "roundtrip_verified": true
+  },
+  "files": [
+    "divine-shell/head.php",
+    "divine-shell/shell.css",
+    "divine-shell/shell.js",
+    "divine-shell/mark.svg",
+    "divine-entrance/entrance.css",
+    "divine-entrance/login-theme.php",
+    "divine-entrance/login-theme.js",
+    "divine-entrance/mark.svg",
+    "divine-entrance/landing.php",
+    "divine-creator/creator.css",
+    "divine-creator/creator.js",
+    "divine-creator/theme.php",
+    "divine-creator/mark.svg"
+  ],
+  "media_artwork_files_preserved": 195,
+  "catalog_queue_native_handlers_and_uptimes_unchanged": true,
+  "database_or_plugin_settings_written": false,
+  "jobs_or_native_startup_invoked": false,
+  "routing_bridge_preserved": true,
+  "after_hashes": {
+    "divine-shell/head.php": "b1d53bcafff29375386abf0f14c1e50eee37a0247eaedace1b613924fc0c0da3",
+    "divine-shell/shell.css": "ef2a8392fa84b70320fffa932950d9ffead44605d07702740a5019d400ec70bf",
+    "divine-shell/shell.js": "0efaa28db266e70a78319edb2363a750201c05bdb086298f0d8a0b7197c6adbb",
+    "divine-shell/mark.svg": "a6c4eb0cbdfd8d7dcc511c15b332628f76cd1ac9b12f4c6cf0e13db9d5b90792",
+    "divine-entrance/entrance.css": "19dfdb73a95b46c9537c36c61f438272483a9f25331d02f3ea334109440f5ab3",
+    "divine-entrance/login-theme.php": "b1b1507eef9445404c70d2f5069870d978cc0aac2aafc5480172356f4fa2fdbe",
+    "divine-entrance/login-theme.js": "493f72105b801d6b125223a281602dab252d5a182e0e2f7ac945cdc252de51e8",
+    "divine-entrance/mark.svg": "a6c4eb0cbdfd8d7dcc511c15b332628f76cd1ac9b12f4c6cf0e13db9d5b90792",
+    "divine-entrance/landing.php": "0f5add481955b029470a5e665f5be12c225b0eb1913400c2786c103e3b1cf33b",
+    "divine-creator/creator.css": "aff83d42db94f0a91e8afa852f5172323139031f3ce389e9c4d705c92932d5b8",
+    "divine-creator/creator.js": "cec397bf65a14795c0e80db6e1d0e66c9c0a6ba36f0e82cc9e5043829b58a5aa",
+    "divine-creator/theme.php": "751422ce3c2a6153e63d54a1fc23efb1e0e2cd1f88f53ced1e5801e3fd927080",
+    "divine-creator/mark.svg": "a6c4eb0cbdfd8d7dcc511c15b332628f76cd1ac9b12f4c6cf0e13db9d5b90792"
+  }
+}
