@@ -1,0 +1,46 @@
+{
+  "result": "pass",
+  "layouts": [
+    {
+      "theme": "default",
+      "width": 1440
+    },
+    {
+      "theme": "default",
+      "width": 390
+    },
+    {
+      "theme": "default",
+      "width": 320
+    },
+    {
+      "theme": "code-black",
+      "width": 1440
+    },
+    {
+      "theme": "code-black",
+      "width": 390
+    },
+    {
+      "theme": "code-black",
+      "width": 320
+    }
+  ],
+  "native_prompt_accepted_and_dismissed": "simulated choices passed",
+  "appinstalled_hides_cta": true,
+  "standalone_hides_cta": true,
+  "ios_manual_instructions": true,
+  "real_service_worker_ready": true,
+  "offline_navigation_and_brand_icon": true,
+  "cache_paths": [
+    "/icons/divine-192.png",
+    "/icons/divine-512.png",
+    "/offline.html"
+  ],
+  "errors": [],
+  "real_user_installation": false,
+  "frontend_unit_tests": 29,
+  "build": "pass",
+  "existing_frontend_browser_interactions": "pass",
+  "real_device_home_screen_install": "pending owner device tests"
+}
