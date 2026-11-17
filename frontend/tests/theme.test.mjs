@@ -6,6 +6,9 @@ test('explicit theme wins, then shared preference wins over stale host-local sto
  assert.equal(resolveTheme({cookie:'dm_view_theme=default',stored:'code-black'}),'default');
  assert.equal(resolveTheme({search:'?theme=cold-black'}),'code-black');assert.equal(resolveTheme({search:'?theme=<script>',cookie:'dm_view_theme=invalid'}),'default');
 });
+test('Cozy accepts its new URL label and preserves existing Default preferences',()=>{
+ assert.equal(resolveTheme({search:'?theme=cozy'}),'default');assert.equal(resolveTheme({cookie:'dm_view_theme=cozy'}),'default');assert.equal(resolveTheme({stored:'default'}),'default');
+});
 test('public route handoff keeps path, existing options and the selected theme on canonical hosts',()=>{
  const u=new URL(themedUrl('https://media.divinecreativegroup.com/Encoder/?noNavbar=0#login','code-black'));
  assert.equal(u.origin,'https://media.divinemedia.us');assert.equal(u.pathname,'/Encoder/');assert.equal(u.searchParams.get('noNavbar'),'0');assert.equal(u.searchParams.get('theme'),'code-black');assert.equal(u.hash,'#login');

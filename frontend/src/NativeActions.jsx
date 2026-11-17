@@ -1,6 +1,6 @@
 import React,{useEffect,useId,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
-import {Bell,UserRound,Upload,X,Copy,Share2,Code,ThumbsUp,ThumbsDown,ListPlus,MessageCircle,Clock,Heart,MoreHorizontal} from 'lucide-react';
+import {Bell,UserRound,Upload,X,Copy,Share2,Code,ThumbsUp,ThumbsDown,ListPlus,MessageCircle,Clock,Heart,MoreHorizontal} from './GlassIcons.jsx';
 import {platform,workspace,contentUrl} from './platform-client.mjs';
 import {usePlatform} from './PlatformContext.jsx';
 import './native-features.css';

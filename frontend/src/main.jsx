@@ -4,7 +4,7 @@ import {recoverArtwork} from './artwork.mjs';
 import useNativePlayback from './useNativePlayback.js';
 import React,{useState,useEffect,useRef} from 'react';
 import{createRoot}from'react-dom/client';
-import{Search,Compass,Clapperboard,Headphones,Radio,Users,Library,Play,ArrowUpRight,Menu,X,Heart,Plus,Volume2,SkipForward,SkipBack,Pause,ArrowLeft,PanelLeftClose,PanelLeftOpen}from'lucide-react';
+import{Search,Compass,Clapperboard,Headphones,Radio,Users,Library,Play,ArrowUpRight,Menu,X,Heart,Plus,Volume2,SkipForward,SkipBack,Pause,ArrowLeft,PanelLeftClose,PanelLeftOpen}from'./GlassIcons.jsx';
 import './style.css';
 import './dcg-tokens.css';
 import './dcg-theme.css';
@@ -17,6 +17,7 @@ import PlatformWorkspace from './PlatformWorkspace.jsx';
 import {platform,workspace} from './platform-client.mjs';
 import {ColdBlackHeader,ColdBlackHero,ThemePicker,readTheme,THEME_KEY} from './ColdBlack.jsx';
 import {loadMedia, loadAVideoCatalog, readSaved, writeSaved, avideoOrigin} from './media.js';
+import './black-glass.css';
 const photos={
  hero:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600&q=85',
  film:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=720&q=80',
@@ -77,7 +78,7 @@ function App(){
 
  return <div className={"app "+(coldBlack?"cold-black ":"")+(sidebarCollapsed?"sidebar-collapsed":"")}>
  {!coldBlack&&<aside className={'sidebar '+(menu?'open':'')}>
- <div className="brand"><div className="brand-icon"><Play size={18} fill="currentColor"/></div><span>DIVINE<span className="brand-light">MEDIA</span><small>INDEPENDENT CULTURE</small></span></div>
+ <div className="brand"><div className="brand-icon"><img className="dm-brand-mark" src="/icons/divine-logo.svg" alt="" aria-hidden="true"/></div><span>DIVINE<span className="brand-light">MEDIA</span><small>INDEPENDENT CULTURE</small></span></div>
  <button className="sidebar-toggle" type="button" onClick={()=>setSidebarCollapsed(v=>!v)} aria-label={sidebarCollapsed?"Expand sidebar":"Collapse sidebar"} title={sidebarCollapsed?"Expand sidebar":"Collapse sidebar"}>{sidebarCollapsed?<PanelLeftOpen size={19}/>:<PanelLeftClose size={19}/>}</button><div className="side-label">EXPLORE</div><nav>{links.map(([name,Icon])=><button key={name} className={'nav-link '+(tab===name?'active':'')} onClick={()=>go(name)} title={name} aria-label={name}><Icon size={19}/><span className="nav-text">{name}</span>{name==='Live'&&<span className="live-dot"/>}</button>)}</nav>
  <div className="side-bottom"><div className="side-label">YOUR SPACE</div><p>Independent stories deserve a place to be discovered.</p><span>DISCOVER MORE. FEEL MORE.</span></div>
  </aside>}

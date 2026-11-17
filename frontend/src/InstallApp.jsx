@@ -1,6 +1,6 @@
 import React,{createContext,useContext,useEffect,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
-import {Download,Share,X} from 'lucide-react';
+import {Download,Share,X} from './GlassIcons.jsx';
 import './install.css';
 const Context=createContext(null);
 export function InstallProvider({children}){

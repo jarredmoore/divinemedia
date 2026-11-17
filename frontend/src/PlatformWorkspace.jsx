@@ -1,7 +1,7 @@
 import DisplayControls from './DisplayControls.jsx';
 import React,{useEffect,useRef,useState} from 'react';
 import {createPortal} from 'react-dom';
-import {X,ArrowLeft} from 'lucide-react';
+import {X,ArrowLeft} from './GlassIcons.jsx';
 import {platform,workspace} from './platform-client.mjs';
 import {usePlatform} from './PlatformContext.jsx';
 import './platform.css';
