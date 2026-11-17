@@ -78,7 +78,7 @@ function App(){
 
  return <div className={"app "+(coldBlack?"cold-black ":"")+(sidebarCollapsed?"sidebar-collapsed":"")}>
  {!coldBlack&&<aside className={'sidebar '+(menu?'open':'')}>
- <div className="brand"><div className="brand-icon"><Play size={18} fill="currentColor"/></div><span>DIVINE<span className="brand-light">MEDIA</span><small>INDEPENDENT CULTURE</small></span></div>
+ <div className="brand"><div className="brand-icon"><img className="dm-brand-mark" src="/icons/divine-logo.svg" alt="" aria-hidden="true"/></div><span>DIVINE<span className="brand-light">MEDIA</span><small>INDEPENDENT CULTURE</small></span></div>
  <button className="sidebar-toggle" type="button" onClick={()=>setSidebarCollapsed(v=>!v)} aria-label={sidebarCollapsed?"Expand sidebar":"Collapse sidebar"} title={sidebarCollapsed?"Expand sidebar":"Collapse sidebar"}>{sidebarCollapsed?<PanelLeftOpen size={19}/>:<PanelLeftClose size={19}/>}</button><div className="side-label">EXPLORE</div><nav>{links.map(([name,Icon])=><button key={name} className={'nav-link '+(tab===name?'active':'')} onClick={()=>go(name)} title={name} aria-label={name}><Icon size={19}/><span className="nav-text">{name}</span>{name==='Live'&&<span className="live-dot"/>}</button>)}</nav>
  <div className="side-bottom"><div className="side-label">YOUR SPACE</div><p>Independent stories deserve a place to be discovered.</p><span>DISCOVER MORE. FEEL MORE.</span></div>
  </aside>}

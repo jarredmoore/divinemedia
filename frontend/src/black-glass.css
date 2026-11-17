@@ -20,9 +20,9 @@ h1,h2,h3,.hero h1 em,.cb-hero-copy h1 em,.cb-scene-reveal h2 em,.experience-copy
 .skip-content{background:#24262b;color:#fff}.save:hover,.save.is-saved,.cold-black .save:hover,.cold-black .save.is-saved{color:#fff}
 .dm-install-card strong,.dm-install-dialog h2{color:#fff}.dm-install-card p,.dm-install-dialog p{color:var(--dm-muted)}
 .brand-icon .dm-glass-icon{background:none;border:0;box-shadow:none;color:#fff}.brand-icon .dm-glass-icon svg{filter:none}
-.dm-glass-icon{--dm-icon-ink:var(--dm-icon-cyan);--dm-icon-tint:#39b9ff24;position:relative;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:var(--dm-icon-size,20px);height:var(--dm-icon-size,20px);flex:0 0 var(--dm-icon-size,20px);border:1px solid #ffffff30;border-radius:6px;color:var(--dm-icon-ink);background:linear-gradient(145deg,#ffffff20,var(--dm-icon-tint) 55%,#05090f80);box-shadow:inset 0 1px 0 #ffffff30,inset 0 -1px 0 #0008,0 2px 5px #0005;line-height:1}
+.dm-glass-icon{--dm-icon-ink:var(--dm-icon-cyan);--dm-icon-tint:#39b9ff14;position:relative;display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:var(--dm-icon-size,20px);height:var(--dm-icon-size,20px);flex:0 0 var(--dm-icon-size,20px);border:1px solid #ffffff30;border-radius:6px;color:var(--dm-icon-ink);background:linear-gradient(145deg,#ffffff10,var(--dm-icon-tint) 55%,#05090f30);box-shadow:inset 0 1px 0 #ffffff20,0 1px 3px #0004;line-height:1}
 .dm-glass-icon svg{flex:none;filter:drop-shadow(0 1px 1px #000b) drop-shadow(0 0 2px var(--dm-icon-tint))}
-.dm-icon-blue{--dm-icon-ink:var(--dm-icon-blue);--dm-icon-tint:#487cff28}.dm-icon-purple{--dm-icon-ink:var(--dm-icon-purple);--dm-icon-tint:#9a65ff28}.dm-icon-pink{--dm-icon-ink:var(--dm-icon-pink);--dm-icon-tint:#ed65b628}.dm-icon-green{--dm-icon-ink:var(--dm-icon-green);--dm-icon-tint:#32db9a25}
+.dm-icon-blue{--dm-icon-ink:var(--dm-icon-blue);--dm-icon-tint:#487cff14}.dm-icon-purple{--dm-icon-ink:var(--dm-icon-purple);--dm-icon-tint:#9a65ff14}.dm-icon-pink{--dm-icon-ink:var(--dm-icon-pink);--dm-icon-tint:#ed65b614}.dm-icon-green{--dm-icon-ink:var(--dm-icon-green);--dm-icon-tint:#32db9a14}
 .dm-display :focus-visible,.dm-workspace :focus-visible,.dm-interactions :focus-visible,.dm-player-toolbar :focus-visible,.dm-player-panel :focus-visible,.dm-install-trigger:focus-visible,.dm-install-card button:focus-visible,.dm-install-dialog :focus-visible{outline:2px solid var(--dm-focus);outline-offset:4px}
 @supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
  .cb-header,.cold-black .cb-header,.sidebar,.cb-navigation.is-open,.modal,.cold-black .modal,.native-dialog,.native-account-panel,.dm-workspace,.dm-player-panel,.dm-display-panel,.dm-more-panel,.dm-install-dialog,.dm-dock,.cold-black .dm-dock,.dm-player-toolbar,.dm-install-card,.cold-black .media-card,.media-card,.manifesto,.cold-black .manifesto{background:var(--dm-glass);backdrop-filter:blur(var(--dm-blur));-webkit-backdrop-filter:blur(var(--dm-blur))}
@@ -46,3 +46,11 @@ h1,h2,h3,.hero h1 em,.cb-hero-copy h1 em,.cb-scene-reveal h2 em,.experience-copy
 :root[data-theme="default"] .nav-link.active{background:#ffcc2f12}
 :root[data-theme="default"] .dm-dock-progress,:root[data-theme="default"] .dm-dock-volume input[type=range],:root[data-theme="default"] .dm-workspace progress{accent-color:#ffcc2f}
 @media(min-width:601px){.app:not(.cold-black) .native-actions>.native-upload{width:auto;min-width:88px}}
+/* Cozy's yellow action buttons use a clear black play glyph. */
+:root[data-theme="default"] :is(.primary,.dm-dock-play,.dm-dock-resume,.player-main) .dm-icon-play{background:none;border:0;box-shadow:none;color:#0b0d10}
+:root[data-theme="default"] :is(.primary,.dm-dock-play,.dm-dock-resume,.player-main) .dm-icon-play svg{stroke:#0b0d10;fill:#0b0d10;filter:none}
+.cb-wordmark .dm-brand-mark{width:36px;height:36px;flex-shrink:0}
+@media(max-width:600px){.cb-wordmark .dm-brand-mark{width:29px;height:29px}}
+@media(max-width:360px){.cb-wordmark .dm-brand-mark{width:26px;height:26px}}
+.brand-icon .dm-brand-mark{width:26px;height:26px}
+:root[data-theme="default"] .brand-icon{background:var(--dm-glass-solid);border-color:var(--dm-border)}

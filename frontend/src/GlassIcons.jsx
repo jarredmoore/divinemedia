@@ -3,12 +3,12 @@ import * as Lucide from 'lucide-react';
 export * from 'lucide-react';
 // A single treatment for action icons; dismiss/back arrows remain quiet neutral glyphs.
 const tones={cyan:['#a4f5ff','#32caff','#657dff'],blue:['#a5ecff','#729fff','#8176ff'],purple:['#dfc2ff','#af7bff','#ff8bd7'],pink:['#ffd1ed','#ff83c8','#a387ff'],green:['#bcffe6','#5de5b3','#45b8e9']};
-function glass(Icon,tone){return function GlassIcon({size=20,className='',fill='none',...props}){
+function glass(Icon,tone,kind=''){return function GlassIcon({size=20,className='',fill='none',...props}){
  const id='glass-'+useId().replace(/[^A-Za-z0-9_-]/g,''),width=Math.max(20,Number(size)||20),colors=tones[tone];
- return <span className={'dm-glass-icon dm-icon-'+tone+' '+className} style={{'--dm-icon-size':width+'px'}} aria-hidden="true"><Icon {...props} stroke={'url(#'+id+')'} fill={fill==='currentColor'?'url(#'+id+')':fill} size={width-6}><defs><linearGradient id={id} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stopColor={colors[0]}/><stop offset=".48" stopColor={colors[1]}/><stop offset="1" stopColor={colors[2]}/></linearGradient></defs></Icon></span>;
+ return <span className={'dm-glass-icon dm-icon-'+tone+' dm-icon-'+kind+' '+className} style={{'--dm-icon-size':width+'px'}} aria-hidden="true"><Icon {...props} stroke={'url(#'+id+')'} fill={fill==='currentColor'?'url(#'+id+')':fill} size={width-6}><defs><linearGradient id={id} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="24" y2="24"><stop offset="0" stopColor={colors[0]}/><stop offset=".48" stopColor={colors[1]}/><stop offset="1" stopColor={colors[2]}/></linearGradient></defs></Icon></span>;
 }}
 
-export const Play=glass(Lucide.Play,'cyan');
+export const Play=glass(Lucide.Play,'cyan','play');
 export const Pause=glass(Lucide.Pause,'blue');
 export const Headphones=glass(Lucide.Headphones,'purple');
 export const Music=glass(Lucide.Music,'purple');
