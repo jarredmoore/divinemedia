@@ -1,0 +1,474 @@
+
+            <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">
+                                            </a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <div class="navbar-lang-btn">
+                                <div class="select_lang">
+                                    <form method="post" id="form_lang">
+                                        <select class="selectpicker" name="lang">
+                                            <option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option selected></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+<option></option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                        </li>
+                                                    
+                            <li><a class="buttonLogoff btn btn-default"><span class="glyphicon glyphicon-log-out"></span> Logoff</a></li>
+
+                                            </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="container-fluid main-container">
+        
+            <div class="col-md-4" id="rightContainer">
+                <div class="panel panel-default">
+                    <div class="panel-heading tabbable-line">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item active  animate__animated animate__bounceInDown">
+                                <a class="nav-link"><i class="fas fa-cog"></i> Basic</a>
+                            </li>
+                                                            <li class="nav-item animate__animated animate__bounceInDown">
+                                    <a class="nav-link"><i class="fas fa-cogs"></i> Advanced</a>
+                                </li>
+                                                    </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div id="basicOptions" class="tab-pane fade in active">
+                                
+<div class="panel panel-default encoder-upload-panel">
+    <div class="panel-heading">
+            </div>
+    <div class="panel-body animate__animated animate__bounceInLeft">
+                <ul class="nav nav-tabs nav-tabs-icons" role="tablist">
+            <li class="active" role="presentation">
+                <a role="tab">
+                    <i class="fas fa-file-upload" aria-hidden="true"></i>
+                    <span class="encoder-tab-label">From File</span>
+                </a>
+            </li>
+                            <li role="presentation">
+                    <a role="tab">
+                        <i class="fas fa-cloud-download-alt" aria-hidden="true"></i>
+                        <span class="encoder-tab-label">Import Video</span>
+                    </a>
+                </li>
+                                <li role="presentation">
+                    <a role="tab">
+                        <i class="fas fa-layer-group" aria-hidden="true"></i>
+                        <span class="encoder-tab-label">Bulk Encode</span>
+                    </a>
+                </li>
+                    </ul>
+        <div class="tab-content">
+            <div id="upload" class="tab-pane fade in active">
+                
+<form id="fileupload" method="POST" enctype="multipart/form-data">
+    <input type="hidden" id="videos_id" name="videos_id">
+    <input type="hidden" id="user">
+    <input type="hidden" id="pass">
+    <div class="form-group">
+        <input type="text" class="form-control" id="title" name="title" placeholder="Title">
+    </div>
+    <div class="form-group">
+        <textarea class="form-control" id="description" name="description" placeholder="Description"></textarea>
+    </div>
+        
+    
+<div class="form-group col-sm-7">
+    <label for="releaseDateOption">Release Date</label>
+    <select class="form-control" id="releaseDateOption">
+        <option>Now (2026-11-07 17:08)</option>
+        
+            <option>1 Hour</option><option>2 Hours</option><option>3 Hours</option><option>4 Hours</option><option>5 Hours</option><option>6 Hours</option><option>7 Hours</option><option>8 Hours</option><option>9 Hours</option><option>10 Hours</option><option>11 Hours</option><option>12 Hours</option><option>13 Hours</option><option>14 Hours</option><option>15 Hours</option><option>16 Hours</option><option>17 Hours</option><option>18 Hours</option><option>19 Hours</option><option>20 Hours</option><option>21 Hours</option><option>22 Hours</option><option>23 Hours</option>        </optgroup>
+        
+            <option>1 Day</option><option>2 Days</option><option>3 Days</option><option>4 Days</option><option>5 Days</option><option>6 Days</option><option>7 Days</option><option>8 Days</option><option>9 Days</option><option>10 Days</option><option>11 Days</option><option>12 Days</option><option>13 Days</option><option>14 Days</option><option>15 Days</option><option>16 Days</option><option>17 Days</option><option>18 Days</option><option>19 Days</option><option>20 Days</option><option>21 Days</option><option>22 Days</option><option>23 Days</option><option>24 Days</option><option>25 Days</option><option>26 Days</option><option>27 Days</option><option>28 Days</option><option>29 Days</option><option>30 Days</option>        </optgroup>
+        
+            <option>1 Month</option><option>2 Months</option><option>3 Months</option><option>4 Months</option><option>5 Months</option><option>6 Months</option><option>7 Months</option><option>8 Months</option><option>9 Months</option><option>10 Months</option><option>11 Months</option>        </optgroup>
+        
+            <option>1 Year</option><option>2 Years</option><option>3 Years</option><option>4 Years</option><option>5 Years</option><option>6 Years</option><option>7 Years</option><option>8 Years</option><option>9 Years</option>        </optgroup>
+    </select>
+</div>
+
+<div class="form-group col-sm-5">
+    <label for="releaseDate">Date Time:</label>
+    <input type="text" id="releaseDate" class="form-control input-sm" placeholder="Date Time">
+</div>
+<div class="clearfix"></div>
+
+    <div class="clearfix"></div>
+        
+    <input type="hidden" name="redirect"></noscript>
+    
+    <div class="row fileupload-buttonbar">
+        <div class="col-lg-12">
+            
+            <span class="btn btn-success fileinput-button col-sm-12">
+                <i class="fas fa-plus" aria-hidden="true"></i>
+                <span>Add files...</span>
+                <input type="file" name="files[]" multiple>
+            </span>
+            <div class="btn-group btn-group-justified upload-action-group">
+                <button type="submit" class="btn btn-primary start upload-action">
+                    <i class="fas fa-upload" aria-hidden="true"></i>
+                    <span>Upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel upload-action">
+                    <i class="fas fa-ban" aria-hidden="true"></i>
+                    <span>Cancel</span>
+                </button>
+                <button type="button" class="btn btn-danger delete upload-action">
+                    <i class="fas fa-trash" aria-hidden="true"></i>
+                    <span>Delete</span>
+                </button>
+            </div>
+            <div class="upload-preferences">
+                <label class="upload-preference" for="selectAll">
+                    <input type="checkbox" class="toggle" id="selectAll" name="selectAll">
+                    <span class="upload-preference-icon" aria-hidden="true"><i class="fas fa-list-ul"></i></span>
+                    <span class="upload-preference-text">Select All</span>
+                </label>
+                <label class="upload-preference" for="videoEditorToggle">
+                    <input type="checkbox" id="videoEditorToggle">
+                    <span class="upload-preference-icon" aria-hidden="true"><i class="fas fa-pencil-alt"></i></span>
+                    <span class="upload-preference-text">Edit while uploading</span>
+                </label>
+                
+            </div>
+            
+            <span class="fileupload-process"></span>
+        </div>
+    </div>
+    
+    <table role="presentation" class="table table-striped">
+        <tbody class="files"></tbody>
+    </table>
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+                            <div id="download" class="tab-pane fade">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i> Share videos from YouTube and a few <a>more sites</a>.
+                    </div>
+                                        <form id="downloadForm">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input type="url" class="form-control" id="inputVideoURL" placeholder="http://...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fas fa-check" aria-hidden="true"></i> Share                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-7">
+    <label for="download_releaseDateOption">Release Date</label>
+    <select class="form-control" id="download_releaseDateOption">
+        <option>Now (2026-11-07 17:08)</option>
+        
+            <option>1 Hour</option><option>2 Hours</option><option>3 Hours</option><option>4 Hours</option><option>5 Hours</option><option>6 Hours</option><option>7 Hours</option><option>8 Hours</option><option>9 Hours</option><option>10 Hours</option><option>11 Hours</option><option>12 Hours</option><option>13 Hours</option><option>14 Hours</option><option>15 Hours</option><option>16 Hours</option><option>17 Hours</option><option>18 Hours</option><option>19 Hours</option><option>20 Hours</option><option>21 Hours</option><option>22 Hours</option><option>23 Hours</option>        </optgroup>
+        
+            <option>1 Day</option><option>2 Days</option><option>3 Days</option><option>4 Days</option><option>5 Days</option><option>6 Days</option><option>7 Days</option><option>8 Days</option><option>9 Days</option><option>10 Days</option><option>11 Days</option><option>12 Days</option><option>13 Days</option><option>14 Days</option><option>15 Days</option><option>16 Days</option><option>17 Days</option><option>18 Days</option><option>19 Days</option><option>20 Days</option><option>21 Days</option><option>22 Days</option><option>23 Days</option><option>24 Days</option><option>25 Days</option><option>26 Days</option><option>27 Days</option><option>28 Days</option><option>29 Days</option><option>30 Days</option>        </optgroup>
+        
+            <option>1 Month</option><option>2 Months</option><option>3 Months</option><option>4 Months</option><option>5 Months</option><option>6 Months</option><option>7 Months</option><option>8 Months</option><option>9 Months</option><option>10 Months</option><option>11 Months</option>        </optgroup>
+        
+            <option>1 Year</option><option>2 Years</option><option>3 Years</option><option>4 Years</option><option>5 Years</option><option>6 Years</option><option>7 Years</option><option>8 Years</option><option>9 Years</option>        </optgroup>
+    </select>
+</div>
+
+<div class="form-group col-sm-5">
+    <label for="download_releaseDate">Date Time:</label>
+    <input type="text" id="download_releaseDate" class="form-control input-sm" placeholder="Date Time">
+</div>
+<div class="clearfix"></div>
+
+                        <div class="clearfix"></div>
+                                            </form>
+                </div>
+
+                
+                <div id="bulk" class="tab-pane fade">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle" aria-hidden="true"></i> Bulk add your server local files on queue.                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <input type="text" id="path" class="form-control" placeholder="Local Path of videos i.e. /media/videos">
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" id="pathBtn">
+                                    <i class="fas fa-list" aria-hidden="true"></i> List Files                                </button>
+                            </span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" id="checkBtn">
+                                    <i class="fas fa-check-square" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                            <span class="input-group-btn">
+                                <button class="btn btn-primary" id="uncheckBtn">
+                                    <i class="far fa-square" aria-hidden="true"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group col-sm-7">
+    <label for="bulk_releaseDateOption">Release Date</label>
+    <select class="form-control" id="bulk_releaseDateOption">
+        <option>Now (2026-11-07 17:08)</option>
+        
+            <option>1 Hour</option><option>2 Hours</option><option>3 Hours</option><option>4 Hours</option><option>5 Hours</option><option>6 Hours</option><option>7 Hours</option><option>8 Hours</option><option>9 Hours</option><option>10 Hours</option><option>11 Hours</option><option>12 Hours</option><option>13 Hours</option><option>14 Hours</option><option>15 Hours</option><option>16 Hours</option><option>17 Hours</option><option>18 Hours</option><option>19 Hours</option><option>20 Hours</option><option>21 Hours</option><option>22 Hours</option><option>23 Hours</option>        </optgroup>
+        
+            <option>1 Day</option><option>2 Days</option><option>3 Days</option><option>4 Days</option><option>5 Days</option><option>6 Days</option><option>7 Days</option><option>8 Days</option><option>9 Days</option><option>10 Days</option><option>11 Days</option><option>12 Days</option><option>13 Days</option><option>14 Days</option><option>15 Days</option><option>16 Days</option><option>17 Days</option><option>18 Days</option><option>19 Days</option><option>20 Days</option><option>21 Days</option><option>22 Days</option><option>23 Days</option><option>24 Days</option><option>25 Days</option><option>26 Days</option><option>27 Days</option><option>28 Days</option><option>29 Days</option><option>30 Days</option>        </optgroup>
+        
+            <option>1 Month</option><option>2 Months</option><option>3 Months</option><option>4 Months</option><option>5 Months</option><option>6 Months</option><option>7 Months</option><option>8 Months</option><option>9 Months</option><option>10 Months</option><option>11 Months</option>        </optgroup>
+        
+            <option>1 Year</option><option>2 Years</option><option>3 Years</option><option>4 Years</option><option>5 Years</option><option>6 Years</option><option>7 Years</option><option>8 Years</option><option>9 Years</option>        </optgroup>
+    </select>
+</div>
+
+<div class="form-group col-sm-5">
+    <label for="bulk_releaseDate">Date Time:</label>
+    <input type="text" id="bulk_releaseDate" class="form-control input-sm" placeholder="Date Time">
+</div>
+<div class="clearfix"></div>
+
+                    <div class="clearfix"></div>
+                                        <ul class="list-group" id="files">
+                    </ul>
+                    <button class="btn btn-block btn-primary" id="addQueueBtn">Add on Queue</button>
+                </div>
+                    </div>
+    </div>
+    <div class="panel-footer">
+        <div class="available-resolutions">
+            <div class="available-resolutions-title">
+                <i class="fas fa-tv" aria-hidden="true"></i>
+                <span>Resolutions</span>
+            </div>
+            <div class="availableResolutionsLabels">
+                <span class="label label-success">240p  </span><span class="label label-success">360p  </span><span class="label label-success">480p  </span><span class="label label-success">540p  </span><span class="label label-success">720p <span class="label label-danger">HD</span> </span><span class="label label-success">1080p <span class="label label-danger">FHD</span> </span><span class="label label-success">1440p <span class="label label-danger">FHD+</span> </span><span class="label label-success">2160p <span class="label label-danger">4K</span> </span>            </div>
+        </div>
+            </div>
+</div>
+                            </div>
+                            <div id="advancedOptions" class="tab-pane fade">
+                                    <div class="panel panel-default">
+        <div class="panel-heading">
+            <i class="fa-solid fa-eye"></i>
+            Override status        </div>
+        <div class="panel-body">
+            <select class="form-control" id="override_status" name="override_status">
+                <option>Use site default</option>
+                <option>Active</option>
+                <option>Inactive</option>
+                <option>Unlisted</option>
+                <option>Unlisted but Searchable</option>
+            </select>
+        </div>
+    </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><i class="fas fa-desktop"></i> Update existing video</div>
+            <div class="panel-body">
+                
+                <input type="text" class="form-control" id="videoSearch" name="videoSearch" placeholder="Search for a video">
+                <input type="number" class="form-control" id="update_video_id" name="update_video_id" placeholder="Video Id">
+            </div>
+        </div>
+
+        
+        <div class="panel panel-default">
+        <div class="panel-heading"><i class="fas fa-desktop"></i> Resolutions</div>
+        <div class="panel-body">
+                            <label id="">
+                    <input type="checkbox" id="inputLow" checked="checked" class="mp4Checkbox"> Low                </label>
+                            <label id="">
+                    <input type="checkbox" id="inputSD" checked="checked" class="mp4Checkbox"> SD                </label>
+                            <label>
+                    <input type="checkbox" id="inputHD" checked="checked" class="mp4Checkbox"> HD                </label>
+                    </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><i class="fas fa-cogs"></i> Advanced</div>
+        <div class="panel-body">
+                            <label>
+                    <input type="checkbox" id="inputAudioOnly">
+                    <span class="glyphicon glyphicon-headphones"></span> Extract Audio                </label><br>
+                                        <label id="spectrum">
+                    <input type="checkbox" id="inputAudioSpectrum">
+                    <span class="glyphicon glyphicon-equalizer"></span> Create Video Spectrum                </label>
+                                        <label id="webm">
+                    <input type="checkbox" id="inputWebM">
+                    <i class="fas fa-chrome" aria-hidden="true"></i> Extract WebM Video <small class="text-muted">(The encode process will be slow)</small>
+                    <br><small class="label label-warning">
+                        For Chrome Browsers                    </small>
+                </label>
+                    </div>
+    </div>
+<div class="panel panel-success">
+    <div class="panel-heading">
+        <span class="fas fa-broadcast-tower"></span> Streamer info    </div>
+    <div class="panel-body">
+        <p>
+            <span class="fas fa-link"></span>
+            <strong>Streamer URL:</strong>
+            <a>
+                https://media.divinemedia.us/            </a>
+        </p>
+        <p>
+            <span class="fas fa-user-circle"></span>
+            <strong>User:</strong>         </p>
+        <p>
+            <span class="fa-solid fa-file-upload"></span>
+            <strong>Max File Size:</strong> 10.00GB        </p>
+            </div>
+</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <div id="noNavbarPlaceholder"></div>
+                                <div class="panel panel-default">
+                    <div class="panel-heading tabbable-line">
+                        <ul class="nav nav-tabs" id="mainTabs">
+                            <li class="nav-item active animate__animated animate__bounceInDown">
+                                <a class="nav-link"><i class="fas fa-list-ul" aria-hidden="true"></i> <span>Sharing Queue</span></a>
+                            </li>
+                            <li class="nav-item animate__animated animate__bounceInDown">
+                                <a class="nav-link"><i class="fas fa-history" aria-hidden="true"></i> <span>Queue Log</span></a>
+                            </li>
+
+                                                    </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div id="encoding" class="tab-pane fade in active">
+                                <div id="queueSummary" class="queue-summary"></div>
+                                <div id="queueEmptyState" class="queue-empty-state">
+                                    <i class="fas fa-inbox" aria-hidden="true"></i>
+                                    No videos in the sharing queue                                </div>
+                            </div>
+                            <div id="log" class="tab-pane fade">
+                                <div class="log-heading">
+                                    <p class="text-muted">Review video processing, status details and available actions.</p>
+                                </div>
+                                <table id="grid" class="table table-hover log-table">
+                                    Queue Log</caption>
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Status</th>
+                                            <th>Dates</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                                                                                </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        
+    </div>
+
+    <div class="modal fade" id="renewStreamerModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form id="renewStreamerForm">
+                    <div class="modal-header">
+                        <button type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="renewStreamerTitle">Renew site access</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="renewStreamerMessage"></p>
+                        <p><strong id="renewStreamerAccount"></strong></p>
+                        <input type="hidden" id="renewStreamerUsername">
+                        <div class="form-group">
+                            <label for="renewStreamerPassword">Password</label>
+                            <input type="password" class="form-control" id="renewStreamerPassword">
+                        </div>
+                        <p class="help-block">Use the password for this account on the video site. Your encoded files will be kept.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="renewStreamerSubmit">Renew and continue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+
+
