@@ -7,8 +7,8 @@
  docker('exec',web,'php','/tmp/dm-route-tests.php','/var/www/html/AVideo/divine-api')
  phase='isolated-account-fixtures'
  # Only disposable database users and rows. Nothing is created in production.
- credentials={name:{'user':'dmqa_'+name+'_'+uuid.uuid4().hex[:8],'password':secrets.token_hex(20)} for name in ['owner','other']}
- seed="""$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$out=[];foreach(json_decode(stream_get_contents(STDIN),true) as $role=>$d){$u=new User(0);$u->setUser($d['user']);$u->setPassword($d['password']);$u->setEmail($d['user'].'@example.invalid');$u->setName('Divine isolated '.$role);$u->setIsAdmin(0);$u->setEmailVerified(1);$u->setCanUpload($role==='owner'?1:0);$u->setCanStream($role==='owner'?1:0);$u->setStatus('a');$id=$u->save();if(!$id)exit(2);$out[$role]=(int)$id;}echo json_encode($out);"""
+ credentials={name:{'user':'dmqa_'+name+'_'+uuid.uuid4().hex[:8],'password':secrets.token_hex(20)} for name in ['owner','other','admin']}
+ seed="""$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$out=[];foreach(json_decode(stream_get_contents(STDIN),true) as $role=>$d){$u=new User(0);$u->setUser($d['user']);$u->setPassword($d['password']);$u->setEmail($d['user'].'@example.invalid');$u->setName('Divine isolated '.$role);$u->setIsAdmin($role==='admin'?1:0);$u->setEmailVerified($role==='admin'?0:1);$u->setCanUpload($role==='owner'?1:0);$u->setCanStream($role==='owner'?1:0);$u->setStatus('a');$id=$u->save();if(!$id)exit(2);$out[$role]=(int)$id;}echo json_encode($out);"""
  fixture=docker('exec','-i',web,'php','-r',seed,data=json.dumps(credentials)).stdout
  pathlib.Path(bundle+'/fixture-seed-private.txt').write_text(fixture)
  user_ids=json.loads(fixture.strip().splitlines()[-1]);owner=user_ids['owner'];other=user_ids['other']
@@ -52,13 +52,13 @@
  checks['anonymous_authentication_and_csrf_guards']=True
  phase='native-account-login'
  actors={}
- for role in ['owner','other']:
+ for role in ['owner','other','admin']:
   actor={};assert call('session',actor)[0]==200;before=actor['sid'];status,res=call('login',actor,credentials[role])
   assert status==200 and res['user']['id']==user_ids[role], 'Native login failed: '+role+' '+str(status)
   assert actor['sid']!=before,'Session did not rotate after native login'
   assert 'password' not in json.dumps(res).lower() and 'passhash' not in json.dumps(res).lower()
   actors[role]=actor
- a=actors['owner'];b=actors['other'];checks['native_login_and_session_rotation']=True
+ a=actors['owner'];b=actors['other'];checks['native_login_and_session_rotation']=True;checks['unverified_admin_native_login']=True
  phase='comments-and-reactions'
  assert call('video',a,params={'id':video})[0]==200
  status,res=call('reaction',a,{'video':video,'value':1});assert status==200 and res['reaction']==1,'Native like failed'
