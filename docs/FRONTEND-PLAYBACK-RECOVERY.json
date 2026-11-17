@@ -1,0 +1,39 @@
+{
+  "incident": "Frontend requests rejected because Azure gateway key was missing from /var/www/tmp",
+  "confirmed": {
+    "frontend_session_api_before": 404,
+    "frontend_video_api_before": 404,
+    "gateway_key_file_missing": true,
+    "web_container_not_restarted": true,
+    "gateway_restored_from_verified_backup": true
+  },
+  "deletion_trigger": "Not established; temporary directory was unsuitable for persistent authentication material.",
+  "recovery_checks": [
+    {
+      "video_id": 1,
+      "actual_decoded_playback_seconds_minimum": 3,
+      "browser_errors": [],
+      "mobile_route_checks": 14,
+      "analytics_writes_stubbed": true
+    },
+    {
+      "video_id": 19,
+      "actual_decoded_playback_seconds_minimum": 3,
+      "browser_errors": [],
+      "mobile_route_checks": 14,
+      "analytics_writes_stubbed": true
+    }
+  ],
+  "content_or_credentials_exposed": false,
+  "durability_fix": {
+    "result": "pass",
+    "state": "/srv/divinemedia/backups/gateway-persistence-fe97e92936b0",
+    "persistent_volume": true,
+    "guarded_php_secret": true,
+    "public_access_denied_status": 403,
+    "before_backup_roundtrip_verified": true,
+    "gateway_session_smoke": "pass",
+    "container_restarted": false,
+    "media_content_modified": false
+  }
+}

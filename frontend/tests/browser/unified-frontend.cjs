@@ -10,6 +10,13 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
  const item={id:101,avideoId:101,title:'Divine test video',type:'Watch',tag:'DIVINE ORIGINAL',creator:'Test creator',channel:'test-creator',userId:7,categoryId:1,img:'/placeholder.svg',image:'/placeholder.svg',videoUrl:'https://media.divinemedia.us/videos/isolated-fixture.mp4',watchUrl:'https://divinemedia.us/watch/101'};
  page.on('pageerror',e=>errors.push(e.message));
  await context.addInitScript(()=>{Object.defineProperty(navigator,'clipboard',{value:{writeText:async text=>{window.__copied=text}}})});
+ await context.addInitScript(()=>{
+  window.__displayCalls={airplay:0,loads:0,fullscreen:0};
+  HTMLMediaElement.prototype.webkitShowPlaybackTargetPicker=function(){window.__displayCalls.airplay++};
+  HTMLElement.prototype.requestFullscreen=async()=>{window.__displayCalls.fullscreen++};Object.defineProperty(document,'fullscreenEnabled',{value:true});
+  let session=null;const ctx={setOptions:()=>{},getCurrentSession:()=>session,requestSession:async()=>{session={loadMedia:async r=>{window.__displayCalls.loads++;window.__displayCalls.source=r.media.url}}},endCurrentSession:()=>{session=null}};
+  window.cast={framework:{CastContext:{getInstance:()=>ctx}}};window.chrome=window.chrome||{};window.chrome.cast={isAvailable:true,AutoJoinPolicy:{TAB_AND_ORIGIN_SCOPED:'tab'},media:{DEFAULT_MEDIA_RECEIVER_APP_ID:'default',StreamType:{LIVE:'live'},MediaInfo:class{constructor(url,type){this.url=url;this.type=type}},LoadRequest:class{constructor(info){this.media=info}}}};
+ });
  await context.route('**/*',async route=>{
   const req=route.request(),url=new URL(req.url());
   if(url.hostname==='media.divinemedia.us'&&url.pathname==='/videos/isolated-fixture.mp4'){
@@ -55,6 +62,12 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
  await page.goto(origin+'/?theme=code-black');await page.getByText('DIVINE CATALOG',{exact:false}).waitFor();
  await page.getByRole('button',{name:'View Divine test video',exact:true}).click();
  assert.equal(new URL(page.url()).pathname,'/watch/101');assert.equal(await page.locator('iframe').count(),0);
+ await page.locator('.dm-player').getByRole('button',{name:'Display options',exact:true}).click();
+ await page.getByRole('button',{name:'AirPlay',exact:true}).click();assert.equal(await page.evaluate(()=>window.__displayCalls.airplay),1);
+ await page.getByRole('button',{name:'Google Cast / Chromecast',exact:true}).click();await page.waitForFunction(()=>window.__displayCalls.loads===1);assert.equal(await page.evaluate(()=>window.__displayCalls.source),'https://media.divinemedia.us/videos/isolated-fixture.mp4');
+ await page.getByRole('button',{name:'Fullscreen site',exact:true}).click();assert.equal(await page.evaluate(()=>window.__displayCalls.fullscreen),1);
+ await page.getByRole('button',{name:'Disconnect Google Cast',exact:true}).click();await page.getByRole('button',{name:'Close display options',exact:true}).click();
+
  assert(await page.locator('video.real-video').getAttribute('controls')!==null);
  await page.waitForFunction(()=>document.querySelector('video.real-video')?.readyState>=1);
  await page.getByRole('button',{name:'Forward 5 seconds',exact:true}).click();
@@ -90,7 +103,7 @@ fs.mkdirSync(dir,{recursive:true});process.umask(0o077);
  await page.goBack();await page.waitForFunction(()=>!document.querySelector('.watch-modal'));
  await page.goForward();await page.locator('.watch-modal').waitFor();
  assert.equal(new URL(page.url()).pathname,'/watch/101');
- for(const width of [390,320]){
+ for(const width of [390,320]){await page.setViewportSize({width,height:900});await page.locator('.dm-player').getByRole('button',{name:'Display options',exact:true}).click();const bounds=await page.locator('.dm-player .dm-display-panel').evaluate(el=>{const r=el.getBoundingClientRect();return r.left>=0&&r.right<=innerWidth+1&&r.top>=0&&r.bottom<=innerHeight+1});assert(bounds,'Display menu outside mobile viewport');await page.getByRole('button',{name:'Close display options',exact:true}).click();
   await page.setViewportSize({width,height:900});await page.getByRole('button',{name:'More video options',exact:true}).click();
   assert.equal(await page.locator('.dm-more-panel').evaluate(el=>el.getBoundingClientRect().right>innerWidth+1),false);
   await page.screenshot({path:dir+'/more-options-'+width+'.png'});await page.keyboard.press('Escape');

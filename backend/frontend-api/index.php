@@ -22,8 +22,16 @@ register_shutdown_function(function () {
         dm_reply(['error'=>'The platform could not complete this request.'], http_response_code() >= 400 ? http_response_code() : 502);
     }
 });
-$keyFile = '/var/www/tmp/divine-frontend-gateway.key';
-$expected = is_file($keyFile) ? trim((string)file_get_contents($keyFile)) : '';
+// PHP guard and persistent volume keep this credential outside disposable native tmp storage.
+$keyFile = '/var/www/html/AVideo/videos/.divine-private/frontend-gateway.php';
+if (is_file($keyFile)) {
+    define('DM_GATEWAY_INTERNAL', true);
+    $expected = trim((string)require $keyFile);
+} else {
+    // Compatibility for restored rehearsals and installations not yet migrated.
+    $keyFile = '/var/www/tmp/divine-frontend-gateway.key';
+    $expected = is_file($keyFile) ? trim((string)file_get_contents($keyFile)) : '';
+}
 if (strlen($expected) < 32 || !hash_equals($expected, (string)($_SERVER['HTTP_X_DIVINE_GATEWAY_KEY'] ?? ''))) { dm_error('Not found', 404); }
 define('DM_FRONTEND_API',true);
 $frontendOrigin = (string)($_SERVER['HTTP_X_DIVINE_FRONTEND_ORIGIN'] ?? '');

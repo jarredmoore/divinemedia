@@ -1,0 +1,31 @@
+{
+  "result": "pass",
+  "checks": [
+    {
+      "theme": "default",
+      "width": 1440
+    },
+    {
+      "theme": "default",
+      "width": 390
+    },
+    {
+      "theme": "default",
+      "width": 320
+    },
+    {
+      "theme": "code-black",
+      "width": 1440
+    },
+    {
+      "theme": "code-black",
+      "width": 390
+    },
+    {
+      "theme": "code-black",
+      "width": 320
+    }
+  ],
+  "creator_and_account_overlay_control": true,
+  "hardware_connections": "simulated only"
+}

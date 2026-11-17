@@ -15,6 +15,8 @@ async function addResponseCookies(context,url,lines){for(const line of lines){co
  page.on('pageerror',e=>errors.push(e.message));
  await context.route('**/*',async route=>{
   const req=route.request(),url=new URL(req.url());
+  // Decode real media without writing view analytics during opt-in recovery checks.
+  if(process.env.VERIFY_ACTUAL_PLAYBACK==='1'&&req.method()==='POST'&&url.pathname==='/api/platform/playback')return route.fulfill({status:200,contentType:'application/json',body:'{}'});
   if(req.method()!=='GET'){blockedWrites++;return route.abort()}
   if(![new URL(watch).host,'media.divinemedia.us','images.unsplash.com','fonts.googleapis.com','fonts.gstatic.com'].includes(url.host))return route.abort();
   try{const r=await fetchPublic(url.href,req.headers().cookie||'',req.headers());await addResponseCookies(context,url.href,r.cookies);if(url.origin===watch&&url.pathname.startsWith('/api/platform/'))requests.push({action:url.pathname.split('/').at(-1),status:r.status});await route.fulfill({status:r.status,headers:r.headers,body:r.body})}catch{await route.abort()}
@@ -26,6 +28,7 @@ async function addResponseCookies(context,url,lines){for(const line of lines){co
  await page.locator('video.real-video[src]').waitFor({state:'attached',timeout:45000});
  assert.equal(await page.locator('iframe').count(),0);assert.equal(await page.locator('video.real-video').getAttribute('controls'),'');
  assert((await page.locator('video.real-video').getAttribute('src')).startsWith('https://media.divinemedia.us/videos/'));
+ if(process.env.VERIFY_ACTUAL_PLAYBACK==='1'){await page.locator('video.real-video').evaluate(el=>el.play());await page.waitForFunction(()=>document.querySelector('video.real-video')?.currentTime>3,{},{timeout:45000});await page.locator('video.real-video').evaluate(el=>el.pause());}
  await page.getByRole('button',{name:'Playback options',exact:true}).click();await page.getByLabel('Playback speed',{exact:true}).selectOption('1.25');
  assert.equal(await page.locator('video.real-video').evaluate(el=>el.playbackRate),1.25);
  await page.screenshot({path:dir+'/deployed-player-options-desktop.png'});await page.keyboard.press('Escape');
@@ -59,6 +62,6 @@ async function addResponseCookies(context,url,lines){for(const line of lines){co
   }
  }
  assert.deepEqual(errors,[]);assert.equal(blockedWrites,0);assert(requests.some(r=>r.action==='session'&&r.status===200));assert(requests.some(r=>r.action==='catalog'&&r.status===200));
- const report={result:'pass',preview:watch,transport:'TLS-verified curl responses in Chromium; no certificate bypass',read_only:true,real_accounts_or_content_mutated:false,frontend_video_element:true,native_html_iframes:false,backend_navigation_links:false,httpOnly_secure_frontend_session:true,creator_routes_stay_on_frontend:true,playback_options_and_more_menu:true,mobile_player_menus_verified:true,route_checks:checks,errors,requests};
+ const report={result:'pass',actual_video_playback_verified:process.env.VERIFY_ACTUAL_PLAYBACK==='1',preview:watch,transport:'TLS-verified curl responses in Chromium; no certificate bypass',read_only:true,real_accounts_or_content_mutated:false,frontend_video_element:true,native_html_iframes:false,backend_navigation_links:false,httpOnly_secure_frontend_session:true,creator_routes_stay_on_frontend:true,playback_options_and_more_menu:true,mobile_player_menus_verified:true,route_checks:checks,errors,requests};
  fs.writeFileSync(dir+'/unified-preview-report.json',JSON.stringify(report,null,2));console.log(JSON.stringify({result:'pass',preview:watch,route_checks:checks.length,errors}));await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});
