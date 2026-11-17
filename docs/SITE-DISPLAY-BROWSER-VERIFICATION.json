@@ -1,0 +1,48 @@
+{
+  "result": "pass",
+  "mode": "frontend interaction fixtures; native backend verified separately",
+  "video_comments_likes_sharing_playlists_stay_on_frontend": true,
+  "account_login_same_origin": true,
+  "player_controls_and_native_preferences": true,
+  "more_menu_and_mobile_layout": true,
+  "broken_channel_artwork_fallback": true,
+  "browser_back_forward_preserves_watch_routes": true,
+  "categories_and_creator_tools_same_origin": true,
+  "no_native_html_iframes": true,
+  "no_backend_navigation_links": true,
+  "upload_chunks_ui": true,
+  "widths": [
+    1440,
+    390,
+    320
+  ],
+  "errors": [],
+  "action_names": [
+    "session",
+    "catalog",
+    "video",
+    "login",
+    "library",
+    "reaction",
+    "comments",
+    "comment",
+    "playlists",
+    "playlist",
+    "playlist-item",
+    "categories",
+    "notifications",
+    "upload-init",
+    "upload-chunk",
+    "encoder-queue",
+    "studio",
+    "channel"
+  ],
+  "real_accounts_or_backend_mutations": false,
+  "display_controls": {
+    "airplay_picker": "simulated browser API passed",
+    "cast_load": "simulated receiver passed",
+    "site_fullscreen": "simulated document API passed",
+    "local_playback_preserved_on_cancel": "unit tests passed",
+    "real_receiver_tested": false
+  }
+}
