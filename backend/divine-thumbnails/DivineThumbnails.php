@@ -6,12 +6,25 @@ class DivineThumbnails extends PluginAbstract {
     const QUEUE='/var/www/tmp/divine-thumbnails';
     public function getName(){return 'DivineThumbnails';}
     public function getUUID(){return self::UUID;}
-    public function getPluginVersion(){return '1.1';}
-    public function getDescription(){return 'Generate a missing still cover after a new local video or audio upload, using the installed Encoder image extractor. Existing covers are preserved.';}
+    public function getPluginVersion(){return '1.2';}
+    public function getDescription(){return 'Generate a missing still cover after a new local video or audio upload, using the installed Encoder image extractor. Missing YouTube embed artwork is fetched from YouTube. Existing covers are preserved.';}
     public function getEmptyDataObject(){return new stdClass();}
     public function onUploadIsDone($id){self::enqueue((int)$id);}
     public function onEncoderNotifyIsDone($id){self::enqueue((int)$id);}
-    public function afterNewVideo($id){self::enqueue((int)$id);}
+    public function afterNewVideo($id){
+        try{
+            $v=new Video('','',(int)$id);
+            if($v->getId()&&$v->getType()==='embed'){
+                require_once __DIR__.'/EmbedCover.php';
+                $filename=$v->getFilename();
+                if(DivineEmbedCover::install((string)$v->getVideoLink(),$filename,Video::getStoragePath(),Video::getPathToFile($filename.'.jpg',true))){
+                    $cache=new VideoCacheHandler($filename);$cache->deleteCache(false,false);Video::clearImageCache($filename,$v->getType());
+                }
+                return;
+            }
+        }catch(Throwable $e){error_log('DivineThumbnails: unable to fetch embed cover for video '.(int)$id);return;}
+        self::enqueue((int)$id);
+    }
     public function executeEveryMinute(){self::kick();}
     public static function enqueue(int $id): bool {
         try{
