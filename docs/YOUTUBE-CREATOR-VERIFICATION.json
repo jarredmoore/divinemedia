@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-19",
+  "project": "divine-creative",
+  "key_belongs_to_project": true,
+  "default_daily_units": 10000,
+  "effective_daily_units": 0,
+  "producer_override_units": 0,
+  "quota_or_billing_changes": false,
+  "secrets_in_repository": false,
+  "channel": "UCBrib_Esy01Ma_97Ae_BCRA",
+  "public_test_video": "S73eGpaoZUk",
+  "discovery_mode": "official_public_feed",
+  "preview": "https://6aff1fa0371d6f03d17958a7--mediaproduction.netlify.app/creator/embed",
+  "production_deploy_unchanged": "6afccd13a10cedc1bd6a6fb9",
+  "production_git_unchanged": "84dc8dc7c9d7eb70f161ed8350c6f9153823749e",
+  "frontend_tests_passed": 32,
+  "python_backend_tests_passed": 19,
+  "php_provider_contract": "pass",
+  "browser_fixture": "pass at 1440 and 390 pixels",
+  "real_authenticated_import_test": "pending creator selection",
+  "provider_stream_playback_test": "pending creator device test"
+}

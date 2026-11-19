@@ -33,7 +33,7 @@ The gateway exposes only two authenticated, CSRF-protected POST actions. Preview
 
 Google Cloud CLI connected to the owner's account on November 19, 2026. The supplied key belongs to project `divine-creative`. YouTube's normal project daily default is 10,000 units, but the project has a Google-side producer override with zero effective daily allowance. Provider calls return `quotaExceeded`; another key in the same project shares that limit. No quota, billing or API-key restrictions were changed. The project needs a Google quota review/restoration, rather than a second key. Console: https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas?project=divine-creative
 
-`@divinemediaUS` resolves to “Divine Media,” channel `UCBrib_Esy01Ma_97Ae_BCRA`. Its public page currently exposes only Home, and its official feed has zero entries. The owner confirmed the archive has not been made public; this is expected visibility behavior, not a failed import.
+`@divinemediaUS` resolves to “Divine Media,” channel `UCBrib_Esy01Ma_97Ae_BCRA`. At the initial audit its public page exposed only Home, and its official feed had zero entries; the owner confirmed the archive was not public. After the owner made one test video public, live discovery correctly returned “Divine Media” (`S73eGpaoZUk`) with its thumbnail. This confirmed the feed path using real channel content.
 
 ## Thumbnail and playback fixes
 
@@ -46,3 +46,5 @@ The PHP provider contract covers supported and hostile URLs, channel identity, b
 The native adapter additions were applied with exact source leases and verified private off-VM before/after backups. Anonymous add/preview requests and missing CSRF are rejected. Existing media, catalog rows, Encoder queue, other handlers and container uptimes were preserved; no videos were imported or published by deployment. Rollback state: `/srv/divinemedia/backups/youtube-channel-api-1993cc5d5c53`. Restore the two original adapter files and remove only the two new PHP files if their hashes still match this change. The production frontend and production Git branch are unchanged; test the feature on its Netlify preview first.
 
 Next provider: Vimeo, using its supported embed/API capabilities and the same AVideo catalog boundary. No paid-plugin replacement suite is introduced.
+
+Feature preview: https://6aff1fa0371d6f03d17958a7--mediaproduction.netlify.app/creator/embed (application source `60179be9`). Its creator route, session service and catalog return HTTP 200. Both the production deploy (`6afccd13a10cedc1bd6a6fb9`) and production Git ref (`84dc8dc7c9d7eb70f161ed8350c6f9153823749e`) were verified unchanged. PR: https://github.com/jarredmoore/divinemedia/pull/30
