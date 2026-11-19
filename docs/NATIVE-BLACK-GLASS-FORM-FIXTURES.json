@@ -1,0 +1,43 @@
+{
+  "result": "pass",
+  "checks": [
+    {
+      "url": "/Encoder/",
+      "width": 1440,
+      "native_nodes_values_and_form_relations_preserved": true,
+      "existing_submit_listener_preserved": true
+    },
+    {
+      "url": "/Encoder/",
+      "width": 390,
+      "native_nodes_values_and_form_relations_preserved": true,
+      "existing_submit_listener_preserved": true
+    },
+    {
+      "url": "/Encoder/",
+      "width": 320,
+      "native_nodes_values_and_form_relations_preserved": true,
+      "existing_submit_listener_preserved": true
+    },
+    {
+      "url": "/upload",
+      "width": 1440,
+      "native_nodes_values_and_form_relations_preserved": true,
+      "existing_submit_listener_preserved": true
+    },
+    {
+      "url": "/upload",
+      "width": 390,
+      "native_nodes_values_and_form_relations_preserved": true,
+      "existing_submit_listener_preserved": true
+    },
+    {
+      "url": "/upload",
+      "width": 320,
+      "native_nodes_values_and_form_relations_preserved": true,
+      "existing_submit_listener_preserved": true
+    }
+  ],
+  "mode": "sanitized historical isolated-restore markup; no live authentication or upload",
+  "errors": []
+}

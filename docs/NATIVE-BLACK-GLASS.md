@@ -1,0 +1,19 @@
+# Native media and Encoder glass branding
+
+The presentation assets for the media entrance/login, creator/upload/Encoder interface and general native HTML shell now share the cool-gradient Divine mark and neutral black/charcoal glass surfaces. Code Black removes the old gold/champagne palette from links, buttons, cards, dialogs, form controls and progress bars. Cozy keeps the explicitly requested brand-yellow actions and is labelled Cozy while preserving its default preference ID. New logo URLs and asset version `34-glass-1` refresh browser caches. The native Apple touch icon points to the existing frontend brand export.
+
+Only 13 owned presentation files are in the deployment allowlist. The live optional redirect-bridge omission is preserved; the landing page receives only branding-literal changes, retaining its deployed head hook. Creator and login scripts may change logo URLs only; form handlers, native templates, `.htaccess`, APIs, permissions, plugin settings and authentication behavior are not rewritten. No Encoder launcher, conversion, thumbnail processing or native startup is invoked.
+
+Staging used read-only responses from the current native routes, overriding only owned CSS/JS/SVG assets. TLS-verified curl transported browser requests; same-origin redirects were followed without certificate bypass, with history normalization only in the test transport. Forty-two route/viewport checks passed (14 routes at 1440/390/320px), with no own script errors, warm Code Black control styling, layout overflow or old brand logo URLs. Login/upload/Encoder public entry redirects remain native. No live sign-in or upload was submitted.
+
+Historical sanitized markup from an isolated backup restore separately verified the authenticated Encoder and direct-upload forms at desktop/mobile widths: existing node identities, values, form relationships and submit listeners remain intact. This is not a claim that a real authenticated upload or encode job ran. Nineteen backend tests cover existing installers and the new source leases, exact rollback, concurrent-change guard, preservation of live landing/head wiring, and rejection of creator behavior changes.
+
+Deployment creates a verified private off-VM before/after backup, checks audited source leases and PHP syntax, writes assets atomically with original permissions, and compares media/artwork hashes, catalog rows, Encoder queue, protected native source and container uptimes. Failure restores only unchanged presentation files written by this deployment; media/database state is never restored or modified. Rollback uses the script and private state recorded in the deployment evidence.
+
+Code is reviewed on a feature branch; no production Git branch merge is included. The unrelated frontend social-links PR remains separate. The login issue was confirmed by the owner to be an incorrect username and is resolved; this task makes no authentication changes.
+
+## Deployed verification
+
+The live presentation deployment passed, with 195 existing media/artwork files preserved and catalog, queue, protected native handlers and container uptimes unchanged. Before/after private off-VM backups were roundtrip verified. State: `/srv/divinemedia/backups/native-glass-3bb8ecb16ba2`; source bundle: `/srv/divinemedia/backups/native-glass-source-2c76a8467059`. Rollback is `python3 <source-bundle>/deploy-native-glass.py --bundle <source-bundle> --rollback <state>` and refuses later presentation changes.
+
+The post-deployment read-only browser run passed all 42 route/viewport combinations with zero response overrides and no own script errors. Cozy label, black backgrounds, no warm Code Black control styling, current unfiltered logo URLs and no horizontal overflow were verified. All five source CI workflows passed. See NATIVE-BLACK-GLASS-DEPLOYMENT.json and NATIVE-BLACK-GLASS-LIVE-BROWSER.json.
