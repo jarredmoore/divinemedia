@@ -14,15 +14,8 @@ if($action==='encoder-action'){
     dm_reply(dm_encoder($op,['id'=>dm_id($body['id']??0)]));
 }
 if($action==='creator-video'){
-    $id=dm_id($body['id']??0);
-    if(!Video::canEdit($id)){dm_error('Video access denied.',403);}
-    $v=new Video('','',$id);
-    $title=dm_text($body['title']??'',140);if($title===''){dm_error('Enter a title.');}
-    $visibility=(string)($body['visibility']??'');$states=['public'=>Video::STATUS_ACTIVE,'unlisted'=>Video::STATUS_UNLISTED,'private'=>Video::STATUS_INACTIVE];
-    if(!isset($states[$visibility])){dm_error('Invalid visibility.');}
-    $v->setTitle($title);$v->setDescription(dm_text($body['description']??'',10000));if($v->setStatus($states[$visibility])===false){dm_error('Your account cannot change this publishing status.',403);}
-    if(!$v->save()){dm_error('Video changes could not be saved.');}
-    dm_reply(['message'=>'Video updated.']);
+    require_once __DIR__.'/creator-details.php';$id=dm_id($body['id']??0);if(!Video::canEdit($id)){dm_error('Video access denied.',403);}
+    $data=dm_creator_validate($body);dm_creator_apply(new Video('','',$id),$data);dm_reply(['message'=>'Details updated.','item'=>dm_creator_record($id)]);
 }
 if(in_array($action,['upload-init','upload-chunk','upload-cancel'],true)){
     if(!User::canUpload()){dm_error('Upload permission required.',403);}
@@ -33,13 +26,15 @@ if(in_array($action,['upload-init','upload-chunk','upload-cancel'],true)){
         if(($upload['expires']??0)<time()&&preg_match('/^[a-f0-9]{64}$/D',(string)$ticket)){@unlink($base.'/'.$ticket.'.part');unset($_SESSION['dm_uploads'][$ticket]);}
     }
     if($action==='upload-init'){
+        require_once __DIR__.'/creator-details.php';$options=dm_creator_options();$details=dm_creator_validate($body);$detailsFlow=array_key_exists('visibility',$body);
         $name=basename(dm_text($body['name']??'',180));$extension=strtolower(pathinfo($name,PATHINFO_EXTENSION));$size=filter_var($body['size']??0,FILTER_VALIDATE_INT);
-        if(!in_array($extension,['mp4','m4v','mov','webm','mkv','avi','mp3','m4a','ogg','wav','flac'],true)||!in_array($extension,Video::$types,true)){dm_error('This media format is not supported.');}
-        if(!$size||$size<1||$size>4*1024*1024*1024){dm_error('Choose a file smaller than 4 GB.');}
+        if(!in_array($extension,array_merge(...array_values($options['formats'])),true)||!in_array($extension,Video::$types,true)){dm_error('This media format is not supported.');}
+        $limit=$options['maxMediaBytes'];foreach($options['formats']as $kind=>$extensions){if(in_array($extension,$extensions,true)){$limit=$options['limits'][$kind];break;}}
+        if(!$size||$size<1||$size>$limit){dm_error('This file exceeds the upload limit for its type.');}
         if(count($_SESSION['dm_uploads'])>=2){dm_error('Finish an existing upload before starting another.',429);}
         if(disk_free_space($base)<$size*2+2*1024*1024*1024){dm_error('Insufficient upload capacity. Please try later.',503);}
         $ticket=bin2hex(random_bytes(32));
-        $_SESSION['dm_uploads'][$ticket]=['name'=>preg_replace('/[^A-Za-z0-9._-]/','_',$name),'size'=>$size,'title'=>dm_text($body['title']??'',140),'received'=>0,'expires'=>time()+7200,'user'=>(int)User::getId(),'state'=>'uploading'];
+        $_SESSION['dm_uploads'][$ticket]=['name'=>preg_replace('/[^A-Za-z0-9._-]/','_',$name),'size'=>$size,'title'=>$details['title'],'details'=>$details,'detailsFlow'=>$detailsFlow,'received'=>0,'expires'=>time()+7200,'user'=>(int)User::getId(),'state'=>'uploading'];
         dm_reply(['ticket'=>$ticket,'chunkBytes'=>1024*1024]);
     }
     $ticket=(string)($body['ticket']??'');
@@ -60,17 +55,22 @@ if(in_array($action,['upload-init','upload-chunk','upload-cancel'],true)){
     if($written!==$file['size']){dm_error('Upload chunk could not be saved.',503);}
     $upload['received']+=$written;
     if($upload['received']<$total){dm_reply(['received'=>$upload['received'],'complete'=>false]);}
-    $upload['state']='processing';$name=$upload['name'];$title=$upload['title'];
+    $upload['state']='processing';$name=$upload['name'];$title=$upload['title'];$hold=!empty($upload['detailsFlow']);$details=$upload['details']??['title'=>$title,'description'=>'','visibility'=>'private'];
     unset($_SESSION['dm_uploads'][$ticket]);
     // Reuse the installed uploader and its normal hooks. Never accept an existing video ID.
-    $_GET=$_REQUEST=[];$_POST=['title'=>$title];$_FILES=['upl'=>['name'=>$name,'type'=>mime_content_type($path),'tmp_name'=>$path,'error'=>0,'size'=>$total]];
+    $GLOBALS['dm_frontend_upload_hold']=$hold;
+    $_GET=$_REQUEST=[];$_POST=['title'=>$title,'description'=>$details['description']];$_FILES=['upl'=>['name'=>$name,'type'=>mime_content_type($path),'tmp_name'=>$path,'error'=>0,'size'=>$total]];
     _session_write_close();ignore_user_abort(true);
     $GLOBALS['dm_sent']=true;
-    register_shutdown_function(function() use($path){
+    register_shutdown_function(function() use($path,$details,$hold){
+        if(!ob_get_level()){return;}
         $raw=ob_get_contents();$result=json_decode((string)$raw,true);
         if(is_file($path)){@unlink($path);}
         if(!is_array($result)||!empty($result['error'])){dm_reply(['error'=>'Upload processing failed. Check your library before retrying.'],502);}
-        dm_reply(['complete'=>true,'videoId'=>(int)($result['videos_id']??0),'message'=>'Upload received.']);
+        $id=(int)($result['videos_id']??0);if(!$id){dm_reply(['error'=>'Upload finished without a record ID. Check your library before retrying.'],502);}
+        if(!$hold){dm_reply(['complete'=>true,'videoId'=>$id,'message'=>'Upload received.']);}
+        try{require_once __DIR__.'/creator-details.php';dm_creator_apply(new Video('','',$id),$details,true);}catch(Throwable $e){dm_reply(['complete'=>true,'videoId'=>$id,'detailsPending'=>true,'message'=>'Media received. Complete its details in Studio.']);}
+        dm_reply(['complete'=>true,'videoId'=>$id,'message'=>'Media received as a private draft.']);
     });
     chdir($root.'view/mini-upload-form');
     require $root.'view/mini-upload-form/upload.php';

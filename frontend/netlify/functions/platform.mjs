@@ -1,6 +1,6 @@
 // Same-origin boundary for the native AVideo adapter. Never proxy arbitrary URLs or HTML.
-const actions=new Set(['playback','captcha','catalog','session','video-unlock','login','logout','register','recover','reset-password','verify-email','categories','channels','channel','video','comments','comment','reaction','playlists','playlist','playlist-item','library','notifications','notification-read','follow','playlist-order','live','studio','studio-save','creator-videos','creator-video','upload-init','upload-chunk','upload-cancel','encoder-queue','encoder-action','profile','embed-preview','embed-add']);
-const reads=new Set(['captcha','catalog','session','categories','channels','channel','video','comments','playlists','playlist','library','notifications','live','studio','creator-videos','encoder-queue','profile']);
+const actions=new Set(['playback','captcha','catalog','session','video-unlock','login','logout','register','recover','reset-password','verify-email','categories','channels','channel','video','comments','comment','reaction','playlists','playlist','playlist-item','library','notifications','notification-read','follow','playlist-order','live','studio','studio-save','creator-videos','creator-video','upload-init','upload-chunk','upload-cancel','encoder-queue','encoder-action','profile','embed-preview','embed-add','creator-options','creator-record','creator-thumbnail']);
+const reads=new Set(['captcha','catalog','session','categories','channels','channel','video','comments','playlists','playlist','library','notifications','live','studio','creator-videos','encoder-queue','profile','creator-options','creator-record']);
 const sessionPattern=/^[A-Za-z0-9,-]{22,128}$/;
 export function appOrigin(value){try{const u=new URL(value);return u.protocol==='https:'&&!u.username&&!u.password&&(u.hostname==='divinemedia.us'||/^(?:[a-f0-9]{24}|deploy-preview-\d+)--mediaproduction\.netlify\.app$/.test(u.hostname))?u.origin:null}catch{return null}}
 export function sessionCookie(raw=''){const matches=raw.split(';').map(x=>x.trim()).filter(x=>x.startsWith('__Host-dm_session='));if(matches.length!==1)return '';const value=matches[0].slice('__Host-dm_session='.length);return sessionPattern.test(value)?value:''}
@@ -21,10 +21,11 @@ export default async function handler(request,context={}){
   let body;
   if(request.method==='POST'){
    const type=request.headers.get('content-type')||'';
-   if(action==='upload-chunk'?!type.startsWith('multipart/form-data; boundary='):!type.startsWith('application/json'))return json('Unsupported request format',415);
+   const multipart=['upload-chunk','creator-thumbnail'].includes(action);
+   if(multipart?!type.startsWith('multipart/form-data; boundary='):!type.startsWith('application/json'))return json('Unsupported request format',415);
    if(Number(request.headers.get('content-length'))>2.5*1024*1024)return json('Request is too large',413);
    body=await request.arrayBuffer();if(body.byteLength>2.5*1024*1024)return json('Request is too large',413);
-   if(action!=='upload-chunk'){let payload;try{payload=JSON.parse(new TextDecoder().decode(body))}catch{return json('Invalid JSON body',400)}if(!payload||typeof payload!=='object'||Array.isArray(payload))return json('Invalid JSON body',400);body=JSON.stringify({payload})}
+   if(!multipart){let payload;try{payload=JSON.parse(new TextDecoder().decode(body))}catch{return json('Invalid JSON body',400)}if(!payload||typeof payload!=='object'||Array.isArray(payload))return json('Invalid JSON body',400);body=JSON.stringify({payload})}
   }
   const headers={'accept':'application/json','x-divine-gateway-key':key,'x-divine-session':sessionCookie(request.headers.get('cookie')||''),'x-divine-csrf':request.headers.get('x-divine-csrf')||'','x-divine-client-ip':context.ip||'','x-divine-frontend-origin':origin,'user-agent':request.headers.get('user-agent')||'Divine Media'};
   if(body){headers['content-type']=request.headers.get('content-type');const range=request.headers.get('content-range');if(range&&/^bytes \d+-\d+\/\d+$/.test(range))headers['content-range']=range}
