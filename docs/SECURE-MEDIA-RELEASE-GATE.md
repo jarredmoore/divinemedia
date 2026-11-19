@@ -22,9 +22,11 @@ The current native catalog has nonpublic external embed/link records. Public/unl
 - Live, LiveLinks and WebRTC are active. Their presence is not proof of protected private playback.
 - Current native secure-source hooks mention MP4/WebM/M3U8/PDF/ZIP. That hook alone does not prove MP3/image coverage or live-origin segment protection.
 
-Prefer evaluating AVideo's existing SecureVideosDirectory module over building a replacement suite. Its vendor documentation requires XSendFile, covers local media and describes expiring URL tokens. It does not by itself establish that copied signed URLs are denied after logout or that all live/image/audio/document paths meet this project's requirements. The module/package and configuration must be examined and tested before relying on it.
+## Delivery implementation decision
 
-No module purchase, licensing step, watermark encoding, key change or protection activation was performed. License/package availability was requested from the owner. Use the vendor marketplace for licensed delivery; do not fetch an unofficial copy.
+The owner selected a first-party delivery boundary on November 19, 2026 to cover the broader all-media requirement. No paid module purchase is needed for this direction. AVideo remains the account, catalog and permission authority; this is not a second identity system or replacement plugin suite.
+
+See [protected delivery design](PROTECTED-DELIVERY-DESIGN.md). The implementation is staged: session cleanup first, then origin authorization and efficient serving, then all-asset/live integration and bypass closure. The existing file privacy gap remains open until the acceptance matrix passes. No protection activation or container restart was performed.
 
 ## Acceptance matrix
 
@@ -56,10 +58,10 @@ The harness is one part of verification. It cannot replace browser testing of se
 
 ## Next implementation sequence
 
-1. Obtain/identify the licensed native protection module and audit its configuration and coverage.
-2. Validate its frontend session/token behavior and secure local serving in an isolated rehearsal. Keep existing media originals and image processing untouched.
-3. Address any uncovered image/audio/document/live delivery paths in one coherent media boundary, reusing native authorization. Avoid separate replacement websites or independent identity stores.
-4. Test the full matrix, including whether login cookies/session grants reach the media origin without exposing backend credentials.
-5. Review measured results and then promote the tested release, keeping the previous Netlify deploy available for rollback.
+1. Implement session cleanup and prevent late account responses from restoring stale private UI.
+2. Build the native origin boundary and frontend-to-origin session exchange in isolation, reusing AVideo permissions.
+3. Integrate catalog-associated artwork/audio/video/documents plus live manifests, segments and keys; close raw and alternate-origin paths only after rehearsal.
+4. Run the full matrix, including copied URLs, expiry, logout and actual browser cookie/range behavior.
+5. Promote only the verified candidate, retaining the previous deploy and origin configuration for rollback.
 
 Vendor documentation: https://github.com/WWBN/AVideo/wiki/SecureVideosDirectory-Plugin

@@ -1,12 +1,16 @@
-let csrf='',bootstrapPromise=null;
+let csrf='',bootstrapPromise=null,sessionGeneration=0;
+function endSession(){csrf='';pendingReads.clear();sessionGeneration++;if(typeof window!=='undefined')window.dispatchEvent(new Event('divine:session-ended'));}
 const pendingReads=new Map();
 export class PlatformError extends Error{constructor(message,status,details){super(message);this.status=status;this.details=details}}
 async function send(action,{method='GET',data,query,signal}={}){
+ const generation=sessionGeneration;
  const params=new URLSearchParams(query||{}),url='/api/platform/'+action+(params.size?'?'+params:'');
  const headers={accept:'application/json'};if(method==='POST'){headers['x-divine-csrf']=csrf;if(!(data instanceof FormData))headers['content-type']='application/json'}
  const response=await fetch(url,{method,credentials:'same-origin',cache:'no-store',headers,body:method==='POST'?(data instanceof FormData?data:JSON.stringify(data||{})):undefined,signal});
  let result;try{result=await response.json()}catch{throw new PlatformError('Account service returned an unexpected response.',response.status)}
- if(result.csrf)csrf=result.csrf;if(action==='logout'&&response.ok)csrf='';
+ if(generation!==sessionGeneration)throw new PlatformError('Your session changed. Please try again.',401);
+ if(response.status===401&&action!=='login'&&action!=='session'&&csrf)endSession();
+ if(action==='logout'&&response.ok)endSession();else if(response.ok&&result.csrf)csrf=result.csrf;
  if(!response.ok||result.error)throw new PlatformError(typeof result.error==='string'?result.error:'Unable to complete this action.',response.status,result);
  return result;
 }
