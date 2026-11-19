@@ -1,0 +1,58 @@
+{
+  "status": "proposal-only",
+  "version": "0.1",
+  "live_changes_applied": false,
+  "preserved_category_ids": [
+    1,
+    4,
+    3,
+    7,
+    2,
+    5,
+    6
+  ],
+  "facets": [
+    "mediaFamily",
+    "workType",
+    "format",
+    "genre",
+    "subjects",
+    "delivery",
+    "technical",
+    "contributors",
+    "rights"
+  ],
+  "existing_category_suggestions": [
+    {
+      "categoryId": 7,
+      "existingPath": "Media / Audio / Music / Hip Hop",
+      "suggestedGenre": "Hip Hop",
+      "workTypeRequiresCreatorConfirmation": true
+    },
+    {
+      "categoryId": 2,
+      "existingPath": "Media / Audio / Music / Rhythm and Blues",
+      "suggestedGenre": "Rhythm and Blues",
+      "workTypeRequiresCreatorConfirmation": true
+    },
+    {
+      "categoryId": 6,
+      "existingPath": "Media / Video / Film",
+      "suggestedCollection": "Film",
+      "workTypeRequiresCreatorConfirmation": true
+    }
+  ],
+  "external_mapping_relationships": [
+    "exact",
+    "broader",
+    "narrower",
+    "approximate"
+  ],
+  "principles": [
+    "Preserve existing category IDs and URLs",
+    "Separate intellectual works from technical assets",
+    "Do not infer ownership or licenses from taxonomy",
+    "Do not treat a category as a copyright registration selection",
+    "Keep private metadata out of public semantic output"
+  ]
+}
