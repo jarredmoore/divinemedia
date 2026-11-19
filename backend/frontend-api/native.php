@@ -58,11 +58,19 @@ function dm_item(array $row): array {
     }
     $source=$allowed&&!$embed?Video::getFirstSource($row['filename']??''):[];
     $url=dm_media_url($source['url']??$source['src']??null);
+    $asset=null;$kind=$row['type']??'video';
+    if($allowed&&in_array($kind,['image','pdf'],true)){
+        $storage=realpath(Video::getStoragePath());$filename=$row['filename']??'';
+        if($storage&&preg_match('/^[A-Za-z0-9_.-]+$/D',$filename)&&!str_contains($filename,'..')){
+            foreach($kind==='pdf'?['pdf']:['png','webp','gif','jpeg','jpg']as $extension){$file=realpath(Video::getPathToFile($filename.'.'.$extension));if($file&&str_starts_with($file,$storage.'/')){$path=implode('/',array_map('rawurlencode',explode('/',substr($file,strlen($storage)+1))));$asset=['kind'=>$kind==='pdf'?'document':'image','url'=>'https://media.divinemedia.us/videos/'.$path];break;}}
+        }
+    }
+
     return ['id'=>$id,'avideoId'=>$id,'title'=>dm_text($row['title']??'',140),'description'=>dm_text($row['description']??'',10000),
         'userId'=>(int)($row['users_id']??0),'creator'=>dm_text($user['channelName']??$user['name']??$user['user']??'Creator',100),'channel'=>dm_text($user['channelName']??$user['user']??'',100),
         'categoryId'=>(int)($row['categories_id']??0),'image'=>dm_media_url(Video::getPoster($id)),'img'=>dm_media_url(Video::getPoster($id))??'/placeholder.svg',
         'type'=>$audio?'Listen':'Watch','tag'=>dm_text($row['category']??($audio?'AUDIO':'VIDEO'),100),'duration'=>dm_text($row['duration']??'',30),
-        'videoUrl'=>$audio?null:$url,'audioUrl'=>$audio?$url:null,'embed'=>$embed,'mediaKind'=>($row['type']??'video'),'watchUrl'=>'https://divinemedia.us/watch/'.$id];
+        'videoUrl'=>$audio?null:$url,'audioUrl'=>$audio?$url:null,'embed'=>$embed,'asset'=>$asset,'sharingAllowed'=>!array_key_exists('can_share',$row)||!empty($row['can_share']),'downloadUrl'=>($allowed&&!$embed&&$cu&&method_exists('CustomizeUser','canDownloadVideosFromVideo')&&CustomizeUser::canDownloadVideosFromVideo($id))?($asset['url']??$url):null,'mediaKind'=>($row['type']??'video'),'watchUrl'=>'https://divinemedia.us/watch/'.$id];
 }
 function dm_playlist(int $id): PlayList {
     require_once $GLOBALS['global']['systemRootPath'].'objects/playlist.php'; AVideoPlugin::loadPlugin('PlayLists');

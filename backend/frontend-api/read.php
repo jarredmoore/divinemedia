@@ -1,6 +1,7 @@
 <?php
 if(!defined('DM_FRONTEND_API')){http_response_code(404);exit;}
 if ($method === 'GET') {
+    if(in_array($action,['creator-options','creator-record'],true)){require __DIR__.'/creator-details.php';}
     if ($action === 'captcha') { dm_reply(dm_native('objects/getCaptcha.php',[],true)); }
     if (in_array($action,['categories','channels','channel','catalog','creator-videos'],true)) {
         require_once $root.'objects/category.php';

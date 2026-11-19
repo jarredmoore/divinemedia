@@ -40,8 +40,9 @@ $action = (string)($_GET['action'] ?? '');
 $query = $_GET; unset($query['action']);
 $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 if (!in_array($method, ['GET','POST'], true)) { dm_error('Method not allowed',405); }
-$envelope = $method === 'POST' && $action !== 'upload-chunk' ? json_decode((string)file_get_contents('php://input'), true) : [];
-$body = $action === 'upload-chunk' ? $_POST : ($method === 'POST' ? ($envelope['payload'] ?? null) : []);
+$multipart = in_array($action,['upload-chunk','creator-thumbnail'],true);
+$envelope = $method === 'POST' && !$multipart ? json_decode((string)file_get_contents('php://input'), true) : [];
+$body = $multipart ? $_POST : ($method === 'POST' ? ($envelope['payload'] ?? null) : []);
 if (!is_array($body)) { dm_error('Invalid request body'); }
 $root = dirname(__DIR__) . DIRECTORY_SEPARATOR;
 $session = (string)($_SERVER['HTTP_X_DIVINE_SESSION'] ?? '');
@@ -67,7 +68,9 @@ _session_start();
 if (empty($_SESSION['dm_frontend_csrf'])) { $_SESSION['dm_frontend_csrf'] = bin2hex(random_bytes(32)); }
 $csrf = $_SESSION['dm_frontend_csrf'];
 if ($method === 'POST' && !hash_equals($csrf, (string)($_SERVER['HTTP_X_DIVINE_CSRF'] ?? ''))) { dm_error('Your session changed. Refresh and try again.',403); }
-enforceRateLimit('divine_frontend_'.$action, $method === 'POST' ? 80 : 300, 60);
+// Authenticated, byte-bounded chunks need a separate allowance for large files.
+$rate=$action==='upload-chunk'?3000:($method==='POST'?80:300);
+enforceRateLimit('divine_frontend_'.$action,$rate,60);
 try {
     if ($action === 'session' && $method === 'GET') {
         dm_reply(['user'=>dm_user(),'csrf'=>$csrf,'capabilities'=>['comments'=>true,'reactions'=>true,'playlists'=>AVideoPlugin::isEnabledByName('PlayLists'),'live'=>AVideoPlugin::isEnabledByName('Live')],'captchaRequired'=>User::isCaptchaNeed()]);

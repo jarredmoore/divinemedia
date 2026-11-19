@@ -41,3 +41,13 @@ test('YouTube preview and import require same-origin POST requests',async()=>{
   assert.equal((await handler(new Request('https://divinemedia.us/api/platform/'+action,{method:'POST',headers:{origin:'https://evil.test','content-type':'application/json'},body:'{}'}))).status,403);
  }assert.equal(calls,0)}finally{global.fetch=before}
 });
+test('thumbnail multipart stays binary and enforces the same-origin size boundary',async()=>{
+ const before=global.fetch,old=process.env.DIVINE_GATEWAY_KEY;process.env.DIVINE_GATEWAY_KEY='fixture-key-'.repeat(8);let upstream;
+ global.fetch=async(url,options)=>{upstream=options;return new Response(JSON.stringify({message:'Thumbnail updated.'}),{headers:{'content-type':'application/json'}})};
+ try{
+  const form=new FormData();form.set('id','7');form.set('kind','landscape');form.set('file_data',new Blob(['fixture-image'],{type:'image/png'}),'cover.png');
+  const result=await handler(new Request('https://divinemedia.us/api/platform/creator-thumbnail',{method:'POST',headers:{origin:'https://divinemedia.us','x-divine-csrf':'fixture'},body:form}));assert.equal(result.status,200);assert.match(upstream.headers['content-type'],/^multipart\/form-data; boundary=/);assert.match(new TextDecoder().decode(upstream.body),/name="file_data"; filename="cover.png"/);
+  assert.equal((await handler(new Request('https://divinemedia.us/api/platform/creator-thumbnail'))).status,405);
+  const big=new FormData();big.set('file_data',new Blob([new Uint8Array(3*1024*1024)]),'large.jpg');assert.equal((await handler(new Request('https://divinemedia.us/api/platform/creator-thumbnail',{method:'POST',headers:{origin:'https://divinemedia.us'},body:big}))).status,413);
+ }finally{global.fetch=before;if(old===undefined)delete process.env.DIVINE_GATEWAY_KEY;else process.env.DIVINE_GATEWAY_KEY=old}
+});

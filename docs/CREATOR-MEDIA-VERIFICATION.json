@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-19",
+  "node_tests": 37,
+  "python_backend_tests": 19,
+  "php_metadata_image_contract": "pass",
+  "trusted_draft_hold_contract": "pass",
+  "browser_studio": "pass at 1440 and 390 pixels",
+  "browser_account": "pass at desktop/mobile with inactive social providers and legacy page aliases",
+  "browser_creator_card": "pass at 1440,390,320 pixels; Code Black and Cozy",
+  "existing_categories_preserved": 7,
+  "native_keywords_type_added": 1,
+  "actual_media_upload_thumbnail_replace_oauth_and_encoding_job_tests": "not run against live creator records",
+  "native_anonymous_and_csrf_checks": "pass",
+  "existing_media_catalog_queue_other_handlers_uptimes_preserved": true,
+  "native_staging_state": "/srv/divinemedia/backups/creator-details-source-1ebb1b13491e",
+  "rollback_states": [
+    "creator-details-74fd0f4e5a68",
+    "creator-keywords-4c8d0233d8d2",
+    "creator-categories-b79a365b52e2",
+    "creator-upload-rate-ce77657151c0"
+  ],
+  "production_git_and_frontend_published": false
+}

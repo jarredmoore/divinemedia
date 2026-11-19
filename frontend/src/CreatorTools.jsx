@@ -2,7 +2,7 @@ import React from 'react';
 import {Upload,Link2,Clapperboard,Library,Radio,Video,Settings2,Newspaper,Users,MonitorUp,Code,UserRound} from './GlassIcons.jsx';
 import {workspace} from './platform-client.mjs';
 const tools=[
- ['upload','Upload video or audio','Add a media file from your device.',Upload,'upload','Create'],
+ ['upload','Upload media','Add video, audio, images or documents.',Upload,'upload','Create'],
  ['embed','Embed YouTube videos','Add one video or select videos from a channel.',Link2,'embed','Create'],
  ['studio','Live studio','Prepare a broadcast and connect your streaming software.',Radio,'stream','Create'],
  ['videos','Your videos','Preview titles, edit details and manage visibility.',Clapperboard,'upload','Manage'],
