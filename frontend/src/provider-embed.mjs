@@ -1,0 +1,1 @@
+export function youtubeEmbedUrl(embed){return embed?.provider==='youtube'&&typeof embed.id==='string'&&/^[A-Za-z0-9_-]{11}$/.test(embed.id)?'https://www.youtube-nocookie.com/embed/'+embed.id+'?playsinline=1&rel=0':null}

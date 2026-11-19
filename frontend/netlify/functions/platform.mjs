@@ -1,5 +1,5 @@
 // Same-origin boundary for the native AVideo adapter. Never proxy arbitrary URLs or HTML.
-const actions=new Set(['playback','captcha','catalog','session','video-unlock','login','logout','register','recover','reset-password','verify-email','categories','channels','channel','video','comments','comment','reaction','playlists','playlist','playlist-item','library','notifications','notification-read','follow','playlist-order','live','studio','studio-save','creator-videos','creator-video','upload-init','upload-chunk','upload-cancel','encoder-queue','encoder-action','profile']);
+const actions=new Set(['playback','captcha','catalog','session','video-unlock','login','logout','register','recover','reset-password','verify-email','categories','channels','channel','video','comments','comment','reaction','playlists','playlist','playlist-item','library','notifications','notification-read','follow','playlist-order','live','studio','studio-save','creator-videos','creator-video','upload-init','upload-chunk','upload-cancel','encoder-queue','encoder-action','profile','embed-preview','embed-add']);
 const reads=new Set(['captcha','catalog','session','categories','channels','channel','video','comments','playlists','playlist','library','notifications','live','studio','creator-videos','encoder-queue','profile']);
 const sessionPattern=/^[A-Za-z0-9,-]{22,128}$/;
 export function appOrigin(value){try{const u=new URL(value);return u.protocol==='https:'&&!u.username&&!u.password&&(u.hostname==='divinemedia.us'||/^(?:[a-f0-9]{24}|deploy-preview-\d+)--mediaproduction\.netlify\.app$/.test(u.hostname))?u.origin:null}catch{return null}}
@@ -28,7 +28,7 @@ export default async function handler(request,context={}){
   }
   const headers={'accept':'application/json','x-divine-gateway-key':key,'x-divine-session':sessionCookie(request.headers.get('cookie')||''),'x-divine-csrf':request.headers.get('x-divine-csrf')||'','x-divine-client-ip':context.ip||'','x-divine-frontend-origin':origin,'user-agent':request.headers.get('user-agent')||'Divine Media'};
   if(body){headers['content-type']=request.headers.get('content-type');const range=request.headers.get('content-range');if(range&&/^bytes \d+-\d+\/\d+$/.test(range))headers['content-range']=range}
-  const upstream=await fetch(target,{method:request.method,headers,body,redirect:'error',signal:AbortSignal.timeout(action==='upload-chunk'?25000:12000)});
+  const upstream=await fetch(target,{method:request.method,headers,body,redirect:'error',signal:AbortSignal.timeout(action==='upload-chunk'?25000:['embed-preview','embed-add'].includes(action)?35000:12000)});
   if(!(upstream.headers.get('content-type')||'').includes('application/json'))return json('Account service returned an unexpected response',502);
   const text=await upstream.text();if(text.length>2*1024*1024)return json('Account response is too large',502);
   // The adapter owns a strict response projection. Native login responses are never forwarded.

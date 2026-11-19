@@ -68,3 +68,5 @@ if($action==='playlist-order'){
     dm_native('objects/playlistSort.php',['playlist_id'=>$p->getId(),'list'=>$ids]);
     dm_reply(['message'=>'Playlist order saved.']);
 }
+
+if(in_array($action,['embed-preview','embed-add'],true)){require __DIR__.'/embeds.php';}
