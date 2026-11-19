@@ -31,7 +31,14 @@
    img.alt='Divine Media';if(img.closest('.navbar-brand'))img.classList.add('dm-route-native-mark');
   }
  }
+ function preserveModalLayers(root=document){
+  const modals=root.matches?.('.modal')?[root]:[...root.querySelectorAll('.modal')];
+  for(const modal of modals)for(let host=modal.parentElement;host&&host!==document.body;host=host.parentElement)host.classList.add('dm-native-modal-host');
+ }
  function mount(){
+  preserveModalLayers();
+  const modalHostObserver=new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1&&(node.matches('.modal')||node.querySelector('.modal')))preserveModalLayers(node)});
+  modalHostObserver.observe(document.body,{childList:true,subtree:true});
   refreshBrand();
   persist();if(location.pathname==='/plugin/Gallery/view/mainAreaLive.php'){history.replaceState(null,'',canonical(location.href))}if(location.pathname==='/live'||location.pathname==='/live/'){const link=document.querySelector('link[rel=canonical]');if(link)link.href='https://media.divinemedia.us/live';const meta=document.querySelector('meta[property="og:url"]');if(meta)meta.content='https://media.divinemedia.us/live'}updateLinks();
   // In-page anchors and dynamically inserted native menus keep their native handlers.
