@@ -42,3 +42,5 @@ Private rollback states:
 - `/srv/divinemedia/backups/creator-upload-rate-ce77657151c0`: bounded upload-chunk allowance; authentication limits unchanged.
 
 Rollback code only against matching installed hashes; preserve later creator edits and uploads. Production Git and the production frontend remain unchanged; the updated experience is delivered as a Netlify feature preview.
+
+Feature preview: https://6aff798ba1253a625d040bfc--mediaproduction.netlify.app/creator ([PR #33](https://github.com/jarredmoore/divinemedia/pull/33)). Studio, upload and account routes and the session/catalog services returned HTTP 200.
