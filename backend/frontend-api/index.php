@@ -86,6 +86,13 @@ try {
         _session_start(); $_SESSION['dm_frontend_csrf'] = bin2hex(random_bytes(32));
         dm_reply(['user'=>dm_user(),'csrf'=>$_SESSION['dm_frontend_csrf']]);
     }
+    if ($action === 'delivery-grant' && $method === 'POST') {
+        dm_require_user();
+        require_once $root.'divine-delivery/core.php';
+        $store=new DivineDeliveryStore('/var/www/tmp/divine-delivery');$store->collect(time());
+        $grant=$store->issue('grant',['session'=>session_id(),'proof'=>hash('sha256',$csrf),'origin'=>$frontendOrigin],time()+120);
+        dm_reply(['grant'=>$grant]);
+    }
     if ($action === 'logout' && $method === 'POST') { User::logoff(); dm_reply(['message'=>'Signed out.']); }
     if ($method === 'POST' && $action === 'playback') {
         $id=dm_id($body['video']??0);dm_video($id);

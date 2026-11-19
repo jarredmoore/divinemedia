@@ -20,7 +20,7 @@ export default function UnifiedPlayer({item,embedded=false}){
  },[item,id,embedded,session?.user?.id]);
  useEffect(()=>{let player,active=true;if(!src||!video.current)return;const el=video.current;
   if(/\.m3u8(?:[?#]|$)/i.test(src)&&!el.canPlayType('application/vnd.apple.mpegurl')){
-   import('hls.js').then(({default:Hls})=>{if(!active)return;if(!Hls.isSupported()){setError('Live playback is not supported by this browser.');return}player=new Hls();player.loadSource(src);player.attachMedia(el);player.on(Hls.Events.ERROR,(_,data)=>{if(data.fatal)setError('This broadcast is unavailable. Try again shortly.')})}).catch(()=>setError('Unable to load live playback.'));
+   import('hls.js').then(({default:Hls})=>{if(!active)return;if(!Hls.isSupported()){setError('Live playback is not supported by this browser.');return}player=new Hls({xhrSetup:xhr=>{xhr.withCredentials=true}});player.loadSource(src);player.attachMedia(el);player.on(Hls.Events.ERROR,(_,data)=>{if(data.fatal)setError('This broadcast is unavailable. Try again shortly.')})}).catch(()=>setError('Unable to load live playback.'));
   }else{el.src=src}
   return()=>{active=false;player?.destroy();el.pause();el.removeAttribute('src');el.load()};
  },[src]);

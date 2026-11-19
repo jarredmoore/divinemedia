@@ -56,7 +56,8 @@ try{
     $_SESSION['login']=(object)['isLogged'=>true,'streamers_id'=>$streamerId,'streamer'=>$s->getSiteURL(),'canUpload'=>true,'isAdmin'=>(bool)$s->getIsAdmin(),'isStreamerAdmin'=>!empty($dmEncoderActor['isAdmin']),'allowedResolutions'=>$dmEncoderActor['allowedResolutions']??[]];
     if($dmEncoderOp==='enqueue'){
         $videoId=(int)($dmEncoderData['videoId']??0);$url=(string)($dmEncoderData['source']??'');$parts=parse_url($url);
-        if($videoId<1||($parts['scheme']??'')!=='https'||($parts['host']??'')!=='media.divinemedia.us'||!str_starts_with($parts['path']??'','/videos/')||isset($parts['user'])||isset($parts['pass'])){enc_reply(['error'=>'Unsupported encoding source.']);}
+        $sourceRoot=realpath(dirname(__DIR__).'/videos');$localSource=realpath($url);
+        if($videoId<1||!$sourceRoot||!$localSource||$localSource!==$url||!str_starts_with($localSource,$sourceRoot.'/')||!is_file($localSource)||!in_array(strtolower(pathinfo($localSource,PATHINFO_EXTENSION)),['mp4','webm','mp3','ogg','m4a','wav','flac'],true)){enc_reply(['error'=>'Unsupported encoding source.']);}
         $profiles=['mp4'=>'inputAutoMP4','hls'=>'inputAutoHLS','audio'=>'inputAutoAudio','webm'=>'inputAutoWebm'];$profile=(string)($dmEncoderData['profile']??'mp4');
         if(!isset($profiles[$profile])){enc_reply(['error'=>'Unsupported encoding profile.']);}
         $_POST=$_REQUEST=[$profiles[$profile]=>'true'];

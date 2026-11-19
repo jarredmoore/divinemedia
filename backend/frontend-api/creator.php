@@ -8,6 +8,13 @@ if($action==='encoder-action'){
         $id=dm_id($body['video']??0);if(!Video::canEdit($id)){dm_error('Video access denied.',403);}
         $video=new Video('','',$id);$source=Video::getFirstSource($video->getFilename());$url=dm_media_url($source['url']??$source['src']??null);
         if(!$url){dm_error('This title has no supported source to encode.');}
+        require_once $root.'divine-delivery/core.php';
+        $asset=ltrim(substr((string)parse_url($url,PHP_URL_PATH),strlen('/videos/')),'/');
+        try {
+            if(!in_array(strtolower(pathinfo($asset,PATHINFO_EXTENSION)),['mp4','webm','mp3','ogg','m4a','wav','flac'],true))throw new RuntimeException('Unsupported source');
+            if(DivineMediaAssets::owner($asset,[['id'=>$id,'filename'=>$video->getFilename()]])!==$id)throw new RuntimeException('Source ownership');
+            $url=DivineMediaAssets::file(Video::getStoragePath(),$asset);
+        }catch(Throwable $e){dm_error('A local audio or video source is required for encoding.');}
         dm_reply(dm_encoder('enqueue',['videoId'=>$id,'source'=>$url,'title'=>$video->getTitle(),'profile'=>(string)($body['profile']??'mp4')]));
     }
     if(!in_array($op,['retry','remove'],true)){dm_error('Unsupported encoding action.');}
