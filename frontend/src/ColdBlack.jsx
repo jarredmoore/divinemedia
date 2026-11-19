@@ -2,7 +2,8 @@ import InstallApp from './InstallApp.jsx';
 import DisplayControls from './DisplayControls.jsx';
 import React,{useEffect,useRef,useState} from 'react';
 import {NativeActions} from './NativeActions.jsx';
-import {ArrowDown,ArrowUpRight,Headphones,Menu,Pause,Play,Search,X} from './GlassIcons.jsx';
+import {workspace} from './platform-client.mjs';
+import {ArrowDown,ArrowUpRight,Headphones,Menu,Pause,Play,Search,Upload,X} from './GlassIcons.jsx';
 
 export {THEME_KEY} from '../shared/theme.mjs';
 export {readCurrentTheme as readTheme} from '../shared/theme.mjs';
@@ -15,7 +16,7 @@ export function ColdBlackHeader({tab,go,query,setQuery,theme,onTheme,links}){
  return <header className="cb-header">
   <button className="cb-wordmark" aria-label="Divine Media home" onClick={()=>{go('Discover');setExpanded(false)}}><img className="dm-brand-mark" src="/icons/divine-logo.svg" alt="" aria-hidden="true"/><span>DIVINE MEDIA</span></button>
   <nav className={'cb-navigation '+(expanded?'is-open':'')} id="cb-navigation" aria-label="Explore Divine Media">{links.map(([name])=><button type="button" key={name} aria-current={tab===name?'page':undefined} onClick={()=>{go(name);setExpanded(false)}}>{name}</button>)}<label className="cb-mobile-search search"><Search size={17}/><input aria-label="Search titles" placeholder="Search the culture…" value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="cb-mobile-install"><InstallApp/><ThemePicker theme={theme} onChange={onTheme}/></div><div className="cb-mobile-native"><NativeActions/></div></nav>
-  <div className="cb-header-tools"><label className="cb-desktop-search search"><Search size={17}/><input aria-label="Search titles" placeholder="Search…" value={query} onChange={e=>setQuery(e.target.value)}/></label><InstallApp/><DisplayControls/><NativeActions/><ThemePicker theme={theme} onChange={onTheme}/><button className="cb-menu" aria-label={expanded?'Close navigation':'Open navigation'} aria-expanded={expanded} aria-controls="cb-navigation" onClick={()=>setExpanded(v=>!v)}>{expanded?<X size={20}/>:<Menu size={20}/>}</button></div>
+  <div className="cb-header-tools"><label className="cb-desktop-search search"><Search size={17}/><input aria-label="Search titles" placeholder="Search…" value={query} onChange={e=>setQuery(e.target.value)}/></label><InstallApp/><DisplayControls/><button className="cb-mobile-create" aria-label="Upload and creator tools" aria-haspopup="dialog" onClick={()=>{setExpanded(false);workspace('creator')}}><Upload size={18}/></button><NativeActions/><ThemePicker theme={theme} onChange={onTheme}/><button className="cb-menu" aria-label={expanded?'Close navigation':'Open navigation'} aria-expanded={expanded} aria-controls="cb-navigation" onClick={()=>setExpanded(v=>!v)}>{expanded?<X size={20}/>:<Menu size={20}/>}</button></div>
  </header>;
 }
 
