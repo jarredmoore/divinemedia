@@ -42,3 +42,7 @@ export const Copy=glass(Lucide.Copy,'cyan');
 export const Code=glass(Lucide.Code,'purple');
 export const MoreHorizontal=glass(Lucide.MoreHorizontal,'blue');
 export const Plus=glass(Lucide.Plus,'cyan');
+
+export const Link2=glass(Lucide.Link2,'cyan');
+export const Video=glass(Lucide.Video,'blue');
+export const Newspaper=glass(Lucide.Newspaper,'purple');

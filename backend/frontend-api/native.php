@@ -7,7 +7,7 @@ function dm_user(): ?array {
     if(!User::isLogged()){return null;}
     $row=User::getUserFromID(User::getId());
     return ['id'=>(int)User::getId(),'username'=>dm_text($row['user']??'',100),'name'=>dm_text($row['name']??$row['user']??'',100),
-        'permissions'=>['upload'=>(bool)User::canUpload(),'stream'=>(bool)User::canStream(),'comment'=>(bool)User::canComment()]];
+        'permissions'=>['embed'=>(bool)(User::canUpload()&&AVideoPlugin::loadPluginIfEnabled('BulkEmbed')&&BulkEmbed::canBulkEmbed()),'upload'=>(bool)User::canUpload(),'stream'=>(bool)User::canStream(),'comment'=>(bool)User::canComment()]];
 }
 function dm_native(string $path, array $data=[], bool $binary=false, bool $allowError=false): array {
     // Paths are hard-coded adapter calls, never supplied by the browser.
