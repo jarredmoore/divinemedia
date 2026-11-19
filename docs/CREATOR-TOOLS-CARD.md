@@ -19,3 +19,5 @@ The Creator Studio card uses the reusable `dm-ambient-stroke` treatment: a maske
 Overlay scrolling follows a shared `dm-scroll-clean` convention: no visible scrollbar, thumb or track, while native wheel, touch and keyboard scrolling remain intact. This convention also covers workspace, video, native-style and install dialogs. Forced-colors mode restores native scrollbar chrome. Future scrolling overlay components should reuse this treatment.
 
 The ambient update is a frontend preview only; no backend or production settings change.
+
+Ambient-stroke preview: https://6aff32097bcf8e79272f6fd8--mediaproduction.netlify.app/creator ([PR #32](https://github.com/jarredmoore/divinemedia/pull/32)). Served CSS matches the verified build.
