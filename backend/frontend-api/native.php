@@ -52,13 +52,17 @@ function dm_item(array $row): array {
     $audio=($row['type']??'')==='audio';
     $allowed=User::canWatchVideoWithAds($id,null,true);
     $cu=AVideoPlugin::loadPluginIfEnabled('CustomizeUser');if($cu&&!CustomizeUser::videoPasswordIsGood($id)){$allowed=false;}
-    $source=$allowed?Video::getFirstSource($row['filename']??''):[];
+    $embed=null;if($allowed&&($row['type']??'')==='embed'){
+        require_once __DIR__.'/youtube.php';$external=DivineYouTube::source((string)($row['videoLink']??''));
+        if(($external['kind']??'')==='video'){$embed=['provider'=>'youtube','id'=>$external['id'],'src'=>'https://www.youtube-nocookie.com/embed/'.$external['id']];}
+    }
+    $source=$allowed&&!$embed?Video::getFirstSource($row['filename']??''):[];
     $url=dm_media_url($source['url']??$source['src']??null);
     return ['id'=>$id,'avideoId'=>$id,'title'=>dm_text($row['title']??'',140),'description'=>dm_text($row['description']??'',10000),
         'userId'=>(int)($row['users_id']??0),'creator'=>dm_text($user['channelName']??$user['name']??$user['user']??'Creator',100),'channel'=>dm_text($user['channelName']??$user['user']??'',100),
         'categoryId'=>(int)($row['categories_id']??0),'image'=>dm_media_url(Video::getPoster($id)),'img'=>dm_media_url(Video::getPoster($id))??'/placeholder.svg',
         'type'=>$audio?'Listen':'Watch','tag'=>dm_text($row['category']??($audio?'AUDIO':'VIDEO'),100),'duration'=>dm_text($row['duration']??'',30),
-        'videoUrl'=>$audio?null:$url,'audioUrl'=>$audio?$url:null,'watchUrl'=>'https://divinemedia.us/watch/'.$id];
+        'videoUrl'=>$audio?null:$url,'audioUrl'=>$audio?$url:null,'embed'=>$embed,'mediaKind'=>($row['type']??'video'),'watchUrl'=>'https://divinemedia.us/watch/'.$id];
 }
 function dm_playlist(int $id): PlayList {
     require_once $GLOBALS['global']['systemRootPath'].'objects/playlist.php'; AVideoPlugin::loadPlugin('PlayLists');

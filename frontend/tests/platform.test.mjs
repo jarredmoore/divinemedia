@@ -34,3 +34,10 @@ test('native HTML errors are never rendered or returned to the frontend',async()
  const before=global.fetch,old=process.env.DIVINE_GATEWAY_KEY;process.env.DIVINE_GATEWAY_KEY='test-key-'.repeat(8);global.fetch=async()=>new Response('<html>private diagnostic</html>',{headers:{'content-type':'text/html'}});
  try{const res=await handler(new Request('https://divinemedia.us/api/platform/session'));assert.equal(res.status,502);assert(!(await res.text()).includes('private diagnostic'))}finally{global.fetch=before;if(old===undefined)delete process.env.DIVINE_GATEWAY_KEY;else process.env.DIVINE_GATEWAY_KEY=old}
 });
+test('YouTube preview and import require same-origin POST requests',async()=>{
+ const before=global.fetch;let calls=0;global.fetch=async()=>{calls++;throw Error('unexpected')};
+ try{for(const action of ['embed-preview','embed-add']){
+  assert.equal((await handler(new Request('https://divinemedia.us/api/platform/'+action))).status,405);
+  assert.equal((await handler(new Request('https://divinemedia.us/api/platform/'+action,{method:'POST',headers:{origin:'https://evil.test','content-type':'application/json'},body:'{}'}))).status,403);
+ }assert.equal(calls,0)}finally{global.fetch=before}
+});
