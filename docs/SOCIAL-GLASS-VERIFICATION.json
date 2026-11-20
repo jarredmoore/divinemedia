@@ -1,0 +1,61 @@
+{
+  "result": "pass",
+  "checks": [
+    {
+      "theme": "code-black",
+      "width": 1440,
+      "profiles": 3,
+      "descriptions": true,
+      "focus": true
+    },
+    {
+      "theme": "code-black",
+      "width": 390,
+      "profiles": 3,
+      "descriptions": true,
+      "focus": true
+    },
+    {
+      "theme": "code-black",
+      "width": 320,
+      "profiles": 3,
+      "descriptions": true,
+      "focus": true
+    },
+    {
+      "theme": "cozy",
+      "width": 1440,
+      "profiles": 3,
+      "descriptions": true,
+      "focus": true
+    },
+    {
+      "theme": "cozy",
+      "width": 390,
+      "profiles": 3,
+      "descriptions": true,
+      "focus": true
+    },
+    {
+      "theme": "cozy",
+      "width": 320,
+      "profiles": 3,
+      "descriptions": true,
+      "focus": true
+    }
+  ],
+  "profile_urls": [
+    "https://www.instagram.com/divinecreativegroup/",
+    "https://www.instagram.com/divinemedia.us/",
+    "https://www.tiktok.com/@divinemedia.us"
+  ],
+  "no_external_profile_actions": true,
+  "errors": [],
+  "profile_picture_exports": {
+    "black_png": "1080x1080",
+    "transparent_png": "1080x1080",
+    "compact_png": "400x400",
+    "vector": "existing Divine mark",
+    "platform_uploads_performed": false
+  }
+}
