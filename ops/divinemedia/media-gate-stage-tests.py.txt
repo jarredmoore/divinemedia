@@ -167,8 +167,9 @@ status,value=api('encoder-action',actors['owner'],{'operation':'enqueue','video'
 assert status==200 and value.get('id',0)>0,'Private Encoder enqueue '+str(status)
 jobid=value['id']
 assert api('encoder-action',actors['other'],{'operation':'remove','id':jobid})[0]==403
-copycode="ob_start();$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/Encoder/';require '/var/www/html/AVideo/Encoder/videos/configuration.php';require_once '/var/www/html/AVideo/Encoder/objects/Encoder.php';$r=Encoder::downloadFile((int)stream_get_contents(STDIN));while(ob_get_level())ob_end_clean();echo json_encode(['error'=>(bool)$r->error,'path'=>$r->pathFileName??'']);"
+copycode="ob_start();$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/Encoder/';require '/var/www/html/AVideo/Encoder/videos/configuration.php';require_once '/var/www/html/AVideo/Encoder/objects/Encoder.php';$id=(int)stream_get_contents(STDIN);$r=Encoder::downloadFile($id);if(empty($r->error)){$q=new Encoder($id);$q->setStatus(Encoder::STATUS_ERROR);$q->save();}while(ob_get_level())ob_end_clean();echo json_encode($r);"
 copyresult=json.loads(docker('exec','-i',web,'php','-r',copycode,data=str(jobid).encode()))
+(BUNDLE/'encoder-copy.private.json').write_text(json.dumps(copyresult))
 assert not copyresult['error'],'Native private source copy failed'
 assert privfile.exists()and hashlib.sha256(privfile.read_bytes()).hexdigest()==original_hash,'Encoder moved or changed original'
 assert api('encoder-action',actors['owner'],{'operation':'remove','id':jobid})[0]==200

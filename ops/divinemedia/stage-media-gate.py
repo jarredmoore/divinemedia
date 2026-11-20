@@ -96,6 +96,7 @@ try:
  report.update(result='pass',checks=checks,native_startup_invoked=False,production_records_modified=False)
 except Exception as e:
  report['completed_checks']=globals().get('checks',{});report.update(result='fail',phase=phase,error_type=type(e).__name__,assertion=str(e)[:180]if isinstance(e,(AssertionError,RuntimeError))else None)
+ if (app/'.compose/encoder/videos/avideo.log').exists():shutil.copyfile(app/'.compose/encoder/videos/avideo.log',BUNDLE/'encoder.private.log')
  if (app/'.compose/videos/avideo.log').exists():shutil.copyfile(app/'.compose/videos/avideo.log',BUNDLE/'native.private.log')
  if 'live'in globals():
   try:(BUNDLE/'nginx.private.log').write_bytes(subprocess.run(['docker','logs',live],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=20).stdout)

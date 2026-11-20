@@ -61,7 +61,7 @@ try{
         $profiles=['mp4'=>'inputAutoMP4','hls'=>'inputAutoHLS','audio'=>'inputAutoAudio','webm'=>'inputAutoWebm'];$profile=(string)($dmEncoderData['profile']??'mp4');
         if(!isset($profiles[$profile])){enc_reply(['error'=>'Unsupported encoding profile.']);}
         $_POST=$_REQUEST=[$profiles[$profile]=>'true'];
-        $e=new Encoder(0);$e->setStreamers_id($streamerId);$e->setFileURI($url);$e->setVideoDownloadedLink($url);$e->setFilename('divine_'.bin2hex(random_bytes(10)));$e->setTitle(mb_substr(strip_tags((string)($dmEncoderData['title']??'Divine Media')),0,140));$e->setPriority($s->getPriority());$e->setFormats_idFromOrder(decideFormatOrder());if(!(int)$e->getFormats_id()){enc_reply(['error'=>'This output format is not configured.']);}$e->setReturn_vars(json_encode(['videos_id'=>$videoId]));
+        $e=new Encoder(0);$e->setStreamers_id($streamerId);$e->setFileURI($url);$e->setVideoDownloadedLink('');$e->setFilename('divine_'.bin2hex(random_bytes(10)));$e->setTitle(mb_substr(strip_tags((string)($dmEncoderData['title']??'Divine Media')),0,140));$e->setPriority($s->getPriority());$e->setFormats_idFromOrder(decideFormatOrder());if(!(int)$e->getFormats_id()){enc_reply(['error'=>'This output format is not configured.']);}$e->setReturn_vars(json_encode(['videos_id'=>$videoId]));
         $id=$e->save();if(!$id){enc_reply(['error'=>'Encoding job could not be queued.']);}
         // Existing Encoder workers retain control. Never dispatch the global queue during deployment or reads.
         enc_reply(['id'=>(int)$id,'message'=>'Encoding job queued.']);
