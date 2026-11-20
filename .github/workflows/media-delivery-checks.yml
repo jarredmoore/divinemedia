@@ -1,0 +1,19 @@
+name: Media delivery policy checks
+on:
+  pull_request:
+    paths:
+      - 'backend/media-delivery/**'
+      - 'backend/frontend-api/**'
+      - 'ops/divinemedia/*media*'
+      - 'tests/media-gate-routing.py'
+      - '.github/workflows/media-delivery-checks.yml'
+permissions:
+  contents: read
+jobs:
+  policy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 tests/media-gate-routing.py
+      - name: PHP policy and traversal tests
+        run: php ops/divinemedia/test-media-delivery.php

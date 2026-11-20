@@ -1,12 +1,12 @@
 # Secure media delivery release gate
 
-Status: live frontend promotion held on November 19, 2026. The owner explicitly requested secure login across creator workflows and gated public/private delivery for all media and content, and approved holding promotion for verification.
+Status: the owner subsequently authorized publishing the Studio release for testing with the known privacy gap. The Azure gate in PR #36 is being verified separately; do not describe production direct files as protected until its activation evidence is recorded.
 
 ## Release state
 
 Approved feature PRs #27–#34 are merged into `production/divine-media` at `884c152625d4620e8dbe30e7ed8bffa5041f56a7`. Its application tree matches the tested Studio feature. The documentation-only taxonomy proposal remains unapplied to the catalog. Older unrelated PRs were not merged.
 
-The live Netlify frontend is still deploy `6afccd13a10cedc1bd6a6fb9`. Tested candidate `6aff798ba1253a625d040bfc` has not been promoted. Git source preparation is complete; live publication is a separate, blocked step. No protected files have been moved or deleted, no blanket media deny rule was activated, and no container was restarted by this audit.
+The owner-approved Studio release is live as Netlify deploy `6aff8200cde8a464895f94cc`, with production Git at `c272e5178640728211a4aa6f2c22c4806dea151b`. Earlier deploy IDs above were part of the previous hold. The new Azure gate is a separate release and remains under verification. No protected files have been moved or deleted, no blanket media deny rule was activated, and no container was restarted by this audit.
 
 ## Confirmed gap
 

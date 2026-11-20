@@ -1,0 +1,189 @@
+checks={}
+# All credentials and records below exist only in the disposable DB/network.
+credentials={role:{'user':'dmqa_'+role+'_'+uuid.uuid4().hex[:8],'password':secrets.token_hex(24)}for role in ['owner','other']}
+seed="""ob_start();$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/';require '/var/www/html/AVideo/videos/configuration.php';$out=[];foreach(json_decode(stream_get_contents(STDIN),true)as $role=>$d){$u=new User(0);$u->setUser($d['user']);$u->setPassword($d['password']);$u->setEmail($d['user'].'@example.invalid');$u->setName('Isolated delivery '.$role);$u->setIsAdmin(0);$u->setEmailVerified(1);$u->setCanUpload($role==='owner'?1:0);$u->setCanStream($role==='owner'?1:0);$u->setStatus('a');$out[$role]=(int)$u->save();}while(ob_get_level())ob_end_clean();echo json_encode($out);"""
+userids=json.loads(docker('exec','-i',web,'php','-r',seed,data=json.dumps(credentials).encode()))
+key=secrets.token_hex(32)
+docker('exec','-i',web,'sh','-c','umask 077; cat > /var/www/tmp/divine-frontend-gateway.key; chown www-data:www-data /var/www/tmp/divine-frontend-gateway.key',data=key.encode())
+# The clone deliberately lacks the production persistent gateway file and accepts this private fixture key.
+assert not(app/'.compose/videos/.divine-private/frontend-gateway.php').exists()
+def request(path,headers=None,body=None,method=None):
+ import urllib.parse
+ lines=['url = '+json.dumps('https://media.divinemedia.us'+path),'resolve = "media.divinemedia.us:443:127.0.0.1"','noproxy = "media.divinemedia.us"','max-time = 25','silent','show-error','user-agent = "Mozilla/5.0 DivineDeliveryIsolatedQA"','dump-header = "/tmp/dm-test-headers"','output = "/tmp/dm-test-body"','write-out = "%{http_code}"']
+ for name,value in (headers or {}).items():lines+=['header = '+json.dumps(name+': '+value)]
+ if method:lines+=['request = '+json.dumps(method)]
+ if body is not None:lines+=['data = '+json.dumps(json.dumps(body))]
+ status=int(docker('exec','-i',web,'curl','--config','-',data=('\n'.join(lines)+'\n').encode()).decode())
+ h=docker('exec',web,'cat','/tmp/dm-test-headers').decode();b=docker('exec',web,'cat','/tmp/dm-test-body')
+ (BUNDLE/'last-headers.private.txt').write_text(h);(BUNDLE/'last-body.private.txt').write_bytes(b)
+ return status,h,b
+
+def api(action,actor,data=None):
+ h={'X-Divine-Gateway-Key':key,'X-Divine-Frontend-Origin':'https://divinemedia.us','X-Divine-Session':actor.get('sid',''),'X-Divine-CSRF':actor.get('csrf',''),'Content-Type':'application/json'}
+ status,headers,body=request('/divine-api/index.php?action='+action,h,None if data is None else {'payload':data})
+ value=json.loads(body);match=re.search(r'^X-Divine-Session:\s*(.+)$',headers,re.I|re.M)
+ if match:actor['sid']=match[1].strip()
+ if 'csrf'in value:actor['csrf']=value['csrf']
+ return status,value
+actors={}
+for role in credentials:
+ actor={};assert api('session',actor)[0]==200
+ status,value=api('login',actor,credentials[role]);assert status==200 and value['user']['id']==userids[role], 'Native fixture login '+str(status)
+ actors[role]=actor
+for role,actor in actors.items():
+ status,value=api('delivery-grant',actor,{});assert status==200,'Grant '+str(status)
+ grant=value['grant'];assert actor['sid']not in grant
+ status,h,b=request('/divine-media/session',{'Origin':'https://divinemedia.us','Content-Type':'application/json'},{'grant':grant});assert status==200,'Exchange '+str(status)
+ cookie=re.search(r'Set-Cookie: (__Host-dm_delivery=[a-f0-9]{64});',h,re.I);assert cookie,'Missing delivery cookie'
+ actor['cookie']=cookie[1]
+ assert all(x in h.lower()for x in ['secure','httponly','samesite=lax'])
+ assert request('/divine-media/session',{'Cookie':actor['cookie'],'Origin':'https://divinemedia.us'})[0]==200
+ assert request('/divine-media/session',{'Origin':'https://divinemedia.us','Content-Type':'application/json'},{'grant':grant})[0]==404,'Grant replay accepted'
+checks['native_login_and_single_use_cookie_exchange']=True
+cat=int(sql('SELECT id FROM categories ORDER BY id LIMIT 1;'))
+fixtures={}
+for visibility,status in [('public','a'),('private','i')]:
+ for kind,ext in [('video','mp4'),('audio','mp3'),('image','jpg'),('pdf','pdf')]:
+  base='dmfixture_'+visibility+'_'+kind+'_'+uuid.uuid4().hex[:8]
+  q="INSERT INTO videos(title,clean_title,filename,status,type,users_id,categories_id,duration,created,modified) VALUES ('Delivery fixture','"+uuid.uuid4().hex+"','"+base+"','"+status+"','"+kind+"',"+str(userids['owner'])+","+str(cat)+",'00:00:02',NOW(),NOW()); SELECT LAST_INSERT_ID();"
+  ident=int(sql(q));folder=app/'.compose/videos'/base;folder.mkdir(mode=0o755);folder.chmod(0o755)
+  # Content bytes never come from a user's media. Valid image/PDF; AV generated below.
+  file=folder/(base+'.'+ext)
+  if ext=='jpg':
+   docker('exec',web,'ffmpeg','-hide_banner','-loglevel','error','-f','lavfi','-i','color=c=blue:s=320x180','-frames:v','1','-update','1','/var/www/html/AVideo/videos/'+base+'/'+base+'.jpg')
+  elif ext=='pdf':file.write_bytes(b'%PDF-1.4\n% disposable delivery fixture\n%%EOF\n')
+  elif ext=='mp3':docker('exec',web,'ffmpeg','-hide_banner','-loglevel','error','-f','lavfi','-i','sine=frequency=440:sample_rate=44100','-t','2','-c:a','libmp3lame','/var/www/html/AVideo/videos/'+base+'/'+base+'.mp3')
+  else:docker('exec',web,'ffmpeg','-hide_banner','-loglevel','error','-f','lavfi','-i','color=c=blue:s=320x180:r=12','-t','2','-c:v','libx264','-preset','ultrafast','-movflags','+faststart','/var/www/html/AVideo/videos/'+base+'/'+base+'.mp4')
+  file.chmod(0o644);fixtures[(visibility,kind)]={'id':ident,'base':base,'path':'/videos/'+base+'/'+base+'.'+ext}
+for (visibility,kind),fixture in fixtures.items():
+ for role in ['guest','owner','other']:
+  headers={'Range':'bytes=0-15','Origin':'https://divinemedia.us'}
+  if role!='guest':headers['Cookie']=actors[role]['cookie']
+  status,h,b=request(fixture['path'],headers)
+  expected=visibility=='public'or role=='owner'
+  assert status in ([206]if expected else [401,403,404]), 'Access '+visibility+' '+kind+' '+role+' '+str(status)
+  if expected:
+   assert len(b)==16 and 'content-range:'in h.lower(),'Byte range not preserved'
+   assert 'no-store'in h.lower()and 'public'not in h.lower().split('cache-control:')[-1].split('\r\n')[0],'Cache policy'
+   assert 'access-control-allow-origin: https://divinemedia.us'in h.lower(),'Credentialed CORS'
+  else:assert b.startswith(b'{"error"'),'Denied native HTML or file bytes'
+checks['public_and_private_video_audio_image_pdf_ranges_and_cross_user_denials']=True
+priv=fixtures[('private','video')];base=priv['base'];folder=app/'.compose/videos'/base
+(folder/'index.m3u8').write_text('#EXTM3U\n#EXT-X-TARGETDURATION:4\n#EXT-X-KEY:METHOD=AES-128,URI="fixture.key"\n#EXTINF:4,\nseg-1.ts\n#EXT-X-ENDLIST\n');(folder/'fixture.key').write_bytes(b'1234567890123456');(folder/'seg-1.ts').write_bytes(b'G'*188)
+for p in [folder/'index.m3u8',folder/'fixture.key',folder/'seg-1.ts']:p.chmod(0o644)
+phase='private-hls-access'
+for suffix in ['index.m3u8','fixture.key','seg-1.ts']:
+ for role in ['guest','owner','other']:
+  status,h,b=request('/videos/'+base+'/'+suffix,{'Cookie':actors[role]['cookie']}if role!='guest'else {})
+  assert status in ([200]if role=='owner'else [401,403,404]),'HLS '+suffix+' '+role+' '+str(status)
+checks['private_hls_manifest_segment_and_key']=True
+phase='live-access'
+# Public live and group-restricted live, without broadcasting/ingest or touching existing streams.
+livekeys={}
+for restricted in [False,True]:
+ stream='dmqa'+uuid.uuid4().hex;livekeys[restricted]=stream
+ sql("INSERT INTO live_transmitions(title,public,saveTransmition,`key`,users_id,categories_id,password,created,modified) VALUES ('Delivery rehearsal',1,0,'"+stream+"',"+str(userids['owner']if restricted else userids['other'])+","+str(cat)+",'',NOW(),NOW());")
+ liveid=int(sql('SELECT LAST_INSERT_ID();')or '0') # LAST_INSERT_ID is connection-local; resolve exact fixture key below.
+ liveid=int(sql("SELECT id FROM live_transmitions WHERE `key`='"+stream+"';"))
+ if restricted:
+  sql("INSERT INTO users_groups(group_name,created,modified)VALUES('Delivery rehearsal',NOW(),NOW());")
+  group=int(sql('SELECT MAX(id) FROM users_groups;'))
+  sql('INSERT INTO users_has_users_groups(users_id,users_groups_id)VALUES('+str(userids['owner'])+','+str(group)+');')
+  sql('INSERT INTO live_transmitions_has_users_groups(live_transmitions_id,users_groups_id)VALUES('+str(liveid)+','+str(group)+');')
+ lf=hls/'live'/stream;lf.mkdir(parents=True,mode=0o755);lf.chmod(0o755);lf.parent.chmod(0o755);os.chown(lf,33,33);os.chown(lf.parent,33,33)
+ (lf/'index.m3u8').write_text('#EXTM3U\n#EXT-X-TARGETDURATION:4\n#EXT-X-KEY:METHOD=AES-128,URI="fixture.key"\n#EXTINF:4,\nseg-1.ts\n');(lf/'fixture.key').write_bytes(b'1234567890123456');(lf/'seg-1.ts').write_bytes(b'G'*188)
+ for p in lf.iterdir():p.chmod(0o644);os.chown(p,33,33)
+ for suffix in ['index.m3u8','fixture.key','seg-1.ts']:
+  for role in ['guest','owner','other']:
+   status,h,b=request('/hls/live/'+stream+'/'+suffix,{'Cookie':actors[role]['cookie']}if role!='guest'else {})
+   assert status in ([200]if not restricted or role=='owner'else [401,403,404]),'Live '+str(restricted)+' '+suffix+' '+role+' '+str(status)
+checks['live_group_permissions_on_manifests_segments_keys']=True
+for scope in ['live','audio']:
+ raw=docker('exec',web,'curl','-sS','--max-time','10','-o','/dev/null','-w','%{http_code}','http://live:8080/'+scope+'/'+livekeys[True]+'/seg-1.ts').decode()
+ assert raw=='403','Raw origin bypass '+scope+' '+raw
+checks['raw_live_and_audio_origin_denied']=True
+phase='vod-group-grant-and-revocation'
+shared=fixtures[('public','video')]
+sql('INSERT INTO videos_group_view(videos_id,users_groups_id)VALUES('+str(shared['id'])+','+str(group)+');')
+assert request(shared['path'])[0]in [403,404],'Group-restricted VOD guest bypass'
+assert request(shared['path'],{'Cookie':actors['other']['cookie']})[0]in [403,404],'Unrelated VOD viewer bypass'
+sql('INSERT INTO users_has_users_groups(users_id,users_groups_id)VALUES('+str(userids['other'])+','+str(group)+');')
+assert request(shared['path'],{'Cookie':actors['other']['cookie'],'Range':'bytes=0-15'})[0]==206,'Authorized VOD group viewer denied'
+sql('DELETE FROM users_has_users_groups WHERE users_id='+str(userids['other'])+' AND users_groups_id='+str(group)+';')
+assert request(shared['path'],{'Cookie':actors['other']['cookie']})[0]in [403,404],'Revoked VOD group viewer still allowed'
+sql('DELETE FROM videos_group_view WHERE videos_id='+str(shared['id'])+' AND users_groups_id='+str(group)+';')
+checks['vod_authorized_group_viewer_and_revocation']=True
+phase='native-rtmp-hls-playback'
+# Exercise a real encrypted HLS output from synthetic media, only on the isolated network.
+import urllib.parse
+status,studio=api('studio',actors['owner']);assert status==200 and studio['key']==livekeys[True],'Native Studio did not select fixture stream'
+server=urllib.parse.urlsplit(studio['server']);tcurl=urllib.parse.urlunsplit(('rtmp','live',server.path,server.query,''))
+publish_url='rtmp://live'+server.path.rstrip('/')+'/'+livekeys[True]
+docker('exec','--user','www-data',live,'sh','-c','test -w \"$1\"','sh','/HLS/live/'+livekeys[True])
+publisher=subprocess.Popen(['docker','exec',web,'ffmpeg','-hide_banner','-loglevel','error','-re','-f','lavfi','-i','testsrc2=size=320x180:rate=12','-f','lavfi','-i','sine=frequency=440:sample_rate=44100','-t','45','-c:v','libx264','-preset','ultrafast','-tune','zerolatency','-g','24','-c:a','aac','-b:a','64k','-rtmp_tcurl',tcurl,'-rtmp_app',server.path.strip('/'),'-f','flv',publish_url],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+try:
+ real_manifest=None
+ for _ in range(15):
+  time.sleep(1)
+  status,h,body=request('/hls/live/'+livekeys[True]+'/index.m3u8',{'Cookie':actors['owner']['cookie']})
+  if status==200 and b'seg-1.ts'not in body and b'#EXTINF'in body:real_manifest=body.decode();break
+ assert real_manifest is not None,'Real authenticated RTMP did not produce guarded HLS'
+ # Check the latest advertised key/fragment while the source is live; old keys can already
+ # be pruned by the native live window while a sequential test walks the whole playlist.
+ keys=re.findall(r'URI="([^"]+)"',real_manifest);segments=[l for l in real_manifest.splitlines()if l and not l.startswith('#')]
+ uris=keys[-1:]+segments[-1:]
+ assert any(u.endswith('.key')for u in uris),'No encrypted HLS key exercised'
+ assert any(u.endswith('.ts')for u in uris),'No real HLS segment exercised'
+ for uri in uris:
+  assert uri.startswith('/hls/live/'+livekeys[True]+'/'),'Manifest escaped authorized stream'
+  code=request(uri,{'Cookie':actors['owner']['cookie']})[0]
+  if code!=200:
+   file=hls/'live'/uri[len('/hls/live/'):]
+   report['failed_live_asset']={'status':code,'suffix':file.suffix,'exists':file.exists(),'mode':oct(file.stat().st_mode&0o777)if file.exists()else None,'uid':file.stat().st_uid if file.exists()else None}
+  assert code==200,'Owner current segment/key failed '+str(code)
+  assert request(uri)[0]in [401,403,404],'Guest real segment/key bypass'
+ assert publisher.poll()is None,'Publisher ended before raw RTMP check'
+ # An external RTMP reader is outside the local thumbnail/recording loopback allowance.
+ reader=subprocess.run(['docker','exec',web,'ffmpeg','-hide_banner','-loglevel','error','-i','rtmp://live/live/'+livekeys[True],'-t','1','-f','null','-'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=12)
+ assert reader.returncode!=0,'Raw external RTMP playback bypass'
+ checks['actual_encrypted_hls_and_external_rtmp_playback_denial']=True
+finally:
+ try:out,err=publisher.communicate(timeout=12)
+ except subprocess.TimeoutExpired:publisher.kill();out,err=publisher.communicate()
+ (BUNDLE/'synthetic-publish.private.log').write_bytes(err)
+ (BUNDLE/'hls-files.private.json').write_text(json.dumps([str(p.relative_to(hls))for p in hls.rglob('*')if p.is_file()]))
+ raw_manifest=hls/'live'/livekeys[True]/'index.m3u8'
+ if raw_manifest.exists():(BUNDLE/'raw-hls.private.m3u8').write_bytes(raw_manifest.read_bytes())
+for path in ['/videos/../.compose/videos/configuration.php','/videos/%2e%2e/configuration.php','/videos/.divine-private/frontend-gateway.php','/.compose/videos/'+base+'/'+base+'.mp4','/.git/config','/divine-delivery/core.php','/view/xsendfile.php?file='+base+'.mp4&folder='+base+'/','/view/hls.php?videoDirectory='+base]:
+ assert request(path)[0]in [400,403,404],'Bypass '+path
+checks['raw_and_native_handler_bypass_denied']=True
+assert request(priv['path'],{'Cookie':actors['owner']['cookie'],'Origin':'https://evil.invalid'})[0]==403
+assert request(priv['path'],{'Referer':'https://divinemedia.us/'})[0]==404
+checks['spoofed_referrer_and_foreign_origin_denied']=True
+phase='private-encoder-copy'
+# A real native Encoder job copies a private source locally, with no HTTP guest exemption.
+privfile=app/'.compose/videos'/priv['base']/(priv['base']+'.mp4');original_hash=hashlib.sha256(privfile.read_bytes()).hexdigest()
+status,value=api('encoder-action',actors['owner'],{'operation':'enqueue','video':priv['id'],'profile':'mp4'})
+assert status==200 and value.get('id',0)>0,'Private Encoder enqueue '+str(status)
+jobid=value['id']
+assert api('encoder-action',actors['other'],{'operation':'remove','id':jobid})[0]==403
+copycode="ob_start();$_SERVER['HTTP_HOST']='media.divinemedia.us';$_SERVER['HTTPS']='on';$_SERVER['REQUEST_URI']='/Encoder/';require '/var/www/html/AVideo/Encoder/videos/configuration.php';require_once '/var/www/html/AVideo/Encoder/objects/Encoder.php';$id=(int)stream_get_contents(STDIN);$r=Encoder::downloadFile($id);if(empty($r->error)){$q=new Encoder($id);$q->setStatus(Encoder::STATUS_ERROR);$q->save();}while(ob_get_level())ob_end_clean();echo json_encode($r);"
+copyresult=json.loads(docker('exec','-i',web,'php','-r',copycode,data=str(jobid).encode()))
+(BUNDLE/'encoder-copy.private.json').write_text(json.dumps(copyresult))
+assert not copyresult['error'],'Native private source copy failed'
+assert privfile.exists()and hashlib.sha256(privfile.read_bytes()).hexdigest()==original_hash,'Encoder moved or changed original'
+assert api('encoder-action',actors['owner'],{'operation':'remove','id':jobid})[0]==200
+assert privfile.exists()and hashlib.sha256(privfile.read_bytes()).hexdigest()==original_hash,'Encoder cleanup removed original'
+checks['private_encoder_copy_and_cleanup_preserve_original']=True
+phase='logout-revocation'
+# Native logout, not merely clearing the delivery cookie, revokes a copied authenticated cookie.
+assert api('logout',actors['owner'],{})[0]==200
+assert request(priv['path'],{'Cookie':actors['owner']['cookie']})[0]in [401,403,404],'Logout did not revoke'
+assert request('/hls/live/'+livekeys[True]+'/seg-1.ts',{'Cookie':actors['owner']['cookie']})[0]in [401,403,404]
+assert request(fixtures[('public','video')]['path'],{'Cookie':actors['owner']['cookie'],'Range':'bytes=0-15'})[0]==206,'Public media failed after logout'
+checks['native_logout_revokes_copied_delivery_cookie']=True
+assert request('/Encoder/videos/fixture.mp4')[0]in [403,404]
+# Store expiry and traversal/symlink rules use the same production module.
+docker('cp',str(BUNDLE/'test-media-delivery.php'),web+':/tmp/test-media-delivery.php')
+code=(BUNDLE/'test-media-delivery.php').read_text().replace("__DIR__.'/../../backend/media-delivery/core.php'","'/var/www/html/AVideo/divine-delivery/core.php'")
+result=json.loads(docker('exec','-i',web,'php',data=code.encode()));assert result['result']=='pass';checks['core_checks']=result['checks']

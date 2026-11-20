@@ -31,10 +31,11 @@ function dm_native(string $path, array $data=[], bool $binary=false, bool $allow
 function dm_video(int $id): array {
     $row=Video::getVideo($id,Video::canEdit($id)?'':Video::SORT_TYPE_VIEWABLE,false,false,false,true);
     if(empty($row['id'])){dm_error('This title is unavailable.',404);}
-    if(!User::canWatchVideoWithAds($id,null,true)){dm_error('This title is unavailable for your account.',403);}
+    $draftPreview=($row['status']??'')===Video::STATUS_INACTIVE&&Video::canEdit($id);
+    if(!$draftPreview&&!User::canWatchVideoWithAds($id,null,true)){dm_error('This title is unavailable for your account.',403);}
     $cu=AVideoPlugin::loadPluginIfEnabled('CustomizeUser');
-    if($cu&&!CustomizeUser::videoPasswordIsGood($id)){dm_reply(['error'=>'Video password required.','code'=>'video_password_required'],403);}
-    forbiddenPageIfCannotWatchVideo($id);
+    if(!$draftPreview&&$cu&&!CustomizeUser::videoPasswordIsGood($id)){dm_reply(['error'=>'Video password required.','code'=>'video_password_required'],403);}
+    if(!$draftPreview){forbiddenPageIfCannotWatchVideo($id);}
     return $row;
 }
 function dm_media_url($value): ?string {
@@ -50,8 +51,9 @@ function dm_item(array $row): array {
     if(!isset($users[$uid])){$users[$uid]=$uid?User::getUserFromID($uid):[];}
     $user=$users[$uid];
     $audio=($row['type']??'')==='audio';
-    $allowed=User::canWatchVideoWithAds($id,null,true);
-    $cu=AVideoPlugin::loadPluginIfEnabled('CustomizeUser');if($cu&&!CustomizeUser::videoPasswordIsGood($id)){$allowed=false;}
+    $draftPreview=($row['status']??'')===Video::STATUS_INACTIVE&&Video::canEdit($id);
+    $allowed=$draftPreview||User::canWatchVideoWithAds($id,null,true);
+    $cu=AVideoPlugin::loadPluginIfEnabled('CustomizeUser');if(!$draftPreview&&$cu&&!CustomizeUser::videoPasswordIsGood($id)){$allowed=false;}
     $embed=null;if($allowed&&($row['type']??'')==='embed'){
         require_once __DIR__.'/youtube.php';$external=DivineYouTube::source((string)($row['videoLink']??''));
         if(($external['kind']??'')==='video'){$embed=['provider'=>'youtube','id'=>$external['id'],'src'=>'https://www.youtube-nocookie.com/embed/'.$external['id']];}

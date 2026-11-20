@@ -56,11 +56,12 @@ try{
     $_SESSION['login']=(object)['isLogged'=>true,'streamers_id'=>$streamerId,'streamer'=>$s->getSiteURL(),'canUpload'=>true,'isAdmin'=>(bool)$s->getIsAdmin(),'isStreamerAdmin'=>!empty($dmEncoderActor['isAdmin']),'allowedResolutions'=>$dmEncoderActor['allowedResolutions']??[]];
     if($dmEncoderOp==='enqueue'){
         $videoId=(int)($dmEncoderData['videoId']??0);$url=(string)($dmEncoderData['source']??'');$parts=parse_url($url);
-        if($videoId<1||($parts['scheme']??'')!=='https'||($parts['host']??'')!=='media.divinemedia.us'||!str_starts_with($parts['path']??'','/videos/')||isset($parts['user'])||isset($parts['pass'])){enc_reply(['error'=>'Unsupported encoding source.']);}
+        $sourceRoot=realpath(dirname(__DIR__).'/videos');$localSource=realpath($url);
+        if($videoId<1||!$sourceRoot||!$localSource||$localSource!==$url||!str_starts_with($localSource,$sourceRoot.'/')||!is_file($localSource)||!in_array(strtolower(pathinfo($localSource,PATHINFO_EXTENSION)),['mp4','webm','mp3','ogg','m4a','wav','flac'],true)){enc_reply(['error'=>'Unsupported encoding source.']);}
         $profiles=['mp4'=>'inputAutoMP4','hls'=>'inputAutoHLS','audio'=>'inputAutoAudio','webm'=>'inputAutoWebm'];$profile=(string)($dmEncoderData['profile']??'mp4');
         if(!isset($profiles[$profile])){enc_reply(['error'=>'Unsupported encoding profile.']);}
         $_POST=$_REQUEST=[$profiles[$profile]=>'true'];
-        $e=new Encoder(0);$e->setStreamers_id($streamerId);$e->setFileURI($url);$e->setVideoDownloadedLink($url);$e->setFilename('divine_'.bin2hex(random_bytes(10)));$e->setTitle(mb_substr(strip_tags((string)($dmEncoderData['title']??'Divine Media')),0,140));$e->setPriority($s->getPriority());$e->setFormats_idFromOrder(decideFormatOrder());if(!(int)$e->getFormats_id()){enc_reply(['error'=>'This output format is not configured.']);}$e->setReturn_vars(json_encode(['videos_id'=>$videoId]));
+        $e=new Encoder(0);$e->setStreamers_id($streamerId);$e->setFileURI($url);$e->setVideoDownloadedLink('');$e->setFilename('divine_'.bin2hex(random_bytes(10)));$e->setTitle(mb_substr(strip_tags((string)($dmEncoderData['title']??'Divine Media')),0,140));$e->setPriority($s->getPriority());$e->setFormats_idFromOrder(decideFormatOrder());if(!(int)$e->getFormats_id()){enc_reply(['error'=>'This output format is not configured.']);}$e->setReturn_vars(json_encode(['videos_id'=>$videoId]));
         $id=$e->save();if(!$id){enc_reply(['error'=>'Encoding job could not be queued.']);}
         // Existing Encoder workers retain control. Never dispatch the global queue during deployment or reads.
         enc_reply(['id'=>(int)$id,'message'=>'Encoding job queued.']);
