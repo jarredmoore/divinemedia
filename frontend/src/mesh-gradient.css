@@ -1,0 +1,8 @@
+/* CSS paints immediately and remains the no-WebGL / lost-context fallback. */
+.cb-mesh{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 78% 18%,#6543cf69,transparent 58%),radial-gradient(ellipse at 65% 80%,#0fa98c26,transparent 60%),radial-gradient(ellipse at 24% 63%,#1b2873bb,transparent 64%),radial-gradient(ellipse at 15% 12%,#d6408f50,transparent 48%),radial-gradient(ellipse at 85% 65%,#ff6a2a12,transparent 22%),radial-gradient(ellipse at 40% 10%,#63e2ff0c,transparent 20%),#070812}
+.cb-mesh canvas{display:block;width:100%;height:100%;opacity:0;pointer-events:none}.cb-mesh canvas[data-mesh=webgl]{opacity:1}
+.cold-black .cb-scene-backdrop{background:#070812}.cold-black .cb-poster{opacity:calc(.16 * clamp(0,1 - var(--scene-progress)*2.8,1));mix-blend-mode:screen;z-index:1}.cold-black .cb-split{opacity:calc(.14 * clamp(0,var(--scene-progress)*2.8,1));z-index:1}
+.cold-black .cb-scene-shade{background:linear-gradient(90deg,#00000083,transparent 78%),linear-gradient(0deg,#000 0%,transparent 30%,#00000020 100%)}
+.cold-black .cb-orbit{border-color:#ffffff0c}.cold-black .cb-scene-reveal h2,.cold-black .cb-hero-copy h1{text-shadow:0 3px 36px #0009}
+.cold-black .manifesto{background:radial-gradient(ellipse at 100% 0%,#6543cf14,transparent 65%),radial-gradient(ellipse at 0% 100%,#0fa98c0b,transparent 55%),var(--dm-glass-solid)}
+@media(prefers-reduced-motion:reduce){.cb-mesh canvas{transition:none}.cold-black .cb-poster{opacity:.16}}
