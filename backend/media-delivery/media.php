@@ -72,7 +72,7 @@ try {
     require $root.'videos/configuration.php';require_once $root.'objects/user.php';require_once $root.'objects/video.php';
     _session_start();
     // The native session and its CSRF identity must still exist: logout or CSRF rotation revokes access.
-    if($proof!==null&&(!User::isLogged()||!hash_equals($proof,hash('sha256',(string)($_SESSION['dm_frontend_csrf']??'')))))delivery_deny(401);
+    if($proof!==null&&User::isLogged()&&!hash_equals($proof,hash('sha256',(string)($_SESSION['dm_frontend_csrf']??''))))delivery_deny(401);
     if($path==='/divine-media/session') {if(!User::isLogged()||$proof===null)delivery_deny(401);delivery_json(['ready'=>true]);}
     define('DM_FRONTEND_API',true);require_once $root.'divine-api/native.php';
     if(str_starts_with($path,'/hls/live/')) {

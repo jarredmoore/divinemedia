@@ -4,6 +4,8 @@ MARKER = '# DM_MEDIA_GATE_V1'
 RULES = '''# DM_MEDIA_GATE_V1
 <IfModule mod_rewrite.c>
 RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/[.]well-known/acme-challenge/[A-Za-z0-9_-]+$
+RewriteRule (^|/)[.] - [F,END]
 RewriteRule ^Encoder/videos(?:/|$) - [F,END,NC]
 RewriteRule ^(?:videos/.*|divine-media/(?:assets/.*|session|logout)|view/(?:xsendfile|hls)[.]php|plugin/VideoHLS/downloadProtection[.]php)$ divine-delivery/media.php [END]
 </IfModule>
@@ -72,7 +74,12 @@ def nginx_origin(original: bytes) -> bytes:
         text=text[:match.start()]+replacement+text[i:]
     # RTMP remains an ingest protocol. External playback must not bypass HTTPS authorization.
     # Local native FFmpeg thumbnail/recording hooks retain their existing read access.
-    if re.search(r'^\s*(?:allow|deny)\s+play\s',text,re.M):raise RuntimeError('Unexpected RTMP play policy')
-    text,n=re.subn(r'(^\s*listen\s+1935\s*;)',lambda m:m[0]+'\n                allow play 127.0.0.1;\n                deny play all;',text,flags=re.M)
-    if n!=1:raise RuntimeError('Expected one RTMP ingest listener')
+    play=re.findall(r'^\s*(?:allow|deny)\s+play\s+[^;]+;',text,re.M)
+    if play:
+        if any(not re.match(r'^\s*allow\s+play\s+all;',p)for p in play):raise RuntimeError('Unexpected RTMP play policy')
+        text,n=re.subn(r'(^[ \t]*)allow\s+play\s+all;',lambda m:m[1]+'allow play 127.0.0.1;\n'+m[1]+'deny play all;',text,flags=re.M)
+        if n!=3:raise RuntimeError('Expected server/live/audio playback scopes')
+    else:
+        text,n=re.subn(r'(^\s*listen\s+1935\s*;)',lambda m:m[0]+'\n                allow play 127.0.0.1;\n                deny play all;',text,flags=re.M)
+        if n!=1:raise RuntimeError('Expected one RTMP ingest listener')
     return text.encode()

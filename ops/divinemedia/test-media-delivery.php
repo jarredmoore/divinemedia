@@ -4,6 +4,7 @@ require __DIR__.'/../../backend/media-delivery/core.php';
 $count=0;
 function check(bool $ok): void { global $count;if(!$ok)throw new RuntimeException('Assertion failed');$count++; }
 function denied(callable $fn): void { try{$fn();}catch(RuntimeException $e){check(true);return;}throw new RuntimeException('Expected denial'); }
+check(DivineMediaAssets::siteAsset('favicon.ico'));check(DivineMediaAssets::siteAsset('favicon.png'));check(DivineMediaAssets::siteAsset('userPhoto/logo.png'));check(!DivineMediaAssets::siteAsset('cache/private.jpg'));
 $records=[['id'=>1,'filename'=>'video_abc'],['id'=>2,'filename'=>'audio.xyz'],['id'=>3,'filename'=>'picture']];
 foreach(['video_abc.mp4','video_abc_HD.webm','video_abc_portrait_thumbsV2.jpg','video_abc/index.m3u8','video_abc/HD/seg-1.ts','video_abc/encryption.key']as $p)check(DivineMediaAssets::owner($p,$records)===1);
 check(DivineMediaAssets::owner('audio.xyz.mp3',$records)===2);check(DivineMediaAssets::owner('picture.png',$records)===3);

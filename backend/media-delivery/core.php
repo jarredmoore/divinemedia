@@ -9,7 +9,7 @@ final class DivineMediaAssets {
         'mp4'=>'video/mp4','webm'=>'video/webm','mp3'=>'audio/mpeg','ogg'=>'audio/ogg',
         'm4a'=>'audio/mp4','wav'=>'audio/wav','flac'=>'audio/flac',
         'jpg'=>'image/jpeg','jpeg'=>'image/jpeg','png'=>'image/png','webp'=>'image/webp','gif'=>'image/gif',
-        'pdf'=>'application/pdf','vtt'=>'text/vtt','srt'=>'application/x-subrip',
+        'ico'=>'image/x-icon','pdf'=>'application/pdf','vtt'=>'text/vtt','srt'=>'application/x-subrip',
         'm3u8'=>'application/vnd.apple.mpegurl','ts'=>'video/mp2t','m4s'=>'video/iso.segment','key'=>'application/octet-stream',
     ];
     public static function path(string $path): string {
@@ -43,7 +43,7 @@ final class DivineMediaAssets {
     }
     public static function siteAsset(string $path): bool {
         self::path($path);
-        return (bool)preg_match('~^(?:faviconPWA(?:72|96|120|128|144|152|180|192|384|512)\.png|userPhoto/photo[0-9]+\.(?:jpg|jpeg|png|webp)|categories/(?:assets/)?[A-Za-z0-9_-]+\.(?:jpg|jpeg|png|webp))$~D',$path);
+        return (bool)preg_match('~^(?:favicon\.(?:png|ico)|userPhoto/logo(?:_small)?\.(?:jpg|png|webp)|faviconPWA(?:72|96|120|128|144|152|180|192|384|512)\.png|userPhoto/photo[0-9]+\.(?:jpg|jpeg|png|webp)|categories/(?:assets/)?[A-Za-z0-9_-]+\.(?:jpg|jpeg|png|webp))$~D',$path);
     }
     public static function file(string $root, string $path): string {
         self::path($path);self::mime($path);$base=realpath($root);$file=realpath($root.'/'.$path);

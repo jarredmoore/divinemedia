@@ -82,7 +82,7 @@ phase='live-access'
 livekeys={}
 for restricted in [False,True]:
  stream='dmqa'+uuid.uuid4().hex;livekeys[restricted]=stream
- sql("INSERT INTO live_transmitions(title,public,saveTransmition,`key`,users_id,categories_id,password,created,modified) VALUES ('Delivery rehearsal',1,0,'"+stream+"',"+str(userids['owner'])+","+str(cat)+",'',NOW(),NOW());")
+ sql("INSERT INTO live_transmitions(title,public,saveTransmition,`key`,users_id,categories_id,password,created,modified) VALUES ('Delivery rehearsal',1,0,'"+stream+"',"+str(userids['owner']if restricted else userids['other'])+","+str(cat)+",'',NOW(),NOW());")
  liveid=int(sql('SELECT LAST_INSERT_ID();')or '0') # LAST_INSERT_ID is connection-local; resolve exact fixture key below.
  liveid=int(sql("SELECT id FROM live_transmitions WHERE `key`='"+stream+"';"))
  if restricted:
@@ -90,9 +90,9 @@ for restricted in [False,True]:
   group=int(sql('SELECT MAX(id) FROM users_groups;'))
   sql('INSERT INTO users_has_users_groups(users_id,users_groups_id)VALUES('+str(userids['owner'])+','+str(group)+');')
   sql('INSERT INTO live_transmitions_has_users_groups(live_transmitions_id,users_groups_id)VALUES('+str(liveid)+','+str(group)+');')
- lf=hls/'live'/stream;lf.mkdir(parents=True,mode=0o755);lf.chmod(0o755);lf.parent.chmod(0o755)
+ lf=hls/'live'/stream;lf.mkdir(parents=True,mode=0o755);lf.chmod(0o755);lf.parent.chmod(0o755);os.chown(lf,33,33);os.chown(lf.parent,33,33)
  (lf/'index.m3u8').write_text('#EXTM3U\n#EXT-X-TARGETDURATION:4\n#EXT-X-KEY:METHOD=AES-128,URI="fixture.key"\n#EXTINF:4,\nseg-1.ts\n');(lf/'fixture.key').write_bytes(b'1234567890123456');(lf/'seg-1.ts').write_bytes(b'G'*188)
- for p in lf.iterdir():p.chmod(0o644)
+ for p in lf.iterdir():p.chmod(0o644);os.chown(p,33,33)
  for suffix in ['index.m3u8','fixture.key','seg-1.ts']:
   for role in ['guest','owner','other']:
    status,h,b=request('/hls/live/'+stream+'/'+suffix,{'Cookie':actors[role]['cookie']}if role!='guest'else {})
@@ -102,12 +102,25 @@ for scope in ['live','audio']:
  raw=docker('exec',web,'curl','-sS','--max-time','10','-o','/dev/null','-w','%{http_code}','http://live:8080/'+scope+'/'+livekeys[True]+'/seg-1.ts').decode()
  assert raw=='403','Raw origin bypass '+scope+' '+raw
 checks['raw_live_and_audio_origin_denied']=True
+phase='vod-group-grant-and-revocation'
+shared=fixtures[('public','video')]
+sql('INSERT INTO videos_group_view(videos_id,users_groups_id)VALUES('+str(shared['id'])+','+str(group)+');')
+assert request(shared['path'])[0]in [403,404],'Group-restricted VOD guest bypass'
+assert request(shared['path'],{'Cookie':actors['other']['cookie']})[0]in [403,404],'Unrelated VOD viewer bypass'
+sql('INSERT INTO users_has_users_groups(users_id,users_groups_id)VALUES('+str(userids['other'])+','+str(group)+');')
+assert request(shared['path'],{'Cookie':actors['other']['cookie'],'Range':'bytes=0-15'})[0]==206,'Authorized VOD group viewer denied'
+sql('DELETE FROM users_has_users_groups WHERE users_id='+str(userids['other'])+' AND users_groups_id='+str(group)+';')
+assert request(shared['path'],{'Cookie':actors['other']['cookie']})[0]in [403,404],'Revoked VOD group viewer still allowed'
+sql('DELETE FROM videos_group_view WHERE videos_id='+str(shared['id'])+' AND users_groups_id='+str(group)+';')
+checks['vod_authorized_group_viewer_and_revocation']=True
 phase='native-rtmp-hls-playback'
 # Exercise a real encrypted HLS output from synthetic media, only on the isolated network.
-password_hash=sql('SELECT password FROM users WHERE id='+str(userids['owner'])+';')
 import urllib.parse
-publish_url='rtmp://live/live/'+livekeys[True]+'?p='+urllib.parse.quote(password_hash,safe='')
-publisher=subprocess.Popen(['docker','exec',web,'ffmpeg','-hide_banner','-loglevel','error','-re','-f','lavfi','-i','testsrc2=size=320x180:rate=12','-f','lavfi','-i','sine=frequency=440:sample_rate=44100','-t','22','-c:v','libx264','-preset','ultrafast','-tune','zerolatency','-g','24','-c:a','aac','-b:a','64k','-f','flv',publish_url],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+status,studio=api('studio',actors['owner']);assert status==200 and studio['key']==livekeys[True],'Native Studio did not select fixture stream'
+server=urllib.parse.urlsplit(studio['server']);tcurl=urllib.parse.urlunsplit(('rtmp','live',server.path,server.query,''))
+publish_url='rtmp://live'+server.path.rstrip('/')+'/'+livekeys[True]
+docker('exec','--user','www-data',live,'sh','-c','test -w \"$1\"','sh','/HLS/live/'+livekeys[True])
+publisher=subprocess.Popen(['docker','exec',web,'ffmpeg','-hide_banner','-loglevel','error','-re','-f','lavfi','-i','testsrc2=size=320x180:rate=12','-f','lavfi','-i','sine=frequency=440:sample_rate=44100','-t','45','-c:v','libx264','-preset','ultrafast','-tune','zerolatency','-g','24','-c:a','aac','-b:a','64k','-rtmp_tcurl',tcurl,'-rtmp_app',server.path.strip('/'),'-f','flv',publish_url],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
 try:
  real_manifest=None
  for _ in range(15):
@@ -115,13 +128,21 @@ try:
   status,h,body=request('/hls/live/'+livekeys[True]+'/index.m3u8',{'Cookie':actors['owner']['cookie']})
   if status==200 and b'seg-1.ts'not in body and b'#EXTINF'in body:real_manifest=body.decode();break
  assert real_manifest is not None,'Real authenticated RTMP did not produce guarded HLS'
- uris=re.findall(r'URI="([^"]+)"',real_manifest)+[l for l in real_manifest.splitlines()if l and not l.startswith('#')]
+ # Check the latest advertised key/fragment while the source is live; old keys can already
+ # be pruned by the native live window while a sequential test walks the whole playlist.
+ keys=re.findall(r'URI="([^"]+)"',real_manifest);segments=[l for l in real_manifest.splitlines()if l and not l.startswith('#')]
+ uris=keys[-1:]+segments[-1:]
  assert any(u.endswith('.key')for u in uris),'No encrypted HLS key exercised'
  assert any(u.endswith('.ts')for u in uris),'No real HLS segment exercised'
  for uri in uris:
   assert uri.startswith('/hls/live/'+livekeys[True]+'/'),'Manifest escaped authorized stream'
-  assert request(uri,{'Cookie':actors['owner']['cookie']})[0]==200,'Owner real segment/key failed'
+  code=request(uri,{'Cookie':actors['owner']['cookie']})[0]
+  if code!=200:
+   file=hls/'live'/uri[len('/hls/live/'):]
+   report['failed_live_asset']={'status':code,'suffix':file.suffix,'exists':file.exists(),'mode':oct(file.stat().st_mode&0o777)if file.exists()else None,'uid':file.stat().st_uid if file.exists()else None}
+  assert code==200,'Owner current segment/key failed '+str(code)
   assert request(uri)[0]in [401,403,404],'Guest real segment/key bypass'
+ assert publisher.poll()is None,'Publisher ended before raw RTMP check'
  # An external RTMP reader is outside the local thumbnail/recording loopback allowance.
  reader=subprocess.run(['docker','exec',web,'ffmpeg','-hide_banner','-loglevel','error','-i','rtmp://live/live/'+livekeys[True],'-t','1','-f','null','-'],stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=12)
  assert reader.returncode!=0,'Raw external RTMP playback bypass'
@@ -130,7 +151,10 @@ finally:
  try:out,err=publisher.communicate(timeout=12)
  except subprocess.TimeoutExpired:publisher.kill();out,err=publisher.communicate()
  (BUNDLE/'synthetic-publish.private.log').write_bytes(err)
-for path in ['/videos/../.compose/videos/configuration.php','/videos/%2e%2e/configuration.php','/videos/.divine-private/frontend-gateway.php','/divine-delivery/core.php','/view/xsendfile.php?file='+base+'.mp4&folder='+base+'/','/view/hls.php?videoDirectory='+base]:
+ (BUNDLE/'hls-files.private.json').write_text(json.dumps([str(p.relative_to(hls))for p in hls.rglob('*')if p.is_file()]))
+ raw_manifest=hls/'live'/livekeys[True]/'index.m3u8'
+ if raw_manifest.exists():(BUNDLE/'raw-hls.private.m3u8').write_bytes(raw_manifest.read_bytes())
+for path in ['/videos/../.compose/videos/configuration.php','/videos/%2e%2e/configuration.php','/videos/.divine-private/frontend-gateway.php','/.compose/videos/'+base+'/'+base+'.mp4','/.git/config','/divine-delivery/core.php','/view/xsendfile.php?file='+base+'.mp4&folder='+base+'/','/view/hls.php?videoDirectory='+base]:
  assert request(path)[0]in [400,403,404],'Bypass '+path
 checks['raw_and_native_handler_bypass_denied']=True
 assert request(priv['path'],{'Cookie':actors['owner']['cookie'],'Origin':'https://evil.invalid'})[0]==403
@@ -155,6 +179,7 @@ phase='logout-revocation'
 assert api('logout',actors['owner'],{})[0]==200
 assert request(priv['path'],{'Cookie':actors['owner']['cookie']})[0]in [401,403,404],'Logout did not revoke'
 assert request('/hls/live/'+livekeys[True]+'/seg-1.ts',{'Cookie':actors['owner']['cookie']})[0]in [401,403,404]
+assert request(fixtures[('public','video')]['path'],{'Cookie':actors['owner']['cookie'],'Range':'bytes=0-15'})[0]==206,'Public media failed after logout'
 checks['native_logout_revokes_copied_delivery_cookie']=True
 assert request('/Encoder/videos/fixture.mp4')[0]in [403,404]
 # Store expiry and traversal/symlink rules use the same production module.

@@ -16,6 +16,9 @@ class LiveOrigin(unittest.TestCase):
   original=b'rtmp { server {\n listen 1935;\n application live { on_publish http://avideo/publish; } } } http { server {\n location /live { root /HLS; location ~ \"m3u8$\" { add_header X \"{hello}\"; } # } in a comment\n }\n location /audio { root /HLS; }\n location /stat { rtmp_stat all; } } }'
   updated=gate.nginx_origin(original);self.assertIn(b'on_publish http://avideo/publish;',updated);self.assertIn(b'location /stat',updated);self.assertIn(b'deny play all;',updated);self.assertIn(b'allow play 127.0.0.1;',updated);self.assertEqual(updated.count(b'return 403;'),2);self.assertNotIn(b'root /HLS;',updated)
   with self.assertRaises(RuntimeError):gate.nginx_origin(updated)
+ def test_existing_public_play_rules_closed_in_all_three_scopes(self):
+  raw=b'rtmp { server {\nlisten 1935;\nallow play all;\napplication live {\nallow play all;\n} application audio {\nallow play all;\n} } } http { server {\nlocation /live {root /HLS;}\nlocation /audio {root /HLS;} } }'
+  result=gate.nginx_origin(raw);self.assertEqual(result.count(b'deny play all;'),3);self.assertNotIn(b'allow play all;',result)
  def test_unexpected_nginx_refused(self):
   with self.assertRaises(RuntimeError):gate.nginx_origin(b'http { server { location /live { root /HLS; } } }')
 if __name__=='__main__':unittest.main()

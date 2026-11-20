@@ -35,7 +35,7 @@ try:
  dbvars=dict(v.split('=',1) for v in dbmeta['Config']['Env']if '='in v);dbname=dbvars['MYSQL_DATABASE']
  apache=scratch/'apache2';docker('cp','app-avideo-1:/etc/apache2',str(apache))
  vhost=apache/'sites-enabled/000-default.conf';vhost.write_bytes(gate.vhost(docker('exec','app-avideo-1','cat','/etc/apache2/sites-enabled/000-default.conf')))
- hls=scratch/'HLS';hls.mkdir(mode=0o755)
+ hls=scratch/'HLS';hls.mkdir(mode=0o755);hls.chmod(0o755)
  # Native-generated fixtures and grant files need access by Apache's www-data in this copy only.
  scratch.chmod(0o755);app.chmod(0o755);(app/'.compose').chmod(0o755);(app/'.compose/videos').chmod(0o777)
  phase='isolated-db-start'
@@ -95,7 +95,11 @@ try:
  exec((BUNDLE/'tests.py.txt').read_text(),globals())
  report.update(result='pass',checks=checks,native_startup_invoked=False,production_records_modified=False)
 except Exception as e:
- report.update(result='fail',phase=phase,error_type=type(e).__name__,assertion=str(e)[:180]if isinstance(e,AssertionError)else None)
+ report['completed_checks']=globals().get('checks',{});report.update(result='fail',phase=phase,error_type=type(e).__name__,assertion=str(e)[:180]if isinstance(e,(AssertionError,RuntimeError))else None)
+ if (app/'.compose/videos/avideo.log').exists():shutil.copyfile(app/'.compose/videos/avideo.log',BUNDLE/'native.private.log')
+ if 'live'in globals():
+  try:(BUNDLE/'nginx.private.log').write_bytes(subprocess.run(['docker','logs',live],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=20).stdout)
+  except Exception:pass
  # Diagnostics remain private in the bundle; never print cookies or native SQL/errors.
  if 'web'in globals():
   try:(BUNDLE/'apache-private.log').write_bytes(subprocess.run(['docker','logs',web],stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=20).stdout)

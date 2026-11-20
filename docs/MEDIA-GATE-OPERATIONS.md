@@ -8,7 +8,9 @@ Implementation branch: `security/azure-media-gate`. Activation requires the isol
 
 The boundary invokes AVideo visibility, group, password and plugin checks. An editor may preview their inactive draft; this does not make that draft public. Authorized byte bodies use the existing Apache XSendFile module. Private responses cannot inherit legacy public cache headers. HLS manifests expose only guarded references, and every segment/key request is authorized again. Unsupported manifests fail closed rather than redirecting to an unchecked source.
 
-Frontend login obtains a CSRF-protected, single-use 120-second handoff. A credentialed cross-origin POST exchanges it for an opaque host-only, Secure, HttpOnly, SameSite=Lax media cookie. A follow-up check verifies the browser accepted the cookie. The server-side record binds it to the native session and its CSRF identity, expires after eight hours, and becomes unusable when native logout destroys the session. No native session IDs, passwords or gateway secrets appear in media URLs. Native operator cookies continue to work.
+Frontend login obtains a CSRF-protected, single-use 120-second handoff. A credentialed cross-origin POST exchanges it for an opaque host-only, Secure, HttpOnly, SameSite=Lax media cookie. A follow-up check verifies the browser accepted the cookie. The server-side record binds it to the native session and its CSRF identity, expires after eight hours, and becomes unusable for private requests when native logout destroys the session. Authorized responses already in progress may finish; bytes already delivered cannot be recalled. Private receiver casting needs its own authenticated device/session handoff; a copied media URL does not authorize a receiver. Public media can continue using ordinary casting.
+
+No native session IDs, passwords or gateway secrets appear in media URLs. Native operator cookies continue to work.
 
 Requests through a Netlify preview may be blocked by browser third-party-cookie policy. Do not weaken production cookies to hide that limitation. Canonical `divinemedia.us` and `media.divinemedia.us` are same-site. Test actual target browsers after activation.
 
@@ -25,7 +27,7 @@ Password-protected live streams currently fail closed until a verified frontend 
 1. Rehearse the exact candidate with disposable databases, accounts, media and streams in an internal Docker network. Never run the production container entrypoint; it invokes global reencoding.
 2. Record source/config leases, create private backups and verify their off-VM copy before changing live routing.
 3. Install the session endpoints and adapter first; deploy the matching frontend handshake; then enable the file/live guards together. Validate Apache/nginx configuration before graceful reloads. Do not restart containers.
-4. Check public range requests, anonymous private denial, legacy aliases, cache/CORS headers and alternate protocols/ports. Retain the previous frontend deploy and exact origin configs for rollback.
+4. Check public range requests, anonymous private denial, legacy aliases, cache/CORS headers and alternate protocols/ports. The persistent live configuration directory is mounted by Compose on a future recreation, so native startup begins with the guards already present. No recreation is performed by installation. Retain the previous frontend deploy and exact origin configs for rollback.
 5. Keep actual media URLs, cookies, grant plans, native logs and fixture credentials out of Git and user-facing reports. Record only case IDs, statuses and content-preservation evidence.
 
 Rehearsal tools: `ops/divinemedia/stage-media-gate.py`, `media-gate-stage-tests.py.txt`, `test-media-delivery.php`, `tests/media-gate-routing.py`, and frontend tests. The read-only production probe is `ops/divinemedia/check-media-access.py`. A build or mock-browser pass alone is not a security release result.
