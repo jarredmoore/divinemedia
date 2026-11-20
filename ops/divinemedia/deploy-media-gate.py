@@ -7,6 +7,8 @@ ROOT=d.ROOT;WEB=d.WEB;LIVE='app-live-1';VHOST='/etc/apache2/sites-enabled/000-de
 def sha(data):return hashlib.sha256(data).hexdigest()
 def docker(*args,data=None):return d.run('docker',*args,data=data)
 def put(path,raw):docker('exec','-i',LIVE,'sh','-c','cat > "$1"','sh',path,data=raw)
+def put_vhost(raw):
+ docker('exec','-i',WEB,'php','-r','$p=$argv[1];$m=fileperms($p)&0777;$t=tempnam(dirname($p),".dm-gate-");file_put_contents($t,stream_get_contents(STDIN));chmod($t,$m);if(!rename($t,$p))exit(2);',VHOST,data=raw)
 def status(path):return int(docker('exec',WEB,'curl','--noproxy','media.divinemedia.us','--resolve','media.divinemedia.us:443:127.0.0.1','-sS','--max-time','20','-o','/dev/null','-w','%{http_code}','https://media.divinemedia.us'+path))
 def save(state,plan):(state/'plan.json').write_text(json.dumps(plan))
 def model(files):return yaml.safe_load(d.run('docker','compose',*[x for f in files for x in ['-f',f]],'config'))
@@ -14,7 +16,7 @@ def restore(state):
  plan=json.loads((state/'plan.json').read_text())
  for n,h in plan.get('written',{}).items():assert d.sha(ROOT/n)==h,'Source rollback lease changed'
  for n in ['.htaccess',*['divine-api/'+n for n in API]]:d.atomic(ROOT/n,(state/'files'/n).read_bytes())
- d.atomic(pathlib.Path(plan['host_vhost']),(state/'vhost-before.conf').read_bytes());put(NGINX,(state/'nginx-before.conf').read_bytes())
+ d.atomic(pathlib.Path(plan['host_vhost']),(state/'host-vhost-before.conf').read_bytes());put_vhost((state/'vhost-before.conf').read_bytes());put(NGINX,(state/'nginx-before.conf').read_bytes())
  if plan.get('compose_changed'):
   compose=pathlib.Path(plan['compose']);assert sha(compose.read_bytes())==plan['compose_after'],'Compose rollback lease changed';d.atomic(compose,(state/'compose-before.yml').read_bytes())
  docker('exec',WEB,'apache2ctl','-t');docker('exec',WEB,'apache2ctl','graceful')
@@ -33,15 +35,15 @@ if a.phase=='bridge':
  assert all(d.sha(ROOT/n)==h for n,h in lease.items()if not n.startswith('@')),'Native source lease changed'
  vh=docker('exec',WEB,'cat',VHOST);ng=docker('exec',LIVE,'cat',NGINX)
  assert sha(vh)==lease['@vhost']and sha(ng)==lease['@nginx'],'Origin config lease changed'
- host=ROOT/'.compose/domain-bootstrap/sites-enabled/000-default.conf';assert host.read_bytes()==vh,'Persistent vhost mapping differs'
+ host=ROOT/'.compose/domain-bootstrap/sites-enabled/000-default.conf';assert host.is_file(),'Persistent vhost missing'
  assert not(ROOT/'divine-delivery').exists(),'Existing gate needs upgrade review'
  state=pathlib.Path('/srv/divinemedia/backups')/('media-gate-deploy-'+uuid.uuid4().hex[:12]);state.mkdir(mode=0o700)
  before=d.snapshot();(state/'before-state.json').write_text(json.dumps(before))
  for n in ['.htaccess',*['divine-api/'+n for n in API]]:
   dest=state/'files'/n;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes((ROOT/n).read_bytes())
- (state/'vhost-before.conf').write_bytes(vh);(state/'nginx-before.conf').write_bytes(ng)
+ (state/'host-vhost-before.conf').write_bytes(host.read_bytes());(state/'vhost-before.conf').write_bytes(vh);(state/'nginx-before.conf').write_bytes(ng)
  meta=json.loads(docker('inspect',LIVE))[0];files=meta['Config']['Labels']['com.docker.compose.project.config_files'].split(',');compose=pathlib.Path(files[-1]);service=meta['Config']['Labels']['com.docker.compose.service'];(state/'compose-before.yml').write_bytes(compose.read_bytes())
- d.archive(state/'before.tar.gz',[(state/'files','files'),(state/'vhost-before.conf','vhost.conf'),(state/'nginx-before.conf','nginx.conf'),(state/'compose-before.yml','compose.yml'),(state/'before-state.json','before-state.json')]);proof=d.backup_module().off_vm(state/'before.tar.gz',state.name)
+ d.archive(state/'before.tar.gz',[(state/'files','files'),(state/'vhost-before.conf','vhost.conf'),(state/'host-vhost-before.conf','host-vhost.conf'),(state/'nginx-before.conf','nginx.conf'),(state/'compose-before.yml','compose.yml'),(state/'before-state.json','before-state.json')]);proof=d.backup_module().off_vm(state/'before.tar.gz',state.name)
  plan={'bundle':str(bundle),'host_vhost':str(host),'compose':str(compose),'compose_files':files,'service':service,'written':{},'before_backup':proof};save(state,plan)
  try:
   folder=ROOT/'divine-delivery';folder.mkdir(mode=0o755);folder.chmod(0o755)
@@ -68,7 +70,7 @@ else:
   d.atomic(compose,yaml.safe_dump(doc,sort_keys=False).encode());plan.update(compose_changed=True,compose_after=sha(compose.read_bytes()));save(state,plan)
   filtered=copy.deepcopy(model(plan['compose_files']));filtered['services'][plan['service']]['volumes']=[m for m in filtered['services'][plan['service']].get('volumes',[])if m.get('target')!='/usr/local/nginx/conf'];assert filtered==before_model,'Unrelated Compose change'
   put('/usr/local/nginx/conf/.divine-media-gate.conf',desired_ng);docker('exec',LIVE,binary,'-t','-c','/usr/local/nginx/conf/.divine-media-gate.conf')
-  d.atomic(pathlib.Path(plan['host_vhost']),desired_vh);docker('exec',WEB,'apache2ctl','-t')
+  d.atomic(pathlib.Path(plan['host_vhost']),desired_vh);put_vhost(desired_vh);docker('exec',WEB,'apache2ctl','-t')
   d.atomic(ROOT/'.htaccess',gate.root_rules((state/'files/.htaccess').read_bytes()));plan['written']['.htaccess']=d.sha(ROOT/'.htaccess');save(state,plan)
   put(NGINX,desired_ng);docker('exec',LIVE,binary,'-t','-c',NGINX);docker('exec',WEB,'apache2ctl','graceful');docker('exec',LIVE,binary,'-s','reload','-c',NGINX)
   assert status('/videos/.divine-private/frontend-gateway.php')in [403,404]and status('/.compose/videos/configuration.php')in [403,404]
