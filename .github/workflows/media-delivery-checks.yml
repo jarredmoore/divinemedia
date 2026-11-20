@@ -17,3 +17,5 @@ jobs:
       - run: python3 tests/media-gate-routing.py
       - name: PHP policy and traversal tests
         run: php ops/divinemedia/test-media-delivery.php
+      - name: Unpublished state regression
+        run: php tests/backend/media-status.php

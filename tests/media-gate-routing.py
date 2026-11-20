@@ -4,7 +4,7 @@ s=importlib.util.spec_from_file_location('gate',p);gate=importlib.util.module_fr
 class Routing(unittest.TestCase):
  def test_all_live_proxies_removed_and_both_vhosts_guarded(self):
   raw=b'<VirtualHost *:80>\nProxyPass "/hls/live/" "http://live:8080/live/"\nProxyPassReverse "/hls/live/" "http://live:8080/live/"\n</VirtualHost>\n<VirtualHost *:443>\nXSendFile on\n</VirtualHost>\n'
-  updated=gate.vhost(raw);self.assertNotIn(b'http://live:8080/live/',updated);self.assertEqual(updated.count(b'RewriteRule ^/hls/live/'),2);self.assertEqual(updated.count(b'XSendFilePath /HLS/live/'),2)
+  updated=gate.vhost(raw);self.assertNotIn(b'http://live:8080/live/',updated);self.assertEqual(updated.count(b'|hls/live/.*)$ /divine-delivery/media.php [END]'),2);self.assertEqual(updated.count(b'XSendFilePath /HLS/live/'),2)
   with self.assertRaises(RuntimeError):gate.vhost(updated)
  def test_unexpected_topology_refused(self):
   with self.assertRaises(RuntimeError):gate.vhost(b'<VirtualHost *:443>\n</VirtualHost>')

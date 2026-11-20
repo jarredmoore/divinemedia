@@ -1,6 +1,6 @@
 # Azure media gate operations
 
-Implementation branch: `security/azure-media-gate`. Activation requires the isolated native rehearsal and a backed-up, reversible rollout. Until the deployment evidence is recorded, do not describe the live origin as protected.
+Active implementation: PR #36 plus server-scope routing and unpublished-status fixes. Deployment evidence and rollback state are recorded in SECURE-MEDIA-RELEASE-GATE.md. Native child-directory rules must never take precedence over the server-scope guard.
 
 ## Request paths
 

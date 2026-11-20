@@ -62,10 +62,12 @@ else:
  vh=(state/'vhost-before.conf').read_bytes();ng=(state/'nginx-before.conf').read_bytes();assert docker('exec',WEB,'cat',VHOST)==vh and docker('exec',LIVE,'cat',NGINX)==ng,'Origin config changed'
  desired_vh=gate.vhost(vh);desired_ng=gate.nginx_origin(ng)
  binary=docker('exec',LIVE,'sh','-c','for p in /proc/[0-9]*/comm; do if [ "$(cat "$p")" = nginx ]; then readlink "${p%/comm}/exe"; break; fi; done').decode().strip();assert binary.startswith('/');plan['nginx_binary']=binary
- managed=pathlib.Path('/srv/divinemedia/runtime/media-gate/live-conf');assert not managed.exists(),'Managed config exists'
- managed.parent.mkdir(parents=True,exist_ok=True);docker('cp',LIVE+':/usr/local/nginx/conf',str(managed));(managed/'nginx.conf').write_bytes(desired_ng)
+ managed=pathlib.Path('/srv/divinemedia/runtime/media-gate/live-conf');assert not managed.exists()or (managed/'nginx.conf').read_bytes()==desired_ng,'Managed config differs'
+ managed.parent.mkdir(parents=True,exist_ok=True)
+ if not managed.exists():docker('cp',LIVE+':/usr/local/nginx/conf',str(managed))
+ (managed/'nginx.conf').write_bytes(desired_ng)
  compose=pathlib.Path(plan['compose']);original=(state/'compose-before.yml').read_bytes();assert compose.read_bytes()==original
- before_model=model(plan['compose_files']);doc=yaml.safe_load(original);doc.setdefault('services',{}).setdefault(plan['service'],{}).setdefault('volumes',[]).append(str(managed)+':/usr/local/nginx/conf')
+ before_model=model(plan['compose_files']);doc=yaml.safe_load(original);doc['services']=doc.get('services')or {};doc['services'][plan['service']]=doc['services'].get(plan['service'])or {};node=doc['services'][plan['service']];node['volumes']=node.get('volumes')or [];node['volumes'].append(str(managed)+':/usr/local/nginx/conf')
  try:
   d.atomic(compose,yaml.safe_dump(doc,sort_keys=False).encode());plan.update(compose_changed=True,compose_after=sha(compose.read_bytes()));save(state,plan)
   filtered=copy.deepcopy(model(plan['compose_files']));filtered['services'][plan['service']]['volumes']=[m for m in filtered['services'][plan['service']].get('volumes',[])if m.get('target')!='/usr/local/nginx/conf'];assert filtered==before_model,'Unrelated Compose change'

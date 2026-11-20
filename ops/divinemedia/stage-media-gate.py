@@ -20,6 +20,7 @@ try:
  shutil.copytree(ROOT,app,symlinks=True,ignore=shutil.ignore_patterns('.compose','.git','node_modules'))
  (app/'.compose/videos').mkdir(parents=True,exist_ok=True)
  shutil.copy2(ROOT/'.compose/videos/configuration.php',app/'.compose/videos/configuration.php')
+ shutil.copy2(ROOT/'.compose/videos/.htaccess',app/'.compose/videos/.htaccess')
  for n in ['divine-api','divine-delivery']:
   dest=app/n
   if dest.exists():shutil.rmtree(dest)
