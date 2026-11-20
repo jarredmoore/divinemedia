@@ -11,8 +11,8 @@ The viewing experience uses React and Vite. AVideo manages the media catalog, cr
 | Destination | Purpose |
 | --- | --- |
 | [Watch](https://divinemedia.us/) | Public viewing and listening experience |
-| [Media](https://media.divinemedia.us/) | Branded entrance and media platform |
-| [Creator upload](https://media.divinemedia.us/upload) | Direct upload for authorized creators; sign-in required |
+| [Media backend](https://media.divinemedia.us/) | AVideo administration and service endpoints |
+| [Creator studio](https://divinemedia.us/) | Open the upload icon on the frontend for creator tools; sign-in required |
 | [Encoder](https://media.divinemedia.us/Encoder/) | Connect a media account, upload source files, and follow processing |
 
 The previous Watch hostname redirects to `divinemedia.us`. Existing media URLs remain supported; creator sign-in and Encoder entry pages move to the new media hostname.
@@ -31,7 +31,7 @@ Published media stays in AVideo’s catalog. The frontend presents that catalog 
 ## Development and deployment
 
 - **Repository homepage:** `master`. This branch contains the historical backend source and this overview.
-- **Active integration branch:** [`dev/divine-media-3.1`](https://github.com/jarredmoore/divinemedia/tree/dev/divine-media-3.1). Current Watch frontend work starts here.
+- **Active integration branch:** [`dev/divine-media-3.1`](https://github.com/jarredmoore/divinemedia/tree/dev/divine-media-3.1). Historical integration baseline; start new release fixes from the current production branch unless a task specifies otherwise.
 - **Production branch:** `production/divine-media`. Changes or merges require explicit approval.
 - **Feature work:** small, reversible changes on separate branches, reviewed through pull requests.
 
@@ -41,12 +41,12 @@ Existing videos and thumbnail processing must be preserved. Backend changes need
 
 ### Run the Watch frontend locally
 
-Use Node.js 22 and npm. The frontend lives on the development branch, rather than the repository homepage branch.
+Use Node.js 22 and npm. The current frontend lives on the production branch, rather than the repository homepage branch.
 
 ```sh
 git clone https://github.com/jarredmoore/divinemedia.git
 cd divinemedia
-git switch dev/divine-media-3.1
+git switch production/divine-media
 cd frontend
 npm install
 npm run dev
@@ -60,6 +60,19 @@ npm run preview
 ```
 
 Validate API responses, media playback, navigation, and mobile layouts in a frontend preview before production promotion.
+
+## Current release and next session
+
+The approved Code Black update is released through [PR #38](https://github.com/jarredmoore/divinemedia/pull/38): a slow cyan/blue/violet/pink WebGL mesh, deeper blacks, and a clearer transition into the featured section and library. Cozy remains the alternate warm theme. White text, glass controls, and existing creator/player workflows are preserved.
+
+- One dependency-free fragment shader, loaded after first paint; added JavaScript source stays below 8 KB.
+- Rendering is capped at 24 fps, DPR 2, and approximately 1.2 megapixels. Hidden tabs, offscreen sections, and active media pause the animation.
+- Reduced motion and data saving use a static frame. CSS gradients cover unavailable or lost WebGL; the motion control can pause the background.
+- Validation: 42 frontend tests, production build, and Chromium desktop/mobile checks for sizing, pause/resume, hidden-tab pause, reduced motion, WebGL fallback, and Cozy isolation. Physical-device testing remains useful.
+
+Next session: test playback, creator uploads/thumbnail selection, and section transitions on real phones and casting devices. Continue private casting/live-password entry validation and plugin configuration only where required; do not treat all installed plugins or paid services as configured. AVideo remains the media/account authority; creators should complete their workflow on the public frontend. External embedded providers retain their own privacy and playback rules.
+
+Deployment stays split: Netlify serves the frontend; Azure serves AVideo, Encoder, and the media authorization gate. This visual release does not change Azure services, stored media, encoding queues, or access rules. For rollback, restore the preceding Netlify production deploy and revert the visual release through a reviewed pull request.
 
 ## Requirements
 
@@ -91,7 +104,7 @@ See the [AVideo administrator manual](https://github.com/WWBN/AVideo/wiki/Admin-
 
 | Version / milestone | Status and scope |
 | --- | --- |
-| **3.3 — In development** | Branded entrance, matching login, shared creator workspace, audio discovery/player improvements, and the `divinemedia.us` domain structure are deployed from feature branches. Production-branch promotion remains a separate approval step; this is not a completed 3.3 release. |
+| **3.3 — Viewer foundation released** | Canonical domains, audio/player fixes, branded media entrance and creator workspace, plus selectable Cozy (formerly Default) and Code Black viewing themes. Production promotion was approved and completed through PR #11. Subsequent creator, player, media authorization, and theme work is recorded in later pull requests. |
 | **3.1 — Development baseline, November 1, 2026** | Established `dev/divine-media-3.1` from the existing Divine Media frontend work. Upload, thumbnail display, and playback were confirmed working as the baseline for the Watch redesign. |
 | **2.x — Earlier frontend foundation** | Existing Watch development on `divine-media-2`, carried forward into the 3.1 integration branch. |
 
@@ -103,6 +116,9 @@ Current work and implementation details:
 - [Branded entrance and login — PR #5](https://github.com/jarredmoore/divinemedia/pull/5)
 - [Creator workspace — PR #6](https://github.com/jarredmoore/divinemedia/pull/6)
 - [Canonical domains and integrated 3.3 foundation — PR #8](https://github.com/jarredmoore/divinemedia/pull/8)
+- [Code Black viewing theme — PR #10](https://github.com/jarredmoore/divinemedia/pull/10)
+- [Approved production release — PR #11](https://github.com/jarredmoore/divinemedia/pull/11)
+- [Native feature activation and free/paid plugin audit — PR #12](https://github.com/jarredmoore/divinemedia/pull/12)
 
 Project references on the integration branch: [Project charter](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/PROJECT.md), [experience direction](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/EXPERIENCE_DIRECTION.md), and [changelog](https://github.com/jarredmoore/divinemedia/blob/dev/divine-media-3.1/CHANGELOG.md). These documents describe their recorded baseline; the linked pull requests contain subsequent work.
 
