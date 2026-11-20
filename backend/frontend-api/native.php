@@ -31,6 +31,7 @@ function dm_native(string $path, array $data=[], bool $binary=false, bool $allow
 function dm_video(int $id): array {
     $row=Video::getVideo($id,Video::canEdit($id)?'':Video::SORT_TYPE_VIEWABLE,false,false,false,true);
     if(empty($row['id'])){dm_error('This title is unavailable.',404);}
+    if(!Video::canEdit($id)&&!in_array($row['status']??'',[Video::STATUS_ACTIVE,Video::STATUS_UNLISTED],true)){dm_error('This title is unavailable.',404);}
     $draftPreview=($row['status']??'')===Video::STATUS_INACTIVE&&Video::canEdit($id);
     if(!$draftPreview&&!User::canWatchVideoWithAds($id,null,true)){dm_error('This title is unavailable for your account.',403);}
     $cu=AVideoPlugin::loadPluginIfEnabled('CustomizeUser');

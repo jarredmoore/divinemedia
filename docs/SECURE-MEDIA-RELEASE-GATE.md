@@ -1,6 +1,6 @@
 # Secure media delivery release gate
 
-Status: the owner subsequently authorized publishing the Studio release for testing with the known privacy gap. The Azure gate in PR #36 is being verified separately; do not describe production direct files as protected until its activation evidence is recorded.
+Status: Azure gate activated on November 19, 2026 (America/Chicago). PR #36 supplies the implementation; the follow-up fixes enforce it at Apache server scope above native child-directory rules and explicitly deny unpublished states to non-editors. Production smoke checks pass.
 
 ## Release state
 
@@ -65,3 +65,14 @@ The harness is one part of verification. It cannot replace browser testing of se
 5. Promote only the verified candidate, retaining the previous deploy and origin configuration for rollback.
 
 Vendor documentation: https://github.com/WWBN/AVideo/wiki/SecureVideosDirectory-Plugin
+
+## Activation evidence
+
+- Netlify frontend: `6affa1537fb77d3ce2c60c61` at `https://divinemedia.us`.
+- Azure rollback state: `/srv/divinemedia/backups/media-gate-deploy-04335f61a552`; before backup verified off VM.
+- Existing media hashes, catalog and Encoder queue preserved; containers not restarted and native startup not invoked.
+- Production public MP4/MP3 range requests: HTTP 206 with no-store. The previously exposed nonpublic artwork: HTTP 404 anonymously. Hidden storage/Git and Encoder media aliases: HTTP 403. Homepage and session API: HTTP 200.
+- Full isolated native rehearsal passed login/grant replay, public/private video/audio/image/PDF ranges, owner/unrelated/guest access, VOD group grants and revocation, actual encrypted HLS keys/segments, raw RTMP denial, Encoder copy/cleanup preserving originals, and logout revocation.
+- Additional regression: 17 cases cover nonpublic states even when the native watch helper is permissive. Native child `.htaccess` is now copied into future rehearsals; server-scope routing prevents it from bypassing the guard.
+
+Browser/device testing remains appropriate after refreshing the app. Password-protected Live and authenticated private casting need their separate frontend/device flows; external provider privacy and already-delivered bytes remain outside this gate's control.

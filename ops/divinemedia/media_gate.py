@@ -40,7 +40,10 @@ def vhost(original: bytes) -> bytes:
     insertion='''
     # DM_MEDIA_GATE_V1
     RewriteEngine On
-    RewriteRule ^/hls/live/.*$ /divine-delivery/media.php [END]
+    RewriteCond %{REQUEST_URI} !^/[.]well-known/acme-challenge/[A-Za-z0-9_-]+$
+    RewriteRule (^|/)[.] - [F,END]
+    RewriteRule ^/Encoder/videos(?:/|$) - [F,END,NC]
+    RewriteRule ^/(?:videos/.*|divine-media/(?:assets/.*|session|logout)|view/(?:xsendfile|hls)[.]php|plugin/VideoHLS/downloadProtection[.]php|hls/live/.*)$ /divine-delivery/media.php [END]
     XSendFilePath /HLS/live/
 '''
     text,n=re.subn(r'</VirtualHost>',lambda m:insertion+HEADERS+'\n'+m[0],text,flags=re.I)
