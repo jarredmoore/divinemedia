@@ -40,7 +40,7 @@ void main(){
  vec3 color=mix(indigo,violet,smoothstep(.32,.78,a));
  color=mix(color,teal,smoothstep(.60,.94,b)*.4);
  color=mix(color,pink,smoothstep(.48,.86,1.-a)*smoothstep(.2,.7,c)*.75);
- color=mix(base,color,.28+.4*smoothstep(.2,.85,c));
+ color=mix(base*.25,color,.12+.5*smoothstep(.35,.9,c));
  float accent=noise(vec3(w*2.1+q*.35+8.,t*.14))*.5+.5;
  color=mix(color,vec3(255.,106.,42.)/255.,smoothstep(.84,.98,accent)*smoothstep(.5,.85,b)*.32);
  color=mix(color,vec3(99.,226.,255.)/255.,smoothstep(.84,.98,1.-accent)*smoothstep(.5,.85,a)*.25);
