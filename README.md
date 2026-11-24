@@ -28,6 +28,8 @@ The previous Watch hostname redirects to `divinemedia.us`. Existing media URLs r
 
 Published media stays in AVideo’s catalog. The frontend presents that catalog and plays its published media sources. Creator authentication, upload permissions, encoding, and thumbnail processing remain with the backend.
 
+For consolidated decisions, release history, and the next feature workflow, see [Divine Media project history](DIVINE_MEDIA_PROJECT_HISTORY.md).
+
 ## Development and deployment
 
 - **Repository homepage:** `master`. This branch contains the historical backend source and this overview.

@@ -1,4 +1,6 @@
 # Divine Media — Master Project Guide
+
+> Historical October 2026 baseline. For current decisions, releases, and this Codex workspace handoff, read [Divine Media — Consolidated Development History](DIVINE_MEDIA_PROJECT_HISTORY.md). The lime palette, old development branch, and proposed parallel apps below are not current implementation instructions.
 Updated: 2026-10-28 | Baseline: Divine Media 3.0 | Target: commercial launch during 2027
 
 ## Mission

@@ -1,0 +1,79 @@
+// Synthetic creator sessions only. No real uploads, embeds or backend mutations.
+const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
+const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
+const repo=path.join(__dirname,'../../..'),origin=process.env.BROWSER_ORIGIN||'http://127.0.0.1:4194',out=process.env.BROWSER_ARTIFACTS||'/tmp/studio-shell';
+fs.mkdirSync(out,{recursive:true});
+const options={formats:{video:['mp4'],audio:['mp3'],image:['png'],document:['pdf']},limits:{video:4294967296,audio:1073741824,image:20971520,document:104857600},maxThumbnailBytes:2097152,categories:[{id:1,name:'Media'},{id:2,name:'Video',parentId:1}],canChangeCategory:true,tagGroups:[{id:1,name:'Keywords'}],ratings:['','g']};
+(async()=>{
+ const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox'],headless:true});
+ const results=[];
+ for(const [width,theme] of [[1440,'code-black'],[390,'default'],[320,'code-black']]){
+  const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce',serviceWorkers:'block'});
+  const page=await context.newPage(),errors=[],writes=[];
+  page.on('pageerror',e=>errors.push(e.message));
+  let releaseChunk;
+  const chunkWait=new Promise(resolve=>{releaseChunk=resolve});
+  await context.route('**/*',route=>{
+   const req=route.request(),url=new URL(req.url()),reply=d=>route.fulfill({contentType:'application/json',body:JSON.stringify(d)}),action=url.pathname.split('/').at(-1);
+   if(url.pathname==='/divine-media/session')return route.fulfill({contentType:'application/json',body:'{}'});
+ if(url.pathname.endsWith('/delivery-grant'))return route.fulfill({contentType:'application/json',body:JSON.stringify({grant:'a'.repeat(64)})});
+ if(url.pathname.startsWith('/api/platform/')){
+    if(req.method()==='POST')writes.push(action);
+    if(action==='session')return reply({csrf:'fixture',user:{id:7,name:'Creator',permissions:{upload:true,embed:true,stream:true}},capabilities:{live:true,playlists:true}});
+    if(action==='creator-options')return reply(options);
+    if(action==='embed-preview')return reply({items:[{id:'fixture-video',title:'Embed test',thumbs:'/icons/divine-192.png',ticket:'fixture'}]});
+    if(action==='embed-add')return reply({id:91});
+    if(action==='creator-record')return reply({item:{id:91,title:'Embed test',description:'Original description',visibility:'public',categoryId:2,tags:{},canShare:true,canDownload:false}});
+    if(action==='creator-video')return reply({item:{...req.postDataJSON()}});
+    if(action==='upload-init')return reply({ticket:'fixture',chunkBytes:1048576});
+    if(action==='upload-chunk')return chunkWait.then(()=>reply({complete:true,videoId:92}));
+    return reply({items:[]});
+   }
+   if(url.pathname==='/api/public-catalog')return reply({response:{rows:[]}});
+   if(url.pathname==='/media.json')return reply([]);
+   if(url.origin!==origin)return route.abort();
+   if(!path.extname(url.pathname))return route.fulfill({contentType:'text/html',body:fs.readFileSync(path.join(repo,'frontend/dist/index.html'))});
+   return route.continue();
+  });
+  await page.goto(origin+'/creator/upload?theme='+theme);
+  const dialog=page.getByRole('dialog',{name:'Creator studio',exact:true}),nav=page.getByRole('navigation',{name:'Studio tools'});
+  await page.getByLabel('Title',{exact:true}).fill('Unfinished upload');
+  await page.getByLabel('Media file',{exact:true}).setInputFiles({name:'fixture.mp4',mimeType:'video/mp4',buffer:Buffer.from('synthetic')});
+  const card=await dialog.elementHandle();
+  await nav.getByRole('button',{name:'YouTube embed',exact:true}).click();
+  await page.getByLabel('YouTube video or channel URL').fill('https://youtu.be/fixture-video');
+  await page.getByRole('button',{name:'Preview videos',exact:true}).click();
+  await page.getByRole('button',{name:'Select new videos',exact:true}).click();
+  await page.getByRole('button',{name:'Add selected · 1',exact:true}).click();
+  const added=page.getByRole('region',{name:'Embedded media details'});
+  await added.getByRole('button',{name:'Edit details & thumbnail',exact:true}).click();
+  await added.getByLabel('Title',{exact:true}).fill('Updated embed');
+  await added.getByLabel('Visibility',{exact:true}).selectOption('private');
+  await added.getByLabel('Landscape thumbnail',{exact:true}).waitFor();
+  await added.getByRole('button',{name:'Save details & artwork',exact:true}).click();
+  await added.getByRole('button',{name:'Edit details & thumbnail',exact:true}).waitFor();
+  assert(writes.includes('creator-video'));
+  await nav.getByRole('button',{name:'Upload',exact:true}).click();
+  assert.equal(await page.getByLabel('Title',{exact:true}).filter({visible:true}).inputValue(),'Unfinished upload');
+  assert.equal(await page.getByLabel('Media file',{exact:true}).evaluate(el=>el.files[0].name),'fixture.mp4');
+  assert(await card.evaluate(el=>el.isConnected));
+  assert.equal(await page.locator('.dm-workspace').count(),1);
+  assert.equal(await dialog.locator('a[href*="media.divinemedia.us"]').count(),0);
+  await page.screenshot({path:path.join(out,'studio-'+width+'.png')});
+  await page.getByRole('button',{name:'Upload & save',exact:true}).click();
+  await page.waitForFunction(()=>document.querySelector('.dm-workspace progress')!==null);
+  assert(await nav.getByRole('button',{name:'YouTube embed',exact:true}).isDisabled());
+  assert(await page.getByRole('button',{name:'Close workspace'}).isDisabled());
+  await page.keyboard.press('Escape');assert(await dialog.isVisible());
+  releaseChunk();
+  await page.getByRole('button',{name:'Upload another file',exact:true}).click();
+  assert.equal(await page.getByLabel('Media file',{exact:true}).evaluate(el=>el.files.length),0);
+  assert.equal(await page.getByLabel('Title',{exact:true}).filter({visible:true}).inputValue(),'');
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
+  assert.deepEqual(errors,[]);
+  await page.keyboard.press('Escape');await dialog.waitFor({state:'hidden'});
+  results.push({width,theme,persistent_card:true,retained_upload:true,inline_embed_metadata:true,busy_protection:true,next_upload:true});
+  await context.close();
+ }
+ await browser.close();fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({result:'pass',results},null,2));console.log(JSON.stringify({result:'pass',results}));
+})().catch(e=>{console.error(e);process.exit(1)});
