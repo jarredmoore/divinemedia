@@ -141,6 +141,8 @@ Keep credentials out of source, browser bundles, documentation, screenshots, and
 
 Before Azure mutations, inspect the affected services, verify a recoverable backup and rollback path, and preserve existing media and processing. A prior successful backup is not proof that today's backup is current. Do not restart containers or launch global encoding jobs as routine verification.
 
+The November 24 feature branch adds a persistent studio menu, in-card upload/embed state, and inline editing of confirmed embeds. This is preview work until separately approved and deployed; see [creator card details](docs/CREATOR-TOOLS-CARD.md).
+
 ## Known resolved issues versus open work
 
 - The reported login failure was confirmed by the user to be an incorrect username. Do not replace authentication without a reproducible new issue.
