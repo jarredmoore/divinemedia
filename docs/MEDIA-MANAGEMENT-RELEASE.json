@@ -1,0 +1,39 @@
+{
+  "release_date": "2026-11-25",
+  "pull_request": 43,
+  "production_merge": "9bb27c1172d81ba7054df21b149de1379a9768d1",
+  "netlify_deploy": "6b07518b5d4e857c23c65096",
+  "previous_netlify_deploy": "6b0621daba7e1b4751e0fdab",
+  "live_frontend_assets_match_tested_build": true,
+  "live_routes_http_200": [
+    "/",
+    "/shop",
+    "/categories",
+    "/library/playlists",
+    "/creator/videos"
+  ],
+  "azure": {
+    "result": "pass",
+    "state": "/srv/divinemedia/backups/youtube-metadata-ae96529ad802",
+    "before_backup_verified": true,
+    "files": [
+      "youtube.php",
+      "creator-details.php"
+    ],
+    "hashes": {
+      "youtube.php": "6c1b4a9fd46125413dff40970f6689446952468f8ccbea57d444d5f6e147b6a1",
+      "creator-details.php": "34b8c6970a073bbdae990d5695d509f405b0bb7c8ae871fffb0d1cc7c9a904c4"
+    },
+    "anonymous_refresh_denied": true,
+    "session_catalog_ok": true,
+    "media_file_metadata_catalog_queue_permissions_other_sources_and_uptimes_preserved": true,
+    "no_real_uploads_encoding_jobs_or_payments": true,
+    "after_backup_verified": true
+  },
+  "limits": [
+    "Square payment end-to-end not verified; hosted checkout can require a separate window.",
+    "Authenticated YouTube refresh and live quota/key availability require creator testing.",
+    "YouTube shares require authorized Analytics access; provider counters remain separate.",
+    "Pagination covers loaded lists within existing API limits."
+  ]
+}

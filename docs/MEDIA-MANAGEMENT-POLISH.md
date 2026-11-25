@@ -1,6 +1,6 @@
 # Media management refinement — November 25, 2026
 
-Feature preview only. No Azure services, native catalog rows, playlists, media files or production settings were changed during development.
+Released November 25 through PR #43. Netlify production and the two scoped Azure adapter files are updated. Native catalog rows, playlists, media files, encoding jobs and service uptimes were preserved. See [release verification and rollback reference](MEDIA-MANAGEMENT-RELEASE.json).
 
 ## Frontend changes
 
@@ -24,7 +24,7 @@ The public storefront returned HTTP 200 during the read-only check. The real Chr
 
 Snapshots are labeled **YouTube** and remain separate from Divine Media reactions. Share counts require authorized YouTube Analytics access; this change adds no creator OAuth grant or share-count sync. Source tags/descriptions are not automatically written over creator edits. Refresh is on demand, not a scheduled background job, and snapshots are not persisted as a separate analytics database.
 
-Backend rollout required: `backend/frontend-api/youtube.php` and `creator-details.php`. These files were linted/tested in a disposable PHP container with networking disabled. They have **not** been applied to Azure. Until rollout, previews can use the current importer, and an unsupported refresh reports that metadata refresh is unavailable instead of claiming success. A later rollout needs matching-source checks, verified backups, PHP lint, scoped replacement and rollback evidence under the existing operational policy.
+Backend rollout completed: `backend/frontend-api/youtube.php` and `creator-details.php`. These files were linted/tested in a disposable PHP container with networking disabled. They were applied to Azure with matching-source checks, verified off-VM before/after backups, runtime PHP lint, anonymous authorization checks and preservation checks. Two earlier verification attempts restored their matching original sources automatically; the successful rollout uses the existing persistent protected gateway configuration. No credentials were exposed or changed. Authenticated creator refresh against the live YouTube key/quota remains a user acceptance check.
 
 ## Verification
 
