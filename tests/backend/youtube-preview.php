@@ -16,3 +16,9 @@ $client=new DivineYouTube(function($url)use($id,$video){$path=parse_url($url,PHP
 $preview=$client->preview(DivineYouTube::source('https://www.youtube.com/channel/'.$id),'synthetic-key');check(count($preview['items'])===1&&$preview['next']==='page-two','Privacy, embeddability or pagination failed');
 $single=(new DivineYouTube(fn($url)=>['status'=>200,'body'=>json_encode(['title'=>'Single video','author_name'=>'Creator'])]))->preview(DivineYouTube::source('https://youtu.be/'.$video),'');check($single['mode']==='single'&&count($single['items'])===1,'Single preview requires API key');
 echo json_encode(['result'=>'pass','strict_sources'=>true,'quota_feed_fallback'=>true,'feed_identity_and_xml_safety'=>true,'private_and_embedding_disabled_filtered'=>true,'pagination'=>true,'single_without_api_key'=>true]);
+
+$meta=(new DivineYouTube(function($url)use($video){parse_str(parse_url($url,PHP_URL_QUERY),$q);check(str_contains($q['part'],'statistics'),'Statistics not requested');return ['status'=>200,'body'=>json_encode(['items'=>[['id'=>$video,'snippet'=>['title'=>'Test','tags'=>['music']],'contentDetails'=>['duration'=>'PT1M'],'status'=>['privacyStatus'=>'public','embeddable'=>true],'statistics'=>['viewCount'=>'120','likeCount'=>'0','commentCount'=>'9','dislikeCount'=>'44','shares'=>'99']]]])];}))->metadata($video,'synthetic-key');
+check($meta['providerMetadata']['statistics']===['viewCount'=>'120','likeCount'=>'0','commentCount'=>'9'],'Public statistics allowlist failed');
+check($meta['providerMetadata']['tags']===['music'],'Source tags missing');
+try{(new DivineYouTube(fn($url)=>['status'=>200,'body'=>json_encode(['items'=>[['status'=>['privacyStatus'=>'private','embeddable'=>true]]]])]))->metadata($video,'synthetic-key');throw new LogicException('Private metadata exposed');}catch(RuntimeException $e){}
+echo "\nYouTube metadata allowlist and privacy: pass\n";
