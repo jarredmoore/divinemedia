@@ -34,7 +34,7 @@ class DivineYouTube {
         foreach(['~<link\b(?=[^>]*\brel=["\']canonical["\'])(?=[^>]*\bhref=["\']https://www\.youtube\.com/channel/(UC[A-Za-z0-9_-]{22})["\'])[^>]*>~i','~"channelMetadataRenderer"\s*:\s*\{.{0,2400}?"externalId"\s*:\s*"(UC[A-Za-z0-9_-]{22})"~s']as $pattern){if(preg_match($pattern,$html,$m)){return $m[1];}}return null;
     }
     private static function item(string $id,array $snippet,array $extra=[]): array {
-        return ['id'=>$id,'title'=>(string)($snippet['title']??'YouTube video'),'description'=>(string)($snippet['description']??''),'channelTitle'=>(string)($snippet['channelTitle']??''),'date'=>(string)($snippet['publishedAt']??''),'duration'=>(string)($extra['duration']??'PT0S'),'thumbs'=>'https://i.ytimg.com/vi/'.$id.'/hqdefault.jpg','link'=>'https://www.youtube.com/embed/'.$id];
+        return ['id'=>$id,'title'=>(string)($snippet['title']??'YouTube video'),'description'=>(string)($snippet['description']??''),'channelTitle'=>(string)($snippet['channelTitle']??''),'date'=>(string)($snippet['publishedAt']??''),'duration'=>(string)($extra['duration']??'PT0S'),'thumbs'=>'https://i.ytimg.com/vi/'.$id.'/hqdefault.jpg','link'=>'https://www.youtube.com/embed/'.$id,'providerMetadata'=>['provider'=>'youtube','syncedAt'=>gmdate('c'),'description'=>(string)($snippet['description']??''),'publishedAt'=>(string)($snippet['publishedAt']??''),'duration'=>(string)($extra['duration']??''),'tags'=>array_slice($snippet['tags']??[],0,30),'statistics'=>array_filter(array_intersect_key($extra['statistics']??[],array_flip(['viewCount','likeCount','commentCount'])),static fn($value)=>is_scalar($value)&&preg_match('/^[0-9]{1,20}$/D',(string)$value))]];
     }
     public static function feed(string $xml,string $channelId): array {
         if(stripos($xml,'<!DOCTYPE')!==false){throw new RuntimeException('youtube_feed_invalid');}
@@ -44,21 +44,27 @@ class DivineYouTube {
         $items=[];foreach($feed->entry as $entry){$yt=$entry->children('http://www.youtube.com/xml/schemas/2015');$id=(string)$yt->videoId;if(!preg_match('/^[A-Za-z0-9_-]{11}$/D',$id)){continue;}$media=$entry->children('http://search.yahoo.com/mrss/')->group;$items[]=self::item($id,['title'=>(string)$entry->title,'description'=>(string)$media->description,'channelTitle'=>(string)$feed->title,'publishedAt'=>(string)$entry->published]);if(count($items)>=15){break;}}
         return ['channel'=>['id'=>$channelId,'title'=>(string)$feed->title,'url'=>'https://www.youtube.com/channel/'.$channelId],'items'=>$items,'mode'=>'feed','notice'=>'Showing up to 15 recent public uploads from YouTube’s channel feed. Full channel browsing needs available YouTube API quota.','next'=>null];
     }
+    public function metadata(string $id,string $key): array {
+        if(!preg_match('/^[A-Za-z0-9_-]{11}$/D',$id)){throw new RuntimeException('youtube_video_unavailable');}
+        $data=$this->api('videos',['part'=>'snippet,contentDetails,status,statistics','id'=>$id],$key);$v=$data['items'][0]??null;
+        if(!$v||($v['status']['privacyStatus']??'')!=='public'||empty($v['status']['embeddable'])){throw new RuntimeException('youtube_video_unavailable');}
+        return self::item($id,$v['snippet'],$v['contentDetails']+['statistics'=>$v['statistics']??[]]);
+    }
     public function single(string $id): array {
         $response=$this->fetch('https://www.youtube.com/oembed?format=json&url='.rawurlencode('https://www.youtube.com/watch?v='.$id));$data=json_decode($response['body'],true);
         if($response['status']!==200||!is_array($data)||empty($data['title'])){throw new RuntimeException('youtube_video_unavailable');}
         return self::item($id,['title'=>$data['title'],'channelTitle'=>$data['author_name']??'']);
     }
     public function preview(array $source,string $key,string $page=''): array {
-        if($source['kind']==='video'){return ['channel'=>null,'items'=>[$this->single($source['id'])],'mode'=>'single','notice'=>'YouTube hosts this video. Its own playback and embedding restrictions still apply.','next'=>null];}
+        if($source['kind']==='video'){$item=null;if($key!==''){try{$item=$this->metadata($source['id'],$key);}catch(RuntimeException $e){}}return ['channel'=>null,'items'=>[$item??$this->single($source['id'])],'mode'=>'single','notice'=>'YouTube hosts this video. Its own playback and embedding restrictions still apply.','next'=>null];}
         $channelId=$source['id']??null;
         try{
             $lookup=$channelId?['id'=>$channelId]:['forHandle'=>$source['handle']];$data=$this->api('channels',['part'=>'id,snippet,contentDetails']+$lookup,$key);$channel=$data['items'][0]??null;
             if(!$channel){throw new RuntimeException('youtube_channel_not_found');}$channelId=$channel['id'];
             $params=['part'=>'snippet,contentDetails','playlistId'=>$channel['contentDetails']['relatedPlaylists']['uploads'],'maxResults'=>25];if($page!==''){$params['pageToken']=$page;}
             $list=$this->api('playlistItems',$params,$key);$ids=[];foreach($list['items']??[]as $item){$id=$item['contentDetails']['videoId']??'';if(preg_match('/^[A-Za-z0-9_-]{11}$/D',$id)){$ids[]=$id;}}
-            $videos=$ids?$this->api('videos',['part'=>'snippet,contentDetails,status','id'=>implode(',',$ids)],$key):['items'=>[]];$items=[];
-            foreach($videos['items']??[]as $v){if(($v['status']['privacyStatus']??'')!=='public'||empty($v['status']['embeddable'])||!preg_match('/^[A-Za-z0-9_-]{11}$/D',$v['id']??'')){continue;}$items[]=self::item($v['id'],$v['snippet'],$v['contentDetails']);}
+            $videos=$ids?$this->api('videos',['part'=>'snippet,contentDetails,status,statistics','id'=>implode(',',$ids)],$key):['items'=>[]];$items=[];
+            foreach($videos['items']??[]as $v){if(($v['status']['privacyStatus']??'')!=='public'||empty($v['status']['embeddable'])||!preg_match('/^[A-Za-z0-9_-]{11}$/D',$v['id']??'')){continue;}$items[]=self::item($v['id'],$v['snippet'],$v['contentDetails']+['statistics'=>$v['statistics']??[]]);}
             return ['channel'=>['id'=>$channelId,'title'=>$channel['snippet']['title'],'url'=>'https://www.youtube.com/channel/'.$channelId],'items'=>$items,'mode'=>'api','notice'=>'Public videos that allow embedding. Select the videos to add to your Divine Media channel.','next'=>$list['nextPageToken']??null];
         }catch(RuntimeException $e){
             if($page!==''||$e->getMessage()==='youtube_channel_not_found'){throw $e;}

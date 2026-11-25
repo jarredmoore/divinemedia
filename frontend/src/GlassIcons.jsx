@@ -9,7 +9,7 @@ function glass(Icon,tone,kind=''){return function GlassIcon({size=20,className='
 }}
 
 export const Play=glass(Lucide.Play,'cyan','play');
-export const Pause=glass(Lucide.Pause,'blue');
+export const Pause=glass(Lucide.Pause,'blue','pause');
 export const Headphones=glass(Lucide.Headphones,'purple');
 export const Music=glass(Lucide.Music,'purple');
 export const Compass=glass(Lucide.Compass,'cyan');

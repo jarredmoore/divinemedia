@@ -1,0 +1,3 @@
+import React from 'react';
+const store='https://divinecreativegroup.square.site/';
+export default function SquareShop(){return <div className="dm-square-shop"><p>Browse Divine Creative Group’s store here. Square handles checkout and payment details.</p><p className="dm-square-note">Some payment methods or browsers may require a separate secure checkout window.</p><iframe src={store} title="Divine Creative Group Square store" loading="lazy" referrerPolicy="strict-origin-when-cross-origin" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"/><a className="dm-square-fallback" href={store} target="_blank" rel="noopener noreferrer">Open Square secure checkout in a new tab</a></div>}

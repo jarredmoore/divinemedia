@@ -54,3 +54,9 @@ h1,h2,h3,.hero h1 em,.cb-hero-copy h1 em,.cb-scene-reveal h2 em,.experience-copy
 @media(max-width:360px){.cb-wordmark .dm-brand-mark{width:26px;height:26px}}
 .brand-icon .dm-brand-mark{width:26px;height:26px}
 :root[data-theme="default"] .brand-icon{background:var(--dm-glass-solid);border-color:var(--dm-border)}
+
+/* Cozy transport controls: larger black glyphs with comfortable touch targets. */
+:root[data-theme="default"] :is(.dm-dock-play,.player-main,.play-float){min-width:48px;min-height:48px}
+:root[data-theme="default"] :is(.primary,.dm-dock-play,.dm-dock-resume,.player-main,.play-float) :is(.dm-icon-play,.dm-icon-pause){--dm-icon-size:30px!important;background:none;border:0;box-shadow:none;color:#0b0d10}
+:root[data-theme="default"] :is(.primary,.dm-dock-play,.dm-dock-resume,.player-main,.play-float) :is(.dm-icon-play,.dm-icon-pause) svg{width:26px;height:26px;stroke:#0b0d10;fill:#0b0d10;filter:none}
+:root[data-theme="default"] .play-float{background:#ffcc2f;color:#0b0d10}

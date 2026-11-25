@@ -39,7 +39,7 @@ export function mapAVideoVideo(row){
  sources.sort((a,b)=>Number(b.res)-Number(a.res));
  const videoUrl=audio?undefined:safeAVideoUrl(sources[0]?.src||row.videos?.mp4?.['720']||row.videos?.mp4?.['480']);
  const item=normalizeMedia({title:row.title,tag:'DIVINE · '+(row.channelName||(audio?'AUDIO':'VIDEO'))+(row.duration?' · '+row.duration:''),type:audio?'Listen':'Watch',watchUrl,img:audio&&[10,11,12,13,14,15,16].includes(Number(row.id))?murphyAlbumCover:image,videoUrl,audioUrl:audio?audioSource(row):undefined,creator:row.channelName||row.user||'Creator',channelUrl:row.wwbnChannelURL});
- return item?{...item,avideoId:row.id}:null;
+ return item?{...item,categoryId:Number(row.categoryId||row.categories_id)||0,avideoId:row.id}:null;
 }
 /** Read sanitized public AVideo catalog from same-origin Netlify function; no credentials. */
 export async function loadAVideoCatalog(){

@@ -60,7 +60,7 @@ export default async function handler(){
    const directAudio=audio?publicAudioSource(row)||await resolveAudio(pageUrl):null;
    return {
     mediaType:audio?'audio':'video',audioUrl:directAudio,
-    id:row.id,title:String(row.title||'').slice(0,140),status:'a',
+    id:row.id,categoryId:Number(row.categories_id||row.categoryId)||0,title:String(row.title||'').slice(0,140),status:'a',
     pageUrl,channelName:String(row.channelName||'').slice(0,100),
     duration:String(row.duration||'').slice(0,30),
     images:{posterLandscape:mediaUrl(row.images?.posterLandscape||row.images?.poster||row.Poster||row.Thumbnail)},

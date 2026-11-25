@@ -31,7 +31,15 @@ function dm_creator_record(int $id): array {
     return $item+['visibility'=>match($v->getStatus()){Video::STATUS_ACTIVE=>'public',Video::STATUS_UNLISTED=>'unlisted',default=>'private'},'status'=>$v->getStatus(),'tags'=>(object)$tags,'canShare'=>(bool)$v->getCan_share(),'canDownload'=>(bool)$v->getCan_download(),'rating'=>(string)$v->getRrating()];
 }
 if($action==='creator-options'){dm_require_user();dm_reply(dm_creator_options());}
-if($action==='creator-record'){dm_require_user();dm_reply(['item'=>dm_creator_record(dm_id($query['id']??0))]);}
+if($action==='creator-record'){
+    dm_require_user();$item=dm_creator_record(dm_id($query['id']??0));
+    if(($query['provider']??'')==='refresh'&&($item['embed']['provider']??'')==='youtube'){
+        enforceRateLimit('divine_youtube_metadata_'.User::getId(),5,60);
+        if(!AVideoPlugin::loadPluginIfEnabled('BulkEmbed')){dm_error('YouTube metadata is not configured.',422);}
+        require_once __DIR__.'/youtube.php';try{$metadata=(new DivineYouTube())->metadata($item['embed']['id'],BulkEmbed::getAPIKey());$item['providerMetadata']=$metadata['providerMetadata'];}catch(RuntimeException $e){dm_error('YouTube metadata is unavailable. Check API configuration or try again later.',502);}
+    }
+    dm_reply(['item'=>$item]);
+}
 if($action==='creator-thumbnail'){
     dm_require_user();$id=dm_id($body['id']??0);if(!Video::canEdit($id)){dm_error('Video access denied.',403);}$kind=(string)($body['kind']??'landscape');if(!in_array($kind,['landscape','portrait'],true)){dm_error('Choose a valid thumbnail type.');}
     $file=$_FILES['file_data']??null;if(!$file||$file['error']!==UPLOAD_ERR_OK||!is_uploaded_file($file['tmp_name'])){dm_error('Choose a thumbnail image.');}
