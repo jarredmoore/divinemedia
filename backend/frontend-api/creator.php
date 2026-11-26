@@ -35,7 +35,10 @@ if($action==='creator-video'){
         foreach($queue['items']??[]as $job){if((int)$job['id']===(int)($hold['jobId']??0)&&(int)$job['videoId']===$id&&$job['status']==='done')$done=true;}
         if(!$done)dm_error('This import is still processing, or its completed job could not be verified. Check the encoding queue before publishing.',409);DivineImportHold::approve($video);$release=true;
     }
-    dm_creator_apply($video,$data);if($release)DivineImportHold::release($video);dm_reply(['message'=>'Details updated.','item'=>dm_creator_record($id)]);
+    dm_creator_apply($video,$data);if($release)DivineImportHold::release($video);
+    // Native row caches may still contain the pre-save status within this request.
+    $item=dm_creator_record($id);$item['status']=$video->getStatus();$item['visibility']=match($video->getStatus()){Video::STATUS_ACTIVE=>'public',Video::STATUS_UNLISTED=>'unlisted',default=>'private'};
+    dm_reply(['message'=>'Details updated.','item'=>$item]);
 }
 if(in_array($action,['upload-init','upload-chunk','upload-cancel'],true)){
     if(!User::canUpload()){dm_error('Upload permission required.',403);}
