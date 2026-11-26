@@ -1,0 +1,53 @@
+{
+  "feature_pr": "https://github.com/jarredmoore/divinemedia/pull/47",
+  "source_commit": "602d8a7484fbbf20e2122b75ce06ceefdef6858c",
+  "feature_head": "a2992e42b6e10819da0ad347dda4457b896e4057",
+  "url": "https://divinemedia.us/?theme=backstage",
+  "deploy_id": "6b087928994361beba507cff",
+  "known_previous_release": "6b083dec1ae58dc7646f7eb3",
+  "browser_verification": {
+    "result": "pass",
+    "url": "https://divinemedia.us/?theme=backstage",
+    "results": [
+      {
+        "session": {
+          "status": 200,
+          "valid": true
+        }
+      },
+      {
+        "width": 1440,
+        "theme": "backstage",
+        "overflow": false,
+        "headerOverflow": false,
+        "errors": []
+      },
+      {
+        "width": 390,
+        "theme": "backstage",
+        "overflow": false,
+        "headerOverflow": false,
+        "errors": []
+      }
+    ]
+  },
+  "assets_and_api_verification": {
+    "result": "pass",
+    "url": "https://divinemedia.us",
+    "checks": {
+      "/": "tested HTML matches",
+      "/creator/embed": "tested HTML matches",
+      "/creator/upload": "tested HTML matches",
+      "/creator/encoding": "tested HTML matches",
+      "javascript_and_css_match": 2,
+      "anonymous_session": true,
+      "public_catalog": true,
+      "link-preview": "recognized; CSRF and anonymous denial pass",
+      "link-import": "recognized; CSRF and anonymous denial pass",
+      "creator_authentication_gate": true
+    },
+    "real_imports_or_downloads_started": false
+  },
+  "backend_changed": false,
+  "existing_media_modified": false
+}

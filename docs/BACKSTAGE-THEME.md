@@ -1,6 +1,6 @@
 # Backstage theme preview
 
-Status: feature preview on `feat/backstage-theme`; production activation requires approval.
+Status: published to production with owner approval through [PR #47](https://github.com/jarredmoore/divinemedia/pull/47). [Open Backstage](https://divinemedia.us/?theme=backstage); see [release evidence and rollback reference](BACKSTAGE-RELEASE.json).
 
 Direction: an editorial music/film theme inspired by the expansive artwork, strong typography, black space and split feature layouts of [Duff McKagan’s site](https://duffmckagan.com/) and its [video page](https://duffmckagan.com/videos/hung-drawn-and-quartered-1424/). Divine Media retains its own mark, imagery, content and player/studio components. No reference-site assets or code are copied.
 
@@ -10,4 +10,4 @@ Motion uses CSS and one scroll-triggered animation-frame handler; there are no n
 
 Verification: 44 frontend tests and the Vite build pass. The Backstage browser fixture verifies 1440/390/320px layouts, no horizontal overflow, theme switching/persistence, player opening, creator upload access, reduced motion and pause behavior. The existing link-import browser regression also passes at desktop/mobile widths. Browser checks use synthetic records and do not upload or import real media.
 
-Rollback: select either existing theme; remove the Backstage option/component/styles on its feature branch. No backend, media, accounts or production configuration changes are part of this preview.
+Rollback: select either existing theme; remove the Backstage option/component/styles on its feature branch. This release changes the frontend theme only; the backend, media and accounts are unchanged.
