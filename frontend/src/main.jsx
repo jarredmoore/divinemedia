@@ -18,6 +18,8 @@ import {platform,workspace} from './platform-client.mjs';
 import {ColdBlackHeader,ColdBlackHero,ThemePicker,readTheme,THEME_KEY} from './ColdBlack.jsx';
 import {loadMedia, loadAVideoCatalog, readSaved, writeSaved, avideoOrigin} from './media.js';
 import './black-glass.css';
+import BackstageHero from './Backstage.jsx';
+import './backstage.css';
 const photos={
  hero:'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=1600&q=85',
  film:'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=720&q=80',
@@ -43,7 +45,7 @@ const links=[['Discover',Compass],['Watch',Clapperboard],['Listen',Headphones],[
 function App(){
  const {requireAccount,favoriteIds,toggleFavorite}=usePlatform();const routeHandled=useRef(false);
  const[sort,setSort]=useState('newest');
- const[theme,setTheme]=useState(readTheme);const coldBlack=theme==='code-black';
+ const[theme,setTheme]=useState(readTheme);const backstage=theme==='backstage';const coldBlack=theme==='code-black'||backstage;
  const changeTheme=value=>{setTheme(value);window.scrollTo({top:0,behavior:'instant'});try{const u=new URL(location.href);u.searchParams.set('theme',value);history.replaceState(null,'',u)}catch{/* preference still works without URL storage */}};
  useEffect(()=>{document.documentElement.dataset.theme=theme;persistTheme(theme)},[theme]);
  const[sidebarCollapsed,setSidebarCollapsed]=useState(true);const[dockTrack,setDockTrack]=useState(null);const[dockVideo,setDockVideo]=useState(null);const[dockPlaying,setDockPlaying]=useState(false);const[dockTime,setDockTime]=useState(0);const[dockDuration,setDockDuration]=useState(0);const[dockVolume,setDockVolume]=useState(0.8);const[volumeBeforeMute,setVolumeBeforeMute]=useState(0.8);const dockAudioRef=useRef(null);const[dockError,setDockError]=useState('');const dockAutoPlay=useRef(false);const[creatorFilter,setCreatorFilter]=useState(null),[playing,setPlaying]=useState(false),[queueIndex,setQueueIndex]=useState(0),[tab,setTab]=useState('Discover'),[query,setQuery]=useState(''),[menu,setMenu]=useState(false),[saved,setSaved]=useState(readSaved),[selected,setSelected]=useState(null),[items,setItems]=useState(sampleItems),[sourceStatus,setSourceStatus]=useState('sample');
@@ -77,7 +79,7 @@ function App(){
  const isSaved=item=>item?.avideoId?(favoriteIds||[]).includes(Number(item.avideoId)):saved.includes(item?.title);
  const toggle=t=>{const item=items.find(i=>i.title===t);if(item?.avideoId){toggleFavorite(item.avideoId).catch(()=>workspace('favorites'));return}setSaved(v=>v.includes(t)?v.filter(x=>x!==t):[...v,t])};
 
- return <div className={"app "+(coldBlack?"cold-black ":"")+(sidebarCollapsed?"sidebar-collapsed":"")}>
+ return <div className={"app "+(coldBlack?"cold-black ":"")+(backstage?"backstage ":"")+(sidebarCollapsed?"sidebar-collapsed":"")}>
  {!coldBlack&&<aside className={'sidebar '+(menu?'open':'')}>
  <div className="brand"><div className="brand-icon"><img className="dm-brand-mark" src="/icons/divine-logo.svg" alt="" aria-hidden="true"/></div><span>DIVINE<span className="brand-light">MEDIA</span><small>INDEPENDENT CULTURE</small></span></div>
  <button className="sidebar-toggle" type="button" onClick={()=>setSidebarCollapsed(v=>!v)} aria-label={sidebarCollapsed?"Expand sidebar":"Collapse sidebar"} title={sidebarCollapsed?"Expand sidebar":"Collapse sidebar"}>{sidebarCollapsed?<PanelLeftOpen size={19}/>:<PanelLeftClose size={19}/>}</button><div className="side-label">EXPLORE</div><nav>{links.map(([name,Icon])=><button key={name} className={'nav-link '+(tab===name?'active':'')} onClick={()=>go(name)} title={name} aria-label={name}><Icon size={19}/><span className="nav-text">{name}</span>{name==='Live'&&<span className="live-dot"/>}</button>)}</nav>
@@ -86,7 +88,8 @@ function App(){
  <div className="content">
  <a className="skip-content" href="#discover-grid">Skip to titles</a>
  {coldBlack?<ColdBlackHeader tab={tab} go={go} query={query} setQuery={setQuery} theme={theme} onTheme={changeTheme} links={links}/>:<header><button className="menu-button" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>{menu?<X/>:<Menu/>}</button><div className="breadcrumb">EXPLORE <span>/</span> {tab.toUpperCase()}</div><div className="header-actions"><label className="search"><Search size={18}/><input aria-label="Search titles" placeholder="Search the culture..." value={query} onChange={e=>setQuery(e.target.value)}/></label><InstallApp/><DisplayControls/><ThemePicker theme={theme} onChange={changeTheme}/><NativeActions/></div></header>}
- {coldBlack&&tab==='Discover'&&!query&&<ColdBlackHero onWatch={()=>featured?openItem(featured):go('Watch')} onListen={()=>go('Listen')} suspended={Boolean(selected)||(dockPlaying&&Boolean(dockTrack))}/>}
+ {coldBlack&&!backstage&&tab==='Discover'&&!query&&<ColdBlackHero onWatch={()=>featured?openItem(featured):go('Watch')} onListen={()=>go('Listen')} suspended={Boolean(selected)||(dockPlaying&&Boolean(dockTrack))}/>}
+ {backstage&&tab==='Discover'&&!query&&<BackstageHero onWatch={()=>featured?openItem(featured):go('Watch')} onListen={()=>go('Listen')} suspended={Boolean(selected)||(dockPlaying&&Boolean(dockTrack))}/>}
  {!coldBlack&&tab==='Discover'&&!query&&<section className="hero" ref={heroRef}><div className="hero-visual" ref={heroVisualRef} style={{backgroundImage:'url('+photos.hero+')'}} aria-hidden="true"/><div className="hero-shade" aria-hidden="true"/><div className="hero-content"><div className="eyebrow"><span className="accent-line"/> THE NEXT WAVE OF INDEPENDENT MEDIA</div><h1>Stories worth<br/><em>staying for.</em></h1><p>Film. Music. Culture. Voices you haven't heard yet. A new home for the creators moving us forward.</p><div className="hero-actions"><button className="primary" onClick={()=>document.getElementById('discover-grid')?.scrollIntoView({behavior:'smooth'})}><Play size={17} fill="currentColor"/> Start exploring</button><button className="secondary" onClick={()=>go('Creators')}>Meet the creators <ArrowUpRight size={17}/></button></div></div><div className="hero-index">01 <span>/</span> 04</div></section>}
  {tab==='Discover'&&!query&&featured&&<section className="featured-program reveal"><div className="featured-image"><img src={featured.img} alt="" loading="lazy"/></div><div className="featured-copy"><span className="eyebrow small">NOW FEATURED / DIVINE MEDIA</span><h2>{featured.title}</h2><p>{featured.creator?'From '+featured.creator+' · ':''}{featured.tag}</p><div className="featured-actions"><button className="primary" onClick={()=>openItem(featured)}><Play size={17} fill="currentColor"/> Watch now</button><button className="secondary" onClick={()=>go('Watch')}>Explore Watch <ArrowUpRight size={17}/></button></div></div></section>}
  {tab==='Watch'&&!query&&<section className="experience-banner watch-banner"><img className="banner-parallax" src={photos.film} alt="" /><div className="experience-copy"><div className="eyebrow small">DIVINE MEDIA / CINEMA</div><h1>Watch beyond<br/><em>the ordinary.</em></h1><p>Independent films, performances and stories with a perspective of their own.</p><button className="primary" onClick={()=>openItem(items.find(i=>i.type==='Watch')||items[0])}><Play size={16}/> Explore featured film</button></div></section>}

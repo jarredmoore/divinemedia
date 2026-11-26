@@ -1,6 +1,6 @@
 export const THEME_KEY='divine-media:theme:v1';
 export const THEME_COOKIE='dm_view_theme';
-export function normalizeTheme(value){if(value==='cozy')return 'default';return value==='cold-black'?'code-black':['default','code-black'].includes(value)?value:null}
+export function normalizeTheme(value){if(value==='cozy')return 'default';return value==='cold-black'?'code-black':['default','code-black','backstage'].includes(value)?value:null}
 export function resolveTheme({search='',cookie='',stored=null}={}){
  const requested=normalizeTheme(new URLSearchParams(search).get('theme'));if(requested)return requested;
  const match=cookie.split(';').map(v=>v.trim()).find(v=>v.startsWith(THEME_COOKIE+'='));
@@ -13,7 +13,7 @@ export function themedUrl(value,theme=readCurrentTheme()){
  try{const u=new URL(value);if(u.protocol!=='https:'||u.username||u.password)return value;
   if([...u.searchParams.keys()].some(k=>/^(pass(word)?|token|api_secret|apisecret|key|secret|sid|session)$/i.test(k)))return value;
   if(['divinemedia.us','www.divinemedia.us','media.divinemedia.us','media.divinecreativegroup.com','watch.divinecreativegroup.com'].includes(u.hostname)){
-   if(u.hostname==='media.divinecreativegroup.com')u.hostname='media.divinemedia.us';if(u.hostname==='watch.divinecreativegroup.com'||u.hostname==='www.divinemedia.us')u.hostname='divinemedia.us';u.searchParams.set('theme',normalizeTheme(theme)||'default');return u.href;
+   if(u.hostname==='media.divinecreativegroup.com')u.hostname='media.divinemedia.us';if(u.hostname==='watch.divinecreativegroup.com'||u.hostname==='www.divinemedia.us')u.hostname='divinemedia.us';const selected=normalizeTheme(theme)||'default';u.searchParams.set('theme',u.hostname==='media.divinemedia.us'&&selected==='backstage'?'code-black':selected);return u.href;
   }
  }catch{/* leave unsupported links unchanged */}return value;
 }
