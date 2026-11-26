@@ -28,5 +28,6 @@ if($action==='link-import'){
     elseif(!Video::canEdit($id))dm_error('Draft access denied.',403);
     $video=new Video('','',$id);DivineImportHold::hold($video,$ticket);
     $result=dm_encoder('import',['url'=>$preview['item']['url'],'title'=>$details['title'],'profile'=>$profile,'videoId'=>$id,'ticket'=>$ticket]);_session_start();
+    if((int)($result['id']??0)<1||(int)($result['videoId']??0)!==$id)dm_error('The import could not be confirmed. Check your queue before retrying.',502);
     DivineImportHold::hold($video,$ticket,(int)$result['id']);$_SESSION['dm_link_previews'][$ticket]['jobId']=(int)$result['id'];dm_reply($result+['message'=>'Import queued into your private draft.']);
 }

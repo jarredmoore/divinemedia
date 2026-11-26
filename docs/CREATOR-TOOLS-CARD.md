@@ -33,3 +33,7 @@ Confirmed YouTube additions offer the existing native record editor inside the e
 After a successful file/details save, **Upload another file** clears the form for the next item. Retry after a partial artwork failure still uses the confirmed record and does not resend the original file.
 
 Validation uses synthetic sessions and records: the new studio-shell browser test covers 1440/390/320px, both themes, same-card navigation, retained upload inputs, inline embed editing, busy controls, the next-upload reset and no overflow. Existing studio-details checks cover both thumbnail formats, partial retry, metadata and previews; creator-card checks cover creator/restricted/guest permissions. Tests do not upload real media, authenticate real users, mutate the backend, or certify live provider configuration.
+
+## Unified link entry in development
+
+The next feature branch renames Add from YouTube to **Add a video link**, keeping one URL field for provider-aware embedding/import review. The existing YouTube flow remains, while native import actions and a server-owned draft hold are staged for a separately verified activation. See [unified link import](UNIFIED-LINK-IMPORT.md) for compatibility, tests and the remaining native rehearsal. Production importing is not enabled by the frontend preview.
