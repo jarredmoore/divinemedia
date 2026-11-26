@@ -7,7 +7,6 @@ $config= <<<'CODE'
 <?php
 if(!defined('MYSQLI_ASSOC'))define('MYSQLI_ASSOC',1);
 if(!function_exists('mb_substr')){function mb_substr($s,$a,$n){return substr($s,$a,$n);}}
-function _session_start(){if(session_status()!==PHP_SESSION_ACTIVE)session_start();}
 function decideFormatOrder(){return 10;}
 class Result {public $q;function __construct($q){$this->q=$q;}function fetch_all($mode){return [['id'=>8]];}function fetch_row(){return [str_contains($this->q,'GET_LOCK')?1:(getenv('DM_PENDING')?:0)];}function fetch_assoc(){return getenv('DM_EXISTING')?['id'=>99]:null;}}
 class Statement {public $q;function __construct($q){$this->q=$q;}function bind_param($types,&...$args){}function execute(){}function get_result(){return new Result($this->q);}function close(){}}

@@ -53,7 +53,7 @@ try{
     if(empty($dmEncoderActor['canUpload'])){enc_reply(['error'=>'Encoding permission required.']);}
     if(!$ids){enc_reply(['error'=>'Encoder job access denied.']);}
     $streamerId=$ids[0];$s=new Streamer($streamerId);
-    _session_start();
+    if(session_status()!==PHP_SESSION_ACTIVE){session_start();}
     $_SESSION['login']=(object)['isLogged'=>true,'streamers_id'=>$streamerId,'streamer'=>$s->getSiteURL(),'canUpload'=>true,'isAdmin'=>(bool)$s->getIsAdmin(),'isStreamerAdmin'=>!empty($dmEncoderActor['isAdmin']),'allowedResolutions'=>$dmEncoderActor['allowedResolutions']??[]];
     if($dmEncoderOp==='import'){
         require_once __DIR__.'/import-source.php';
