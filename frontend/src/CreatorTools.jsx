@@ -3,7 +3,7 @@ import {Upload,Link2,Clapperboard,Library,Radio,Video,Settings2,Newspaper,Users,
 import {workspace} from './platform-client.mjs';
 const tools=[
  ['upload','Upload media','Add video, audio, images or documents.',Upload,'upload','Create'],
- ['embed','Embed YouTube videos','Add one video or select videos from a channel.',Link2,'embed','Create'],
+ ['embed','Add a video link','Embed YouTube or import a supported public video link.',Link2,'upload','Create'],
  ['studio','Live studio','Prepare a broadcast and connect your streaming software.',Radio,'stream','Create'],
  ['videos','Your videos','Preview titles, edit details and manage visibility.',Clapperboard,'upload','Manage'],
  ['encode','Encode video & audio','Choose an uploaded title and its encoding output.',Settings2,'upload','Manage','videos'],
@@ -16,7 +16,7 @@ const tools=[
  ['live-link','Add a live link','Add an existing external live stream.',Link2,null,'Additional tools'],
  ['meet','Meet','Host a creator meeting.',Users,null,'Additional tools'],
  ['local-encoder','Use a local encoder','Connect encoding tools on your computer.',MonitorUp,null,'Additional tools'],
- ['providers','Other embed providers','Connect Vimeo and additional video providers.',Code,null,'Additional tools']
+ ['providers','Additional embedded players','More hosted players will appear when available.',Code,null,'Additional tools']
 ];
 export default function CreatorTools({session}){
  const p=session?.user?.permissions||{},cap=session?.capabilities||{};

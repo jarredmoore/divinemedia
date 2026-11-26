@@ -29,7 +29,16 @@ if($action==='encoder-action'){
 }
 if($action==='creator-video'){
     require_once __DIR__.'/creator-details.php';$id=dm_id($body['id']??0);if(!Video::canEdit($id)){dm_error('Video access denied.',403);}
-    $data=dm_creator_validate($body);dm_creator_apply(new Video('','',$id),$data);dm_reply(['message'=>'Details updated.','item'=>dm_creator_record($id)]);
+    $data=dm_creator_validate($body);$video=new Video('','',$id);require_once __DIR__.'/import-hold.php';$release=false;
+    if(DivineImportHold::active($video)&&$data['visibility']!=='private'){
+        $hold=DivineImportHold::read($video);$queue=dm_encoder('queue');_session_start();$done=false;
+        foreach($queue['items']??[]as $job){if((int)$job['id']===(int)($hold['jobId']??0)&&(int)$job['videoId']===$id&&$job['status']==='done')$done=true;}
+        if(!$done)dm_error('This import is still processing, or its completed job could not be verified. Check the encoding queue before publishing.',409);DivineImportHold::approve($video);$release=true;
+    }
+    dm_creator_apply($video,$data);if($release)DivineImportHold::release($video);
+    // Native row caches may still contain the pre-save status within this request.
+    $item=dm_creator_record($id);$item['status']=$video->getStatus();$item['visibility']=match($video->getStatus()){Video::STATUS_ACTIVE=>'public',Video::STATUS_UNLISTED=>'unlisted',default=>'private'};
+    dm_reply(['message'=>'Details updated.','item'=>$item]);
 }
 if(in_array($action,['upload-init','upload-chunk','upload-cancel'],true)){
     if(!User::canUpload()){dm_error('Upload permission required.',403);}

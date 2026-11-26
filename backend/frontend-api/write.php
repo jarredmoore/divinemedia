@@ -72,3 +72,5 @@ if($action==='playlist-order'){
 if(in_array($action,['embed-preview','embed-add'],true)){require __DIR__.'/embeds.php';}
 
 if($action==='creator-thumbnail'){require __DIR__.'/creator-details.php';}
+
+if(in_array($action,['link-preview','link-import'],true)){require __DIR__.'/link-actions.php';}

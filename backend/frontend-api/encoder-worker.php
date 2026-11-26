@@ -29,7 +29,7 @@ try{
     $stmt=$global['mysqli']->prepare('SELECT id FROM '.$table.' WHERE user=? AND LOWER(siteURL) IN (?,?) ORDER BY id DESC');
     $username=(string)$dmEncoderActor['username'];$site='https://media.divinemedia.us/';$legacy='https://media.divinecreativegroup.com/';
     $stmt->bind_param('sss',$username,$site,$legacy);$stmt->execute();$ids=array_map('intval',array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC),'id'));$stmt->close();
-    if($dmEncoderOp==='enqueue'&&!$ids){
+    if(in_array($dmEncoderOp,['enqueue','import'],true)&&!$ids){
         if(empty($dmEncoderActor['canUpload'])||empty($dmEncoderActor['credential'])){enc_reply(['error'=>'Encoding permission required.']);}
         // Respect the installed Encoder's streamer allowlist, including its retained legacy alias.
         $connectionSite=Streamer::isURLAllowed($site)?$site:(Streamer::isURLAllowed($legacy)?$legacy:'');
@@ -38,6 +38,7 @@ try{
         if(!$id){enc_reply(['error'=>'Unable to create your native Encoder connection.']);}
         $ids=[(int)$id];
     }
+    if($dmEncoderOp==='import-preview'){if(empty($dmEncoderActor['canUpload']))enc_reply(['error'=>'Upload permission required.']);require __DIR__.'/import-preview.php';}
     if($dmEncoderOp==='queue'){
         if(!$ids){enc_reply(['items'=>[]]);}
         $table=Encoder::getTableName();if(!preg_match('/^[a-zA-Z0-9_]+$/D',$table)){enc_reply(['error'=>'Encoder configuration unavailable.']);}
@@ -52,8 +53,25 @@ try{
     if(empty($dmEncoderActor['canUpload'])){enc_reply(['error'=>'Encoding permission required.']);}
     if(!$ids){enc_reply(['error'=>'Encoder job access denied.']);}
     $streamerId=$ids[0];$s=new Streamer($streamerId);
-    _session_start();
+    if(session_status()!==PHP_SESSION_ACTIVE){session_start();}
     $_SESSION['login']=(object)['isLogged'=>true,'streamers_id'=>$streamerId,'streamer'=>$s->getSiteURL(),'canUpload'=>true,'isAdmin'=>(bool)$s->getIsAdmin(),'isStreamerAdmin'=>!empty($dmEncoderActor['isAdmin']),'allowedResolutions'=>$dmEncoderActor['allowedResolutions']??[]];
+    if($dmEncoderOp==='import'){
+        require_once __DIR__.'/import-source.php';
+        $source=DivineImportSource::url((string)($dmEncoderData['url']??''));$videoId=(int)($dmEncoderData['videoId']??0);$ticket=(string)($dmEncoderData['ticket']??'');
+        if($videoId<1||!preg_match('/^[a-f0-9]{48}$/D',$ticket)||!method_exists('Encoder','setOverride_status'))enc_reply(['error'=>'This Encoder import contract is not available.']);
+        $profiles=['mp4'=>'inputAutoMP4','hls'=>'inputAutoHLS','audio'=>'inputAutoAudio','webm'=>'inputAutoWebm'];$profile=(string)($dmEncoderData['profile']??'mp4');if(!isset($profiles[$profile]))enc_reply(['error'=>'Unsupported encoding profile.']);
+        $lock='divine_import_'.(int)$dmEncoderActor['userId'];$q=$global['mysqli']->prepare('SELECT GET_LOCK(?,0)');$q->bind_param('s',$lock);$q->execute();$locked=(int)$q->get_result()->fetch_row()[0];$q->close();if(!$locked)enc_reply(['error'=>'Another import is being queued. Please retry.']);
+        $table=Encoder::getTableName();if(!preg_match('/^[a-zA-Z0-9_]+$/D',$table))enc_reply(['error'=>'Encoder configuration unavailable.']);$filename='divine_import_'.$ticket;
+        $q=$global['mysqli']->prepare('SELECT id FROM '.$table.' WHERE filename=? AND streamers_id=? LIMIT 1');$q->bind_param('si',$filename,$streamerId);$q->execute();$existing=$q->get_result()->fetch_assoc();$q->close();if($existing)enc_reply(['id'=>(int)$existing['id'],'videoId'=>$videoId,'duplicate'=>true]);
+        $pending=$global['mysqli']->prepare('SELECT COUNT(*) FROM '.$table.' WHERE streamers_id=? AND filename LIKE \'divine_import_%\' AND status NOT IN (?,?)');$done=Encoder::STATUS_DONE;$error=Encoder::STATUS_ERROR;$pending->bind_param('iss',$streamerId,$done,$error);$pending->execute();$count=(int)$pending->get_result()->fetch_row()[0];$pending->close();if($count>=3)enc_reply(['error'=>'Wait for one of your three pending imports to finish.']);
+        $_POST=$_REQUEST=[$profiles[$profile]=>'true'];$e=new Encoder(0);$e->setStreamers_id($streamerId);$e->setFileURI($source);$e->setVideoDownloadedLink($source);$e->setFilename($filename);$e->setTitle(mb_substr(strip_tags((string)($dmEncoderData['title']??'Imported media')),0,140));$e->setPriority($s->getPriority());$e->setFormats_idFromOrder(decideFormatOrder());$e->setOverride_status('i');$e->setReturn_vars(json_encode(['videos_id'=>$videoId]));if(!(int)$e->getFormats_id())enc_reply(['error'=>'This output format is not configured.']);$id=$e->save();if(!$id)enc_reply(['error'=>'The import could not be queued. Your private draft is retained.']);
+        // Use native on-demand processing only when this is the sole unfinished job.
+        // An unrelated pending/running job must never be restarted by a frontend import.
+        $other=$global['mysqli']->prepare('SELECT COUNT(*) FROM '.$table.' WHERE id<>? AND status NOT IN (?,?)');$other->bind_param('iss',$id,$done,$error);$other->execute();$others=(int)$other->get_result()->fetch_row()[0];$other->close();
+        $dispatch='waiting';if(!$others&&function_exists('execRun')){try{$started=execRun();$dispatch=$started===false||(is_array($started)&&!empty($started['error']))?'unavailable':'requested';}catch(Throwable $ignored){$dispatch='unavailable';}}
+        $message=match($dispatch){'requested'=>'Import queued. Native Encoder processing was requested; your draft stays private.','waiting'=>'Import queued privately behind an existing Encoder job. No unrelated job was restarted.',default=>'Import queued privately, but Encoder could not be started. An administrator needs to check the worker.'};
+        enc_reply(['id'=>(int)$id,'videoId'=>$videoId,'dispatch'=>$dispatch,'message'=>$message]);
+    }
     if($dmEncoderOp==='enqueue'){
         $videoId=(int)($dmEncoderData['videoId']??0);$url=(string)($dmEncoderData['source']??'');$parts=parse_url($url);
         $sourceRoot=realpath(dirname(__DIR__).'/videos');$localSource=realpath($url);
