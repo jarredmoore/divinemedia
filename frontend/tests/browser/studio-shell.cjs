@@ -1,10 +1,11 @@
 // Synthetic creator sessions only. No real uploads, embeds or backend mutations.
 const {chromium}=require(process.env.PLAYWRIGHT_MODULE||'playwright');
 const fs=require('fs'),path=require('path'),assert=require('node:assert/strict');
-const repo=path.join(__dirname,'../../..'),origin=process.env.BROWSER_ORIGIN||'http://127.0.0.1:4194',out=process.env.BROWSER_ARTIFACTS||'/tmp/studio-shell';
+const repo=path.join(__dirname,'../../..'),out=process.env.BROWSER_ARTIFACTS||'/tmp/studio-shell';
 fs.mkdirSync(out,{recursive:true});
 const options={formats:{video:['mp4'],audio:['mp3'],image:['png'],document:['pdf']},limits:{video:4294967296,audio:1073741824,image:20971520,document:104857600},maxThumbnailBytes:2097152,categories:[{id:1,name:'Media'},{id:2,name:'Video',parentId:1}],canChangeCategory:true,tagGroups:[{id:1,name:'Keywords'}],ratings:['','g']};
 (async()=>{
+ const server=await require('./fixture-server.cjs')(path.join(repo,'frontend/dist')),origin=server.origin;
  const browser=await chromium.launch({executablePath:'/usr/bin/chromium',args:['--no-sandbox'],headless:true});
  const results=[];
  for(const [width,theme] of [[1440,'code-black'],[390,'default'],[320,'code-black']]){
@@ -40,9 +41,9 @@ const options={formats:{video:['mp4'],audio:['mp3'],image:['png'],document:['pdf
   await page.getByLabel('Title',{exact:true}).fill('Unfinished upload');
   await page.getByLabel('Media file',{exact:true}).setInputFiles({name:'fixture.mp4',mimeType:'video/mp4',buffer:Buffer.from('synthetic')});
   const card=await dialog.elementHandle();
-  await nav.getByRole('button',{name:'YouTube embed',exact:true}).click();
-  await page.getByLabel('YouTube video or channel URL').fill('https://youtu.be/fixture-video');
-  await page.getByRole('button',{name:'Preview videos',exact:true}).click();
+  await nav.getByRole('button',{name:'Video link',exact:true}).click();
+  await page.getByLabel('Video or channel URL').fill('https://youtu.be/fixture-video');
+  await page.getByRole('button',{name:'Preview link',exact:true}).click();
   await page.getByRole('button',{name:'Select new videos',exact:true}).click();
   await page.getByRole('button',{name:'Add selected · 1',exact:true}).click();
   const added=page.getByRole('region',{name:'Embedded media details'});
@@ -62,7 +63,7 @@ const options={formats:{video:['mp4'],audio:['mp3'],image:['png'],document:['pdf
   await page.screenshot({path:path.join(out,'studio-'+width+'.png')});
   await page.getByRole('button',{name:'Upload & save',exact:true}).click();
   await page.waitForFunction(()=>document.querySelector('.dm-workspace progress')!==null);
-  assert(await nav.getByRole('button',{name:'YouTube embed',exact:true}).isDisabled());
+  assert(await nav.getByRole('button',{name:'Video link',exact:true}).isDisabled());
   assert(await page.getByRole('button',{name:'Close workspace'}).isDisabled());
   await page.keyboard.press('Escape');assert(await dialog.isVisible());
   releaseChunk();
@@ -75,5 +76,5 @@ const options={formats:{video:['mp4'],audio:['mp3'],image:['png'],document:['pdf
   results.push({width,theme,persistent_card:true,retained_upload:true,inline_embed_metadata:true,busy_protection:true,next_upload:true});
   await context.close();
  }
- await browser.close();fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({result:'pass',results},null,2));console.log(JSON.stringify({result:'pass',results}));
+ await browser.close();await server.close();fs.writeFileSync(path.join(out,'report.json'),JSON.stringify({result:'pass',results},null,2));console.log(JSON.stringify({result:'pass',results}));
 })().catch(e=>{console.error(e);process.exit(1)});

@@ -92,7 +92,7 @@ function dm_playlist_items(int $id): array {
 function dm_encoder(string $op, array $data=[]): array {
     dm_require_user();
     $actor=['userId'=>(int)User::getId(),'username'=>(string)User::getUserName(),'canUpload'=>(bool)User::canUpload(),'isAdmin'=>(bool)User::isAdmin()];
-    if($op==='enqueue'){$actor['credential']=(string)User::getUserPass();$actor['allowedResolutions']=UserGroups::getAllowedResolutionsForUser(User::getId());}
+    if(in_array($op,['enqueue','import'],true)){$actor['credential']=(string)User::getUserPass();$actor['allowedResolutions']=UserGroups::getAllowedResolutionsForUser(User::getId());}
     _session_write_close();
     $pipes=[];$process=proc_open(['/usr/bin/php',__DIR__.'/encoder-worker.php'],[0=>['pipe','r'],1=>['pipe','w'],2=>['file','/dev/null','a']],$pipes);
     if(!is_resource($process)){dm_error('Encoder service unavailable.',503);}
