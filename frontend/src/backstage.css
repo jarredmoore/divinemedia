@@ -10,3 +10,4 @@
 
 @media(max-width:360px){.backstage .cb-header{padding-inline:3%;gap:6px}.backstage .cb-wordmark span{font-size:9px}.backstage .cb-wordmark .dm-brand-mark{width:26px;height:26px}.backstage .cb-header-tools{gap:4px}}
 .backstage .watch-modal{max-width:min(1240px,96vw);border-radius:4px;background:#090a0c}.backstage .modal-body h2{font-family:Impact,'Arial Narrow',sans-serif;font-size:clamp(28px,4vw,54px);line-height:1.1;text-transform:uppercase;overflow-wrap:anywhere}.backstage .dm-dock{border-radius:3px;background:#0c0e12ed}
+.backstage :is(.featured-copy h2,.section-head h2,.manifesto h2,.modal-body h2){font-weight:900}
