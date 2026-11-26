@@ -1,6 +1,6 @@
 # Unified link entry and native imports
 
-Status: feature branch and preview, not a production activation. The existing live API continues to handle YouTube embedding; the new import actions, helper and native model hook must be deployed together before live imports are available. No real import, media download or encoding job was queued during implementation.
+Status: production release approved through [PR #45](https://github.com/jarredmoore/divinemedia/pull/45). The matching Azure adapter/model hook and Netlify frontend are deployed together; see [release evidence](UNIFIED-LINK-IMPORT-RELEASE.json). No real import, media download or encoding job was started during production validation.
 
 ## Creator experience
 
@@ -42,7 +42,7 @@ A creator publication request checks the marker's exact native job ID, ownership
 
 Required native patch: `ops/divinemedia/import_draft_hold.py`, applied only to the verified installed `objects/video.php` source. The patch is pure/idempotent and refuses an unknown setter signature. The installed source accepted it and the patched candidate passed runtime PHP lint. The disposable rehearsal verified that automatic activation remains private and only a completed, owned job can be explicitly published. Live deployment requires the source lease and backup steps below.
 
-## Verification and remaining activation work
+## Verification and operational requirements
 
 - 43 frontend tests, Vite build, and 21 Python backend tests pass.
 - Disposable PHP tests cover URL/DNS and metadata restrictions; native-stub tests cover actor scoping, private override, job mapping, retries and pending limits; marker tests cover holding and explicit release.
@@ -52,6 +52,6 @@ Required native patch: `ops/divinemedia/import_draft_hold.py`, applied only to t
 - The rehearsal caught and fixed two native integration issues: a non-admin needs the draft saved before edit authorization, and a same-request row cache could return the old private status after publication. The response now uses the saved model status.
 - Recorded native model fingerprint: `0232aed873b69fd44bb6a7c99b24ecf719970aaffa7468887139bf503b813c21`. Recompute a byte-level source lease immediately before any mutation; this recorded fingerprint is not permission to overwrite newer native source.
 
-Before production activation, rehearse the native queue, completion callbacks, private hold and final publication with disposable records/storage and the installed classes; verify provider previews, worker processing and download/storage controls. Then create verified off-VM backups, apply the helper and leased model hook before exposing import actions, install the adapter files, and deploy the matching frontend. Do not start real imports merely to validate deployment.
+For future backend upgrades, rehearse the native queue, completion callbacks, private hold and final publication with disposable records/storage and the installed classes; verify provider previews, worker processing and download/storage controls. Then create verified off-VM backups, apply the helper and leased model hook before exposing import actions, install the adapter files, and deploy the matching frontend. Do not start real imports merely to validate deployment.
 
 Rollback: disable new import actions first. Restore only source files matching the deployment hashes. Retain the model guard, helper and markers while marked imports exist or are processing; removing them can let native automatic status handling publish an unfinished import. Never delete existing creator media or markers as a generic code rollback.
