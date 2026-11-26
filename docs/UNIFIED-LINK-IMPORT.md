@@ -28,7 +28,7 @@ Sources known to exceed 12 hours or 4 GB are rejected from their metadata. That 
 
 New POST actions: `link-preview` and `link-import`, through the existing same-origin, CSRF-protected gateway.
 
-A preview is an expiring, creator-bound server ticket. Import accepts that ticket, not a client-supplied media URL, actor, catalog ID or Encoder connection. The server creates one private record and saves its ID in the ticket before queuing. The worker uses a deterministic filename and a per-creator DB lock to return the existing queue ID on retry. Each native streamer is limited to three pending frontend imports; the existing rate limits also apply.
+A preview is an expiring, creator-bound server ticket. Import accepts that ticket, not a client-supplied media URL, actor, catalog ID or Encoder connection. The server creates one private record and saves its ID in the ticket before applying editable details or queuing. Native edit authorization requires a persisted ID for non-admin creators; the initial save already has the owner and private status. The worker uses a deterministic filename and a per-creator DB lock to return the existing queue ID on retry. Each native streamer is limited to three pending frontend imports; the existing rate limits also apply.
 
 The private CLI adapter reuses installed `Encoder`, `Streamer`, `Login`, `Format` and native profile selection. It does not call native `view/queue.php` because that handler creates records and dispatches the global queue. New code only saves the intended job; existing workers retain processing control. No global queue run, reencode, original-media replacement or container restart is part of this feature.
 

@@ -24,9 +24,14 @@ if($action==='link-import'){
     $details=dm_creator_validate(['title'=>$body['title']??$preview['item']['title'],'description'=>$body['description']??$preview['item']['description'],'visibility'=>'private','categoryId'=>$body['categoryId']??null,'canShare'=>false,'canDownload'=>false]);
     // Hold a creator-owned draft before queuing. Retry reuses this ID; no arbitrary catalog IDs are accepted.
     $id=(int)($preview['videoId']??0);
-    if(!$id){$video=new Video();$video->setFilename('divine_import_'.$ticket);$video->setUsers_id(User::getId());$video->setType($profile==='audio'?'audio':'video');dm_creator_apply($video,$details);$id=(int)$video->getId();if(!$id)dm_error('The private draft could not be created.',502);$_SESSION['dm_link_previews'][$ticket]['videoId']=$id;}
-    elseif(!Video::canEdit($id))dm_error('Draft access denied.',403);
-    $video=new Video('','',$id);DivineImportHold::hold($video,$ticket);
+    if(!$id){
+        $video=new Video();$video->setFilename('divine_import_'.$ticket);$video->setUsers_id(User::getId());$video->setType($profile==='audio'?'audio':'video');$video->setTitle($details['title']);$video->setDescription($details['description']);
+        // Native edit authorization requires a persisted ID, even for its creator.
+        if($video->setStatus(Video::STATUS_INACTIVE)===false||!$video->save())dm_error('The private draft could not be created.',502);
+        $id=(int)$video->getId();if(!$id)dm_error('The private draft could not be created.',502);$_SESSION['dm_link_previews'][$ticket]['videoId']=$id;
+    }
+    if(!Video::canEdit($id))dm_error('Draft access denied.',403);
+    $video=new Video('','',$id);dm_creator_apply($video,$details);DivineImportHold::hold($video,$ticket);
     $result=dm_encoder('import',['url'=>$preview['item']['url'],'title'=>$details['title'],'profile'=>$profile,'videoId'=>$id,'ticket'=>$ticket]);_session_start();
     if((int)($result['id']??0)<1||(int)($result['videoId']??0)!==$id)dm_error('The import could not be confirmed. Check your queue before retrying.',502);
     DivineImportHold::hold($video,$ticket,(int)$result['id']);$_SESSION['dm_link_previews'][$ticket]['jobId']=(int)$result['id'];dm_reply($result+['message'=>'Import queued into your private draft.']);
