@@ -9,7 +9,7 @@ import {ArrowDown,ArrowUpRight,Headphones,Menu,Pause,Play,Search,Upload,X} from 
 export {THEME_KEY} from '../shared/theme.mjs';
 export {readCurrentTheme as readTheme} from '../shared/theme.mjs';
 export function ThemePicker({theme,onChange}){
- return <label className="theme-picker"><span className="sr-only">Viewing theme</span><select aria-label="Viewing theme" value={theme} onChange={e=>onChange(e.target.value)}><option value="default">Cozy</option><option value="code-black">Code Black</option></select></label>;
+ return <label className="theme-picker"><span className="sr-only">Viewing theme</span><select aria-label="Viewing theme" value={theme} onChange={e=>onChange(e.target.value)}><option value="default">Cozy</option><option value="code-black">Code Black</option><option value="backstage">Backstage</option></select></label>;
 }
 export function ColdBlackHeader({tab,go,query,setQuery,theme,onTheme,links}){
  const[expanded,setExpanded]=useState(false);

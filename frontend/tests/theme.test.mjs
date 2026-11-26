@@ -17,3 +17,9 @@ test('public route handoff keeps path, existing options and the selected theme o
 test('theme propagation does not rewrite foreign links or credential-bearing URLs',()=>{
  for(const url of ['https://example.com/','mailto:a@example.com','https://u:p@media.divinemedia.us/user','https://media.divinecreativegroup.com/Encoder/?pass=example'])assert.equal(themedUrl(url,'code-black'),url);
 });
+test('Backstage persists independently and uses the dark native handoff',()=>{
+ assert.equal(resolveTheme({search:'?theme=backstage'}),'backstage');
+ assert.equal(resolveTheme({cookie:'dm_view_theme=backstage',stored:'default'}),'backstage');
+ assert.equal(new URL(themedUrl('https://divinemedia.us/creator/upload','backstage')).searchParams.get('theme'),'backstage');
+ assert.equal(new URL(themedUrl('https://media.divinemedia.us/Encoder/','backstage')).searchParams.get('theme'),'code-black');
+});
