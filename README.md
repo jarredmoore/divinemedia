@@ -12,8 +12,8 @@ The viewing experience uses React and Vite. AVideo manages the media catalog, cr
 | --- | --- |
 | [Watch](https://divinemedia.us/) | Public viewing and listening experience |
 | [Media backend](https://media.divinemedia.us/) | AVideo administration and service endpoints |
-| [Creator studio](https://divinemedia.us/?workspace=upload) | Open the upload icon on the frontend for creator tools; sign-in required |
-| [Encoder](https://media.divinemedia.us/Encoder/) | Connect a media account, upload source files, and follow processing |
+| [Creator studio](https://divinemedia.us/creator/upload) | Open the upload icon on the frontend for creator tools; sign-in required |
+| [Processing queue](https://divinemedia.us/creator/encoding) | Follow native Encoder jobs within the creator studio |
 
 The previous Watch hostname redirects to `divinemedia.us`. Existing media URLs remain supported; creator sign-in and Encoder entry pages move to the new media hostname.
 
@@ -29,6 +29,8 @@ The previous Watch hostname redirects to `divinemedia.us`. Existing media URLs r
 Published media stays in AVideo’s catalog. The frontend presents that catalog and plays its published media sources. Creator authentication, upload permissions, encoding, and thumbnail processing remain with the backend.
 
 For consolidated decisions, release history, and the next feature workflow, see [Divine Media project history](DIVINE_MEDIA_PROJECT_HISTORY.md).
+
+The studio’s **Video link** card accepts a video or channel URL. YouTube embedding remains available; enabled public sources can be previewed and imported into a private draft with metadata and thumbnail controls. Native Encoder processes imports, and the creator publishes after completion. [Compatibility, security and rollback details](docs/UNIFIED-LINK-IMPORT.md).
 
 ## Development and deployment
 

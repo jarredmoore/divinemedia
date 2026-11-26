@@ -141,7 +141,7 @@ Keep credentials out of source, browser bundles, documentation, screenshots, and
 
 Before Azure mutations, inspect the affected services, verify a recoverable backup and rollback path, and preserve existing media and processing. A prior successful backup is not proof that today's backup is current. Do not restart containers or launch global encoding jobs as routine verification.
 
-The November 24 studio refinement was approved and released through PR #41; Cozy’s collapsed sidebar followed in PR #42. November 25 media management, Square card and YouTube metadata work shipped through PR #43, with rollout evidence in PR #44. See [release evidence](docs/MEDIA-MANAGEMENT-RELEASE.json). The unified provider-link/import workflow is current feature-branch work and is not activated in production; see [unified link import](docs/UNIFIED-LINK-IMPORT.md).
+The November 24 studio refinement was approved and released through PR #41; Cozy’s collapsed sidebar followed in PR #42. November 25 media management, Square card and YouTube metadata work shipped through PR #43, with rollout evidence in PR #44. See [release evidence](docs/MEDIA-MANAGEMENT-RELEASE.json). The unified provider-link/import workflow shipped through PR #45, retaining YouTube embedding and adding private native imports within the studio. Native on-demand processing is requested only when no other unfinished job exists. See [unified link import](docs/UNIFIED-LINK-IMPORT.md) and [release evidence](docs/UNIFIED-LINK-IMPORT-RELEASE.json).
 
 ## Known resolved issues versus open work
 

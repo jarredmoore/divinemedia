@@ -1,0 +1,101 @@
+{
+  "feature_pr": "https://github.com/jarredmoore/divinemedia/pull/45",
+  "source_commit": "cd2d9c5d3e62af75ab75b780bcaac53b1213f9f8",
+  "native_rehearsal": {
+    "result": "pass",
+    "checks": {
+      "anonymous_import_denied": true,
+      "csrf_guard": true,
+      "native_preview_without_queue_write": true,
+      "foreign_ticket_denied": true,
+      "native_on_demand_dispatch_requested": true,
+      "native_owned_queue_and_private_draft": true,
+      "retry_without_duplicate": true,
+      "native_auto_status_stays_private": true,
+      "publish_before_completion_denied": true,
+      "explicit_publication_releases_hold": true,
+      "global_queue_not_dispatched": true,
+      "foreign_record_edit_denied": true
+    },
+    "publication_result": {
+      "http": 200,
+      "visibility": "public",
+      "item_status": "a",
+      "database_status": "a",
+      "marker_remains": false
+    },
+    "original_media_not_mounted": true,
+    "no_real_media_downloaded": true,
+    "native_completion_rehearsed": true,
+    "scratch_containers_removed": true,
+    "scratch_network_removed": true,
+    "scratch_files_removed": true,
+    "native_source_manifest_sha256": "9781f553092cf92669b1714e38cd016278be99888c8a78d40cbbf87524511520"
+  },
+  "azure": {
+    "result": "pass",
+    "state": "/srv/divinemedia/backups/link-import-8b50b4e7d5a6",
+    "before_backup": {
+      "name": "before.tar.gz",
+      "sha256": "0317e94fa8e1ade39f68ceb974f28e4c933ce25b1311b51dc0b8b8d916f91039",
+      "bytes": 76536,
+      "roundtrip_verified": true
+    },
+    "after_backup": {
+      "name": "after.tar.gz",
+      "sha256": "18c3c0299b5624febd2485aa5bba12c2fc0b05e36228f7ffc26edcb747c77d3e",
+      "bytes": 76495,
+      "roundtrip_verified": true
+    },
+    "after_hashes": {
+      "divine-api/creator.php": "5dc282383787b5f914c8c04c3ec9fdc468d081a9546c022f09f2a8acf43db9ac",
+      "divine-api/encoder-worker.php": "33501b00ee9f1d07d6af02db6d19832a97ff91a2fe5cebb71bce163e962984fa",
+      "divine-api/native.php": "b73ef2a4f22f02ea2005529c2ec8aa90e15c575f92a8ca446838c99f77ba2db4",
+      "divine-api/write.php": "524fa117ed0c8772791da3f1e53fa6cb8d2290bc4862923267ef8ebe99ba699a",
+      "divine-api/import-source.php": "773a8ed7d166851d1d1678f23552e2b09ea178682b2b43ea653c4abce829842b",
+      "divine-api/import-preview.php": "40e32ea1b78e41ab4bb9f48068eb56b83afc6ee04836bf97fb8cac2c938c55cb",
+      "divine-api/import-hold.php": "8901b829cab605b0f5dd99d4608c4a389c5468fc9464bcf0bdbbc8049225d0cd",
+      "divine-api/link-actions.php": "c956a75a5364a3b48e9eaeb6a9e38add2aa0e3ced2086976c9fc2c4ac87b88d1",
+      "objects/video.php": "43dd266c890eb714205e2da7be37eb17f0e63e5031859b1226ac79534e7c2feb"
+    },
+    "anonymous_and_csrf_checks": true,
+    "catalog_queue_media_uptimes_unchanged": true,
+    "jobs_dispatched": false,
+    "worker_schedule": {
+      "mode": "native-on-demand",
+      "unrelated_job_restart_guard": true,
+      "preexisting_unfinished_jobs": 0
+    }
+  },
+  "netlify": {
+    "status": "live",
+    "deploy_id": "6b083dec1ae58dc7646f7eb3",
+    "deploy_url": "https://6b083dec1ae58dc7646f7eb3--mediaproduction.netlify.app",
+    "url": "https://divinemedia.us",
+    "previous_deploy": "6b07518b5d4e857c23c65096",
+    "source_commit": "cd2d9c5d3e62af75ab75b780bcaac53b1213f9f8"
+  },
+  "live_verification": {
+    "result": "pass",
+    "url": "https://divinemedia.us",
+    "checks": {
+      "/": "tested HTML matches",
+      "/creator/embed": "tested HTML matches",
+      "/creator/upload": "tested HTML matches",
+      "/creator/encoding": "tested HTML matches",
+      "javascript_and_css_match": 2,
+      "anonymous_session": true,
+      "public_catalog": true,
+      "link-preview": "recognized; CSRF and anonymous denial pass",
+      "link-import": "recognized; CSRF and anonymous denial pass",
+      "creator_authentication_gate": true
+    },
+    "real_imports_or_downloads_started": false
+  },
+  "limitations": [
+    "Real provider downloading/transcoding was not initiated by release validation; creators can test their own compatible public sources.",
+    "Provider availability varies; this does not enable every youtube-dl supported site.",
+    "Native on-demand processing is requested only when the newly queued import is the sole unfinished job.",
+    "Known metadata limits are not a hard downloaded-byte quota for unknown or inaccurate source sizes."
+  ]
+}
