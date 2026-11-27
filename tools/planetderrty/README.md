@@ -1,0 +1,41 @@
+# Planet Derrty archive restoration
+
+Private review of the owner's April/May 2009 Flash work and the supplied `planetderrty/songs` collection. This folder contains only the modern review-player source and metadata preparation tool. Original SWFs, MP3s, source manifests and emulator binaries stay outside Git and outside Netlify production.
+
+## Local review
+
+Prepare `tracks.json` with Python 3 and FFprobe:
+
+```sh
+python tools/planetderrty/prepare.py /path/to/review/original/songs /path/to/review
+```
+
+Copy `index.html`, `player.css` and `player.js` into that review directory. Serve it over localhost with `python -m http.server 4177 --bind 127.0.0.1 --directory /path/to/review`. Open `http://127.0.0.1:4177/`. Do not serve the private audio directory on a public interface.
+
+## Recovery findings
+
+- 31 MP3 files; 154,237,846 bytes; approximately 121.5 minutes. Source bytes are unchanged, with SHA-256 verification.
+- Preserve the 28-song XML order, then append the three additional files. The original XML contains bare ampersands; parsing repairs apply only to a working text copy.
+- Embedded MP3 tags supply titles, artists, album, year, track, genre and other available fields. Preserve all tags, technical stream metadata, legacy XML values, filename and hash. The XML repeatedly assigns four sets of credits to unrelated tracks; it is not reliable title/artist authority.
+- `ThisGoesOut.mp3` is about 6.4 seconds and requires review before release. None of the MP3s contains attached cover artwork.
+- April's 1.8 MB `derrtyplayer.swf` renders the blue City Free/St. Lunatics scene. May's 112 KB player renders the DJ-console design. The supplied `planetderrty.swf` is only 54 bytes. External media and historical navigation may be unavailable.
+- Ruffle 0.8.0 runs unchanged SWF bytes in an isolated review wrapper; this is emulation, not Adobe Flash. The tested May build renders but has not demonstrated working XML/audio playback. Do not call it fully restored. Ruffle is loaded only for the original view, never the production homepage.
+- The modern HTML audio player supports play/pause, previous/next, seek, volume, search, native metadata review, mobile layouts and reduced motion. It is a design/reference implementation, not a second production media catalog.
+
+## Import and privacy
+
+The owner selected **private for review**. Native imports must be inactive/private under the existing owner account, in a private native playlist, with download/share disabled. Never publish a new public audio route or static copy of the private tracks. Keep import hash-to-record mappings outside Git. Preserve existing files, playlists and thumbnails. A rerun must verify existing private imports and reuse their IDs, not duplicate records or change public content.
+
+The native import retains tags and conflicting XML provenance in each record's description. Playlist order is distinct from the embedded album track number. The short source remains private and flagged. No fabricated release dates, composers, ISRCs, publishers or ownership claims are added.
+
+## Verified review import
+
+On November 27, 2026, all 31 files were imported as new native audio records under existing owner 1, status `i` (inactive/private), with download/share disabled. Native private playlist **372**, **Planet Derrty — Private Archive Review**, contains all 31 in the recovered order. Each original and stored MP3 was SHA-256 verified during import. Existing media and encoding/thumbnail queues were not modified. Use the signed-in frontend **Your playlists** or **Your media** to review; this branch does not deploy a public archive route.
+
+The private local bundle includes unchanged SWFs, source audio, the original-review wrapper, Ruffle runtime/licenses and the modern player. Binary/audio artifacts are deliberately excluded from this repository. Recorded original views show rendering through emulation, not proof of legacy playlist playback.
+
+## Hosted review page
+
+`https://divinemedia.us/planet-derrty` presents the modern console design publicly; listening and archive metadata require the existing owner's sign-in. The page reuses the same platform account UI, private media-session grant, native creator catalog and origin authorization gate. There are no static MP3s or private metadata manifests in the frontend build. Only the original-design recording and its poster are public display assets.
+
+Playback repair: the first import placed MP3s in the storage root, while this installed AVideo resolves them from `<filename>/<filename>.mp3`. The 31 new private records were repaired by copying hash-verified original bytes into their exact native paths and clearing only their source caches. Private status and playlist membership remain unchanged; existing media was not moved or modified.
