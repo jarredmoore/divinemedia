@@ -63,3 +63,9 @@ The frontend route `/artists/murphy-lee` presents a large artist header, two fea
 - Artwork is credited to Divine Creative Group. Printed legacy contact details remain part of archival packaging, not current contact links.
 - Purchase and fulfillment continue through the existing artist store. No new checkout, payment entitlement, public ZIP or merchandise inventory is claimed or created.
 - This curated artist presentation does not create a separate native artist account or transfer the administrator's media. Native artist profile editing, label account roles, album management, merchandise fulfillment and protected DVD-bonus delivery remain follow-up integrations using the native capabilities and authorization gate described above.
+
+### Preview refinements
+
+Artist-page listening now stops at 90 seconds, caps the dock seek range, and carries the preview limit when using previous/next. This is a frontend listening sample, not enforced media access control: existing public full-track URLs and other catalog surfaces remain unchanged. True preview-only distribution needs separately generated short media assets plus a native visibility/entitlement decision for full tracks; a browser timer does not protect those bytes.
+
+Artwork tiles and the enlarged viewer have no outer frame, with floating circular glass controls. Image context menus, touch callouts and image dragging are discouraged locally. These affordances cannot prevent screenshots, browser inspection or saving already delivered web images. Only optimized display derivatives are shipped; masters remain private.

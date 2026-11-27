@@ -4,3 +4,16 @@
 @media(prefers-reduced-motion:reduce){.dm-artist-page{scroll-behavior:auto}.dm-artist-page *{animation:none!important;transition:none!important}}
 
 .dm-featured-artist-card{font:inherit;text-decoration:none}
+/* Artwork floats on the page and viewer; controls remain clear without a frame. */
+.dm-artist-page img{-webkit-user-drag:none;user-select:none;-webkit-touch-callout:none}
+.dm-artist-portrait img{border:0;box-shadow:none}
+.dm-artist-artwork-tile,.dm-artist-artwork-tile.square>img{border:0;background:transparent}
+.dm-artist-artwork-tile>span{padding:16px 0;color:#b8bac4}
+.dm-artist-lightbox-backdrop{background:#000f;backdrop-filter:blur(18px)}
+.dm-artist-lightbox{background:transparent;border:0;box-shadow:none;position:relative}
+.dm-artist-lightbox-image{background:transparent;scrollbar-width:none}
+.dm-artist-lightbox-image::-webkit-scrollbar{display:none}
+.dm-artist-lightbox-navigation{border:0}
+.dm-artist-lightbox button{border:1px solid #ffffff18;border-radius:50%;background:#161820aa;backdrop-filter:blur(12px);box-shadow:0 6px 22px #0005}
+.dm-artist-lightbox-toolbar,.dm-artist-lightbox-navigation{padding:14px 0}
+.dm-artist-lightbox-toolbar>span{color:#b8bac4}
