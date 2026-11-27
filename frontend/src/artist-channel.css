@@ -16,3 +16,5 @@
 .dm-artist-lightbox button{border:1px solid #ffffff18;border-radius:50%;background:#161820aa;backdrop-filter:blur(12px);box-shadow:0 6px 22px #0005}
 .dm-artist-lightbox-toolbar,.dm-artist-lightbox-navigation{padding:14px 0}
 .dm-artist-lightbox-toolbar>span{color:#b8bac4}
+
+.dm-artist-release-cover>img{object-fit:contain}
