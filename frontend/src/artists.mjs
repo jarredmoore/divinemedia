@@ -6,7 +6,9 @@ export const featuredArtists=[{
  artworkCredit:'Artwork by Divine Creative Group',
  releases:[
   {id:'you-see-me',title:'You See Me',kind:'Documentary + companion soundtrack',cover:'/artists/murphy-lee/you-see-me-cover.webp',description:'The documentary and its companion soundtrack, together as the DVD release.',checkout:'https://store.newmurph.com/Home/Details/2',checkoutLabel:'View DVD release',privateBonus:true,previewIds:[]},
-  {id:'2nd-time-around',title:'2nd Time Around',kind:'Album',cover:'/2ndTimeAround.jpg',description:'Explore the project and listen to the artist’s published previews.',checkout:'https://store.newmurph.com/Home/Details/4',checkoutLabel:'View album',nativePlaylistId:129,previewIds:[15,13,11,14,16,21,23,22,25,28,27,29,26,24]}
+  {id:'2nd-time-around',title:'2nd Time Around',kind:'Album',cover:'/2ndTimeAround.jpg',description:'Explore the project and listen to the artist’s published previews.',checkout:'https://store.newmurph.com/Home/Details/4',checkoutLabel:'View album',nativePlaylistId:129,previewIds:[15,13,11,14,16,21,23,22,25,28,27,29,26,24]},
+  {id:'murphys-law',title:'Murphy’s Law DVD',kind:'DVD + free ML10 album',cover:'/artists/murphy-lee/murphys-law.webp',description:'The 10th anniversary documentary, with the ML10 companion album included free.',checkout:'https://store.newmurph.com/Home/Details/1',checkoutLabel:'View DVD package',privateBonus:true,previewIds:[]},
+  {id:'ml10',title:'ML10 companion album',kind:'Included free with DVD',cover:'/artists/murphy-lee/murphys-law.webp',description:'Included free with the Murphy’s Law DVD. Shown with the DVD package artwork; not sold separately.',checkout:'https://store.newmurph.com/Home/Details/1',checkoutLabel:'View included DVD package',privateBonus:true,previewIds:[],includedWith:'murphys-law'}
  ],
  gallery:[
   {id:'exterior',title:'You See Me — exterior artwork',image:'/artists/murphy-lee/package-exterior.webp',layout:'wide',width:2400,height:600},

@@ -71,3 +71,7 @@ Artist-page listening now stops at 90 seconds, caps the dock seek range, and car
 Artwork tiles and the enlarged viewer have no outer frame, with floating circular glass controls. Image dragging, right-click saving and touch callouts retain normal browser behavior. Browsers cannot prevent screenshots, inspection or saving already delivered web images. Only optimized display derivatives are shipped; masters remain private.
 
 Owner approved production publication of the artist showcase on November 27, 2026, with normal image dragging/saving restored and the flat artwork presentation retained. The 90-second player preview remains a frontend sample limit; full public audio is not made private by this release.
+
+## Four-offering presentation
+
+The owner approved four artwork tiles: 2nd Time Around, Murphy’s Law DVD, ML10 companion album, and You See Me DVD. ML10 is included free with Murphy’s Law DVD, not sold separately; both tiles use the existing `/Home/Details/1` package checkout. Until separate ML10 artwork is supplied, its tile explicitly identifies the shared official DVD package artwork. Portrait artwork is contained without cropping. No private audio or new download entitlement is exposed.

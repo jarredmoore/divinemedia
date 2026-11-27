@@ -20,3 +20,5 @@ test('official purchase destinations remain release specific; masters are not we
  assert.equal(artist.merchandise.length,0);
 });
 test('track display formatting leaves native records untouched',()=>{const item={title:'1DIVINEIntro'};assert.equal(artistTrackTitle(item.title),'DIVINE Intro');assert.equal(item.title,'1DIVINEIntro');assert.equal(artistTrackTitle('12FlowersandBars'),'Flowersand Bars')});
+
+test('four offerings keep ML10 bundled with the DVD',()=>{const releases=featuredArtists[0].releases;assert.equal(releases.length,4);const dvd=releases.find(r=>r.id==='murphys-law'),album=releases.find(r=>r.id==='ml10');assert.equal(album.includedWith,dvd.id);assert.equal(album.checkout,dvd.checkout);assert.equal(album.privateBonus,true);assert.deepEqual(releasePreviews(album,[]),[])});
