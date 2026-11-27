@@ -75,3 +75,5 @@ Owner approved production publication of the artist showcase on November 27, 202
 ## Four-offering presentation
 
 The owner approved four artwork tiles: 2nd Time Around, Murphy’s Law DVD, ML10 companion album, and You See Me DVD. ML10 is included free with Murphy’s Law DVD, not sold separately; both tiles use the existing `/Home/Details/1` package checkout. Until separate ML10 artwork is supplied, its tile explicitly identifies the shared official DVD package artwork. Portrait artwork is contained without cropping. No private audio or new download entitlement is exposed.
+
+The You See Me release tile uses the official black-and-white DVD cover from the provided store (`/Content/image/products/ml-you-see-me-dvd-th.jpg`). Colorful packaging artwork remains in the artwork gallery. The public store exposes three distinct product-cover images; a separate ML10 album cover has not been found on its public pages.
