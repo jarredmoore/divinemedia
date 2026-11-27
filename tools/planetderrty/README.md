@@ -39,3 +39,7 @@ The private local bundle includes unchanged SWFs, source audio, the original-rev
 `https://divinemedia.us/planet-derrty` presents the modern console design publicly; listening and archive metadata require the existing owner's sign-in. The page reuses the same platform account UI, private media-session grant, native creator catalog and origin authorization gate. There are no static MP3s or private metadata manifests in the frontend build. Only the original-design recording and its poster are public display assets.
 
 Playback repair: the first import placed MP3s in the storage root, while this installed AVideo resolves them from `<filename>/<filename>.mp3`. The 31 new private records were repaired by copying hash-verified original bytes into their exact native paths and clearing only their source caches. Private status and playlist membership remain unchanged; existing media was not moved or modified.
+
+### Production tracklist correction
+
+The hosted page now checks permission on the private archive playlist, then reads its 31 known imported records through the existing authorized creator-record endpoint in batches of four. It no longer depends on the generic creator listing returning inactive drafts. The metadata decoder handles numeric HTML entities and named dash entities from native descriptions. No audio permissions, media files, Encoder jobs or speaker/turntable layout are changed by this frontend correction.
