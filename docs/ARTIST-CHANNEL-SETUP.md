@@ -1,6 +1,6 @@
 # Artist channel and featured album setup
 
-Status: native feature audit complete; artist identity, selected releases, payment model and assets are awaiting owner input. No artist account, payment configuration, media ownership or production files were changed by this audit. Work branch: `feat/artist-channel-albums`.
+Status: Murphy Lee is the first curated artist-page implementation, on a feature branch for preview. The selected releases are You See Me and 2nd Time Around. No artist account, payment configuration, media ownership or production files were changed by this audit. Work branch: `feat/artist-channel-albums`.
 
 ## Reuse the installed AVideo features
 
@@ -15,7 +15,7 @@ Status: native feature audit complete; artist identity, selected releases, payme
 | Support/payment links | Native channel Donation Link; active wallet/gateway records; existing Square storefront card | Distinguish optional artist support from buying an album; use real, album-specific checkout links where a sale is intended |
 | Follows and community | Existing native channel follows, comments, likes, shares and playlists | Keep the current frontend controls and native account permissions |
 
-The public playlist **Murphy Lee – 2nd Time Around**, native ID **129**, already exists under the current administrator account. It is a candidate for the first featured album, not an inferred choice of artist identity. Featuring or referencing it must not silently rename the administrator's channel, transfer existing media ownership or claim an artist account has been created.
+The public playlist **Murphy Lee – 2nd Time Around**, native ID **129**, already exists under the current administrator account. It supplies the approved public listening-preview selection for 2nd Time Around. Featuring or referencing it must not silently rename the administrator's channel, transfer existing media ownership or claim an artist account has been created.
 
 ## Integration gaps found
 
@@ -52,3 +52,14 @@ Required before configuring real records:
 - [Native uploads, including ZIP](https://github.com/WWBN/AVideo/wiki/About-Video-Upload)
 - [Native download settings](https://github.com/WWBN/AVideo/wiki/Enable-Video-Download)
 - [PayPerView scope and wallet requirements](https://github.com/WWBN/AVideo/wiki/PayPerView-Plugin)
+
+## Murphy Lee preview and reusable label presentation
+
+The frontend route `/artists/murphy-lee` presents a large artist header, two featured releases, public listening previews, and a zoomable packaging/artwork gallery. The Creators directory links to it. Profile configuration lives in `frontend/src/artists.mjs`; the page component is reusable for additional approved artists. Def Jam Shop's catalog structure and Jadakiss's artist-first presentation are design references, without copying their assets or code.
+
+- You See Me links to the existing artist store DVD product at `https://store.newmurph.com/Home/Details/2`. Its free DVD companion soundtrack stays private: there is no public audio or archive download for this release.
+- 2nd Time Around links to `https://store.newmurph.com/Home/Details/4`. Its curated preview IDs follow the inspected native program selection; current media metadata and playback use the existing native catalog/player. This is not a live native playlist editor or automatic program synchronization.
+- The supplied `youseeme.zip` contains packaging JPEGs and Photoshop artwork masters, not album audio or the film. Only optimized JPEG-derived WebP display assets are included in the frontend. The source ZIP, Photoshop masters and private bonus are not published.
+- Artwork is credited to Divine Creative Group. Printed legacy contact details remain part of archival packaging, not current contact links.
+- Purchase and fulfillment continue through the existing artist store. No new checkout, payment entitlement, public ZIP or merchandise inventory is claimed or created.
+- This curated artist presentation does not create a separate native artist account or transfer the administrator's media. Native artist profile editing, label account roles, album management, merchandise fulfillment and protected DVD-bonus delivery remain follow-up integrations using the native capabilities and authorization gate described above.
