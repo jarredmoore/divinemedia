@@ -33,3 +33,9 @@ The native import retains tags and conflicting XML provenance in each record's d
 On November 27, 2026, all 31 files were imported as new native audio records under existing owner 1, status `i` (inactive/private), with download/share disabled. Native private playlist **372**, **Planet Derrty — Private Archive Review**, contains all 31 in the recovered order. Each original and stored MP3 was SHA-256 verified during import. Existing media and encoding/thumbnail queues were not modified. Use the signed-in frontend **Your playlists** or **Your media** to review; this branch does not deploy a public archive route.
 
 The private local bundle includes unchanged SWFs, source audio, the original-review wrapper, Ruffle runtime/licenses and the modern player. Binary/audio artifacts are deliberately excluded from this repository. Recorded original views show rendering through emulation, not proof of legacy playlist playback.
+
+## Hosted review page
+
+`https://divinemedia.us/planet-derrty` presents the modern console design publicly; listening and archive metadata require the existing owner's sign-in. The page reuses the same platform account UI, private media-session grant, native creator catalog and origin authorization gate. There are no static MP3s or private metadata manifests in the frontend build. Only the original-design recording and its poster are public display assets.
+
+Playback repair: the first import placed MP3s in the storage root, while this installed AVideo resolves them from `<filename>/<filename>.mp3`. The 31 new private records were repaired by copying hash-verified original bytes into their exact native paths and clearing only their source caches. Private status and playlist membership remain unchanged; existing media was not moved or modified.
