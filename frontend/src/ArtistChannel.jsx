@@ -18,7 +18,7 @@ export default function ArtistChannel({artist,items,onOpen,onBack}){
  },[art]);
  const playPreview=item=>onOpen({...item,previewSeconds:90});
  const share=async()=>{try{const url=location.href;if(navigator.share)await navigator.share({title:artist.name+' · Divine Media',url});else{await navigator.clipboard.writeText(url);setMessage('Artist page link copied.')}}catch(e){if(e.name!=='AbortError')setMessage('Use your browser’s share option to share this page.')}};
- return <main className="dm-artist-page" onContextMenu={e=>{if(e.target.tagName==='IMG')e.preventDefault()}} onDragStart={e=>{if(e.target.tagName==='IMG')e.preventDefault()}}>
+ return <main className="dm-artist-page">
   <section className="dm-artist-hero" aria-labelledby="artist-title"><img className="dm-artist-backdrop" src={artist.header} alt="" fetchPriority="high"/><div className="dm-artist-hero-shade"/>
    <div className="dm-artist-hero-top"><button onClick={onBack}><ArrowLeft size={16}/>Artists</button><span>DIVINE MEDIA / ARTIST SPOTLIGHT</span></div>
    <div className="dm-artist-identity"><div className="dm-artist-kicker">MUSIC. FILM. ART.</div><h1 id="artist-title">{artist.name}</h1><p className="dm-artist-byline">{artist.byline}</p><p>{artist.description}</p><div className="dm-artist-actions"><button className="primary" onClick={()=>scroll('artist-releases')}><Music size={18}/>Explore releases<ArrowDown size={16}/></button><a className="secondary" href={artist.store} target="_blank" rel="noopener noreferrer"><ShoppingBag size={18}/>Official store<ArrowUpRight size={16}/></a><button className="dm-artist-share" onClick={share} aria-label="Share artist page"><Share2 size={18}/></button></div>{message&&<p role="status">{message}</p>}</div>
