@@ -5,7 +5,7 @@
 .pd-page .pd-play{width:56px;height:56px;background:#a0b0f0;color:#080a12}.pd-original{border-top:1px solid #ffffff18;padding:24px 0}.pd-original video{width:100%;max-height:75svh;background:#000;margin-top:20px}.pd-page .pd-console{scroll-margin-top:20px}
 
 .pd-channel-kicker{display:flex;gap:14px;align-items:center}.pd-channel-kicker img{width:42px;height:42px;object-fit:contain}.pd-channel-description{max-width:580px;line-height:1.8;color:#b4bed2;font-size:14px;margin:0 0 28px}.pd-channel-nav{display:flex;align-items:center;flex-wrap:wrap;gap:25px;margin:0 0 36px;border-bottom:1px solid #ffffff22;padding-bottom:18px}.pd-channel-nav a{font-size:12px;color:#d1d8e8;text-decoration:none}.pd-channel-nav button{width:auto;height:auto;padding:9px 13px;border-radius:9px;margin-left:auto}.pd-channel-about{border-top:1px solid #ffffff1c;padding:40px 0;margin-top:35px}.pd-channel-about h2{font-size:38px;letter-spacing:-.04em;margin:15px 0}.pd-channel-about p{font-size:14px;line-height:1.8;color:#a9b5cb;max-width:650px}.pd-page :is(#channel-music,#channel-collection,#channel-about){scroll-margin-top:25px}@media(max-width:600px){.pd-channel-description{font-size:12px}.pd-channel-nav{gap:20px}.pd-channel-nav button{margin-left:0}}
-/* Full-viewport artwork belongs to this channel only. The page has no animation loop. */
+/* Full-viewport artwork belongs to this channel only. Image parallax updates only in response to scroll/resize. */
 .pd-cosmic{position:relative;isolation:isolate;min-height:100svh;background:#03040b}
 .pd-cosmos{position:fixed;inset:-42px 0;z-index:-2;pointer-events:none;overflow:hidden;transform:translate3d(0,var(--pd-parallax,0px),0)}
 .pd-cosmos[data-motion=true]{will-change:transform}
@@ -53,3 +53,13 @@
 }
 @media(prefers-reduced-motion:reduce){.pd-cosmos{transform:none;will-change:auto}.pd-cosmic{scroll-behavior:auto}}
 @media(forced-colors:active){.pd-cosmos{display:none}.pd-cosmic .pd-channel-hero h1 em{background:none;-webkit-text-fill-color:CanvasText;color:CanvasText;filter:none}}
+/* Three repeating tiles drift by exactly one tile, so wrapping has no visible seam. */
+.pd-starfield{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none}
+.pd-stars{position:absolute;top:0;left:0;width:100%;height:calc(100% + 768px);background-repeat:repeat;background-size:768px 768px;pointer-events:none;animation:pd-stars-drift var(--pd-star-duration) linear infinite;animation-play-state:paused}
+.pd-stars-distant{background-image:url('/channels/planet-derrty/stars-distant.svg');--pd-star-duration:320s;opacity:.36}
+.pd-stars-middle{background-image:url('/channels/planet-derrty/stars-middle.svg');--pd-star-duration:220s;opacity:.48}
+.pd-stars-near{background-image:url('/channels/planet-derrty/stars-near.svg');--pd-star-duration:150s;opacity:.64}
+.pd-cosmos[data-motion=true] .pd-stars{animation-play-state:running;will-change:transform}
+@keyframes pd-stars-drift{from{transform:translate3d(0,0,0)}to{transform:translate3d(0,-768px,0)}}
+@media(prefers-reduced-motion:reduce){.pd-stars{animation:none;will-change:auto}}
+@media(forced-colors:active){.pd-starfield{display:none}}
