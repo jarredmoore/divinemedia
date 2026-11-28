@@ -43,3 +43,9 @@ Playback repair: the first import placed MP3s in the storage root, while this in
 ### Production tracklist correction
 
 The hosted page now checks permission on the private archive playlist, then reads its 31 known imported records through the existing authorized creator-record endpoint in batches of four. It no longer depends on the generic creator listing returning inactive drafts. The metadata decoder handles numeric HTML entities and named dash entities from native descriptions. No audio permissions, media files, Encoder jobs or speaker/turntable layout are changed by this frontend correction.
+
+## Managed channel presentation
+
+The owner chose a managed collection under the existing account, not a separate creator login. `/channel/planet-derrty` is the canonical frontend presentation; `/planet-derrty` remains a working alias. The profile appears in Creators and the channel directory. A shared presentation registry holds the public profile and references the existing private native playlist/records. It does not rename the DivineCreative native channel, transfer ownership, create a native user, invent follower counts, or grant public media access.
+
+The page includes Music, Collection and About sections, the existing speakers/turntable player, and an owner-only entry to the existing media manager. Native AVideo remains authoritative for ownership, media and access. This first managed profile retains the approved recovered-record selection; automatic playlist membership editing/synchronization is not introduced by this visual setup.
