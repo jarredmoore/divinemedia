@@ -1,0 +1,5 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {managedChannels,managedChannelFromPath,planetDerrty} from '../src/managed-channels.mjs';
+test('managed channel canonical URLs resolve without hijacking native channels',()=>{assert.equal(managedChannelFromPath('/channel/planet-derrty'),planetDerrty);assert.equal(managedChannelFromPath('/channel/planet-derrty/'),planetDerrty);for(const path of ['/channel/DivineCreative','/channel/planet-derrty/private','/channel/../admin'])assert.equal(managedChannelFromPath(path),null)});
+test('managed channel uses existing native ownership and private playlist references',()=>{assert.equal(managedChannels.length,1);assert.equal(planetDerrty.ownerId,1);assert.equal(planetDerrty.playlistId,372);assert.equal(new Set(planetDerrty.recordIds).size,31);assert.equal(planetDerrty.recordIds[0],39);assert.equal(planetDerrty.recordIds.at(-1),69);assert(!('audioUrl'in planetDerrty));assert(!('password'in planetDerrty));assert(!('followers'in planetDerrty))});
