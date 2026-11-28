@@ -51,3 +51,16 @@ The owner chose a managed collection under the existing account, not a separate 
 The page includes Music, Collection and About sections, the existing speakers/turntable player, and an owner-only entry to the existing media manager. Native AVideo remains authoritative for ownership, media and access. This first managed profile retains the approved recovered-record selection; automatic playlist membership editing/synchronization is not introduced by this visual setup.
 
 Native terminology and the administrator/artist model are defined in [AVIDEO-CREATOR-CHANNEL-MODEL.md](../../docs/AVIDEO-CREATOR-CHANNEL-MODEL.md). The managed presentation is not an additional native user channel; independent artist login must use native AVideo user records and permissions. DivineCreative remains the managing administrator, and Murphy Lee is the first artist selected for that next integration.
+
+## Cosmic channel treatment
+
+The channel uses the owner's exact `bg3.jpg` artwork from DCG CIC, exported as a 216,838-byte WebP display asset. A full-viewport hero and a fixed decorative background keep the planet visible next to large white/brand-gradient typography. The player remains below the hero, reachable through an explicit listening-room anchor; its native sources, ownership and permissions are unchanged.
+
+Scroll parallax is limited to 32 pixels and updates only on scroll/resize through one requestAnimationFrame callback. No continuous JavaScript rendering loop, WebGL or library is added. Reduced motion, data-saving preference and hidden-tab state disable movement. Dark surface fallbacks preserve readability without backdrop-filter. The selectors and asset load are limited to the Planet Derrty page.
+
+
+### Drifting star layer
+
+Three sparse, locally authored SVG tiles add white/cyan stars at different sizes and speeds, inspired by the layered motion in [Saransh Sinha’s CSS starfield reference](https://codepen.io/sarazond/pen/LYGbwj). No external embed, Compass/Sass dependency, particle library or per-star DOM elements are loaded. The 75 star points repeat inside three compositor-animated layers, each moving by one exact 768 px tile for seamless wrapping.
+
+The existing motion controller pauses the CSS animations when the document is hidden or data saving is enabled; reduced motion renders static stars. The decorative layer is hidden from assistive technology and cannot intercept clicks. Only the Planet Derrty page loads the tiles, and private audio/account behavior is unchanged.
